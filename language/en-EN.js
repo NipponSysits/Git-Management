@@ -1,9 +1,4 @@
 module.exports = {
-	NAV_MENU:[
-		{ name: "HOME", component:'', key: 'home' },
-		{ name: "PORTFOLIO", component:'portfolio', key:'touno-item' },
-		{ name: "PROFILE", component:'profile', key:'touno-contract' },
-	],
 	EXCEPTION: {
 		LOCALSTORAGE_TITLE: 	"LocalStorage Support",
 		LOCALSTORAGE_DESC: 		"Browser your not support 'localStorage', Please contact the system administrator.",

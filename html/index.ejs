@@ -65,6 +65,8 @@
                 //         });
                 //     });
                 // } 
+
+                
             }
             return module.promise();
         })()
@@ -88,8 +90,10 @@
             <div class="row">
                 <div id="nav-module" class="small-centered medium-10 medium-centered large-8 large-centered columns">    
                     <ul class="menu">
-                        <% _LANG.NAV_MENU.forEach(function(item) { %>
-                        <li name="<%= item.key %>"><a href="/<%= item.component %>"><%= item.name %></a></li>
+                        <% opt._MENU.forEach(function(item) { %>
+                        <li class="shrink<%= State.Component == item.component ? " selected" : "" %>">
+                            <a href="/<%= item.component %>"><%= item.name %></a>
+                        </li>
                         <% }) %>
                     </ul>
                 </div>
@@ -99,13 +103,22 @@
     <div class="content" style="background:url('/libs/img/header-line.png') top repeat-x; padding-top:10px;">
         <div class="row">
             <div class="small-centered medium-10 medium-centered large-8 large-centered columns">    
-                Content
+                <%- body -%>
             </div>
         </div>
     </div>
     <div class="footer" style="background:url('/libs/img/footer-line.png') 0px 28px repeat-x;">
         <div class="row">
             <div id="k-footer" class="small-centered medium-10 medium-centered large-8 large-centered columns align-bottom">    
+                <script>
+                  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+                  ga('create', 'UA-70130307-2', 'auto');
+                  ga('send', 'pageview');
+                </script>
                 Designed by <strong><a href="http://www.facebook.com/dvgamer" target="_blank">Touno.K &copy; Copyright</a></strong> | Powered by <strong>NodeJS</strong>
             </div>
         </div>
