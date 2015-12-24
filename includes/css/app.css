@@ -1,0 +1,104 @@
+@font-face {
+    font-family: 'league_gothic';
+    src: url('webfont/leaguegothic-regular-webfont.eot');
+    src: url('webfont/leaguegothic-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('webfont/leaguegothic-regular-webfont.woff') format('woff'),
+         url('webfont/leaguegothic-regular-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'rsuregular';
+    src: url('webfont/rsu_regular-webfont.eot');
+    src: url('webfont/rsu_regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('webfont/rsu_regular-webfont.woff') format('woff'),
+         url('webfont/rsu_regular-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'NuvoWeb';
+    src: url('webfont/NuvoWeb-Medieot');
+    src: url('webfont/NuvoWeb-Medi.eot?#iefix') format('embedded-opentype'),
+         url('webfont/NuvoWeb-Medi.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'league_gothicregular';
+    src: url('leaguegothic-regular-webfont.eot');
+    src: url('leaguegothic-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('leaguegothic-regular-webfont.woff') format('woff'),
+         url('leaguegothic-regular-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    padding: 0px;
+    font-family: "Segoe UI", Tahoma !important;
+    font-size: 12px;
+    background: #F7F7F7;
+    overflow: hidden !important;
+    overflow-y: visible !important;
+}
+h1 {
+    font-family:"Tahoma";
+    font-weight:bold;
+    font-size:20px;
+    color:#5f5e5e;
+    border-bottom:#979797 solid 1px;
+    background:url(../img/module-h1.png) no-repeat;
+    padding:16px 5px 12px 24px;
+}
+h4 {
+    text-shadow: 1px 1px 2px #777;
+    font-size:350%;
+    margin:10px 10px 0 8px;
+}
+
+h5 {
+    font-size:150%;
+    margin:0 10px 10px 10px;
+}
+a { text-decoration: none; color: #000;  }
+a:hover { text-decoration: underline; color: #000;  }
+div.main { min-height: 100%; position: relative; }
+div.header {  }
+div.content { padding-bottom: 50px; }
+div.footer { position: absolute; bottom: 0; width: 100%; }
+
+div#k-background { background:#000 url(../img/background.jpg) -1250px 0px; }
+div#k-ground { background:transparent url(../img/ground.png) top center; height:190px; }
+div#k-footer { padding:10px 15px 9px 5px; font: 11px Segoe UI; color:#807f7f; text-align: right; }
+
+div#nav-module { background-color: #000; height: 34px; }
+div#nav-module ul { position: relative; }
+div#nav-module ul li > a:hover { color:#ff9900;  }
+div#nav-module ul li > a {
+    cursor: pointer;
+    display: inline-block;
+    font-family: "NuvoWeb";
+    font-size: 13px;
+    font-weight: bold;
+    height: 18px;
+    color:#FFF; 
+    text-decoration:none;
+    text-transform: uppercase;
+    margin: 8px 0px 8px 0px;
+    padding: 8px 18px 18px 18px;
+    border-bottom: transparent solid 5px;
+}
+div#nav-module ul li.selected > a { border-bottom: #ff9900 solid 5px; color:#ff9900;  }
+div#nav-module ul li.selected::before > a {
+    content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+    border-style: solid;
+    border-width: 6px 6px 0 6px;
+    border-color: #ff9900 transparent transparent transparent;
+    bottom: 2px;
+}
