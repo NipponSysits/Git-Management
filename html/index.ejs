@@ -1,0 +1,118 @@
+<!DOCTYPE HTML>
+
+<head>
+<meta charset="utf-8">
+<meta name="description" content="">
+<meta name="author" content="Mr.Kunanek Thongkam">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Touno.K</title>
+<!--[if IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<script language="javascript" src="/libs/js/vendor/jquery.min.js"></script>
+<script language="javascript" src="/libs/js/vendor/db.js"></script>
+<script language="javascript" src="/libs/js/vendor/html5shiv.min.js"></script>
+<script language="javascript" src="/libs/js/vendor/respond.min.js"></script>
+<script language="javascript" src="/libs/js/vendor/URI.min.js"></script>
+<script language="javascript" src="/libs/js/foundation.min.js"></script>
+<script language="javascript" src="/libs/js/touno.engine.js"></script>
+<script language="javascript" src="/libs/js/app.js"></script>
+<link rel="stylesheet" href="/libs/css/foundation.min.css" type="text/css">
+<link rel="stylesheet" href="/libs/css/app.css" type="text/css">
+
+<link rel="shortcut icon" href="/libs/GhostIcon.ico">
+<link rel="apple-touch-icon" sizes="57x57" href="libs/GhostIcon.ico">
+<link rel="apple-touch-icon" sizes="72x72" href="libs/GhostIcon.ico">
+<link rel="apple-touch-icon" sizes="144x144" href="libs/GhostIcon.ico">
+
+<script type="text/javascript">
+    $.when(
+        (function(){
+            window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+            window.origin = '<%= _HOST %>' || window.location.origin;
+
+            var module = $.Deferred();
+            if (localStorage == undefined) {
+                module.reject(new CallbackException("<%= _LANG.EXCEPTION.LOCALSTORAGE_TITLE %>", "<%= _LANG.EXCEPTION.LOCALSTORAGE_DESC %>"));
+            } else if (console == undefined) {
+                module.reject(new CallbackException("<%= _LANG.EXCEPTION.CONSOLE_TITLE %>", "<%= _LANG.EXCEPTION.CONSOLE_DESC %>"));
+            } else if (document.cookie == undefined) {
+                module.reject(new CallbackException("<%= _LANG.EXCEPTION.COOKIE_TITLE %>", "<%= _LANG.EXCEPTION.COOKIE_DESC %>"));
+            } else if (window.indexedDB == undefined) {
+                module.reject(new CallbackException("<%= _LANG.EXCEPTION.INDEXED_TITLE %>", "<%= _LANG.EXCEPTION.INDEXED_DESC %>"));
+            } else if (History == undefined) {
+                module.reject(new CallbackException("<%= _LANG.EXCEPTION.HISTORY_TITLE %>", "<%= _LANG.EXCEPTION.HISTORY_DESC %>"));
+            } else if (/MSIE 5.0|MSIE 5.5|MSIE 6.0|MSIE 7.0|MSIE 8.0/g.exec(navigator.userAgent)) {
+                module.reject(new CallbackException("<%= _LANG.EXCEPTION.IE9_TITLE %>", "<%= _LANG.EXCEPTION.IE9_DESC %>"));
+            } else {
+                module.resolve(true);
+
+                // if(T.Storage('version') && T.Storage('dbname') && T.Storage('theme'))
+                // {
+
+                // } else {
+                //     $.ajax({ url: window.origin+"/lib/init.php", dataType : 'JSON', type: "POST", data: { config: 'initial' } }).done(function(init) {
+                //         T.Storage('version', init.version); 
+                //         T.Storage('dbname', init.db.name);
+                //         T.Storage('theme', init.default.theme);
+                //         db.open({
+                //             server: init.db.name, version: 1,
+                //             schema: { initial: { key: { keyPath: 'version' }}}
+                //         }).then( function (s) {
+                //             console.log(init);
+                //             s.add('initial', init);
+                //             s.close();
+                //             location.reload();
+                //         });
+                //     });
+                // } 
+            }
+            return module.promise();
+        })()
+    ).fail(function (ex) {
+        if (ex instanceof CallbackException) {
+            alert(ex.exMessage);
+        } else {
+            alert(ex);
+        }
+    }).done(function (data) {
+        console.log('done.');
+    });
+        
+</script>
+</head>
+<body data-whatinput-formtyping>
+<div class="main">
+    <div class="header">
+        <div id="k-background"><div id="k-ground"></div></div>
+        <div style="background-color: #000;">
+            <div class="row">
+                <div id="nav-module" class="small-centered medium-10 medium-centered large-8 large-centered columns">    
+                    <ul class="menu">
+                        <% _LANG.NAV_MENU.forEach(function(item) { %>
+                        <li name="<%= item.key %>"><a href="/<%= item.component %>"><%= item.name %></a></li>
+                        <% }) %>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content" style="background:url('/libs/img/header-line.png') top repeat-x; padding-top:10px;">
+        <div class="row">
+            <div class="small-centered medium-10 medium-centered large-8 large-centered columns">    
+                Content
+            </div>
+        </div>
+    </div>
+    <div class="footer" style="background:url('/libs/img/footer-line.png') 0px 28px repeat-x;">
+        <div class="row">
+            <div id="k-footer" class="small-centered medium-10 medium-centered large-8 large-centered columns align-bottom">    
+                Designed by <strong><a href="http://www.facebook.com/dvgamer" target="_blank">Touno.K &copy; Copyright</a></strong> | Powered by <strong>NodeJS</strong>
+            </div>
+        </div>
+        <div style="background:#000;height:5px;">
+        </div>
+    </div>
+</div>
+<script language="javascript" src="/libs/js/vendor/what-input.min.js"></script>
+</body>
+</html>

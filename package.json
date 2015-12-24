@@ -1,0 +1,28 @@
+{
+  "name": "Sentinel-Project",
+  "description": "Server on Touno-PC",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "connect-url-rewrite": "^0.1.0",
+    "ejs": "^2.3.4",
+    "express": "^4.13.3",
+    "mongodb": "^2.0.52",
+    "monk": "^0.1.4"
+  },
+  "main": "app.js",
+  "scripts": {
+    "dev": "webpack"
+  },
+  "author": "Touno.K",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "1.0"
+  },
+  "devDependencies": {
+    "webpack": "^1.12.9",
+    "webpack-dev-server": "^1.14.0",
+    "webpack-merge": "^0.3.2"
+  }
+}
