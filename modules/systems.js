@@ -8,7 +8,7 @@ app.set('view options', { layout:false, root: __dirname + '/html' } );
 app.use("/libs", express.static(__dirname+'/../includes'));
 
 var user = {};
-var config = require("./../app.config")[/--(\w+)/.exec(process.argv[2] || '')[1] || 'serv'];
+var config = require("./../app.config")[/--(\w+)/.exec(process.argv[2] || '--serv')[1]];
 var language = require('./../language/'+(user.language || 'en-EN'));
 
 module.exports = {

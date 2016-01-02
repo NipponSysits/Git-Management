@@ -18,7 +18,7 @@ module.exports = {
 		}
 	},
 	serv: {
-		ip: '122.155.3.228',
+		ip: '10.0.1.21',
 		port: 8220,
 		mongo_db: {
 			domain: 'touno-k.noip.me',
