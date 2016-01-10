@@ -1,41 +1,3 @@
-@font-face {
-    font-family: 'league_gothic';
-    src: url('webfont/leaguegothic-regular-webfont.eot');
-    src: url('webfont/leaguegothic-regular-webfont.eot?#iefix') format('embedded-opentype'),
-         url('webfont/leaguegothic-regular-webfont.woff') format('woff'),
-         url('webfont/leaguegothic-regular-webfont.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'rsuregular';
-    src: url('webfont/rsu_regular-webfont.eot');
-    src: url('webfont/rsu_regular-webfont.eot?#iefix') format('embedded-opentype'),
-         url('webfont/rsu_regular-webfont.woff') format('woff'),
-         url('webfont/rsu_regular-webfont.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-
-}
-@font-face {
-    font-family: 'NuvoWeb';
-    src: url('webfont/NuvoWeb-Medieot');
-    src: url('webfont/NuvoWeb-Medi.eot?#iefix') format('embedded-opentype'),
-         url('webfont/NuvoWeb-Medi.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-
-}
-@font-face {
-    font-family: 'league_gothicregular';
-    src: url('leaguegothic-regular-webfont.eot');
-    src: url('leaguegothic-regular-webfont.eot?#iefix') format('embedded-opentype'),
-         url('leaguegothic-regular-webfont.woff') format('woff'),
-         url('leaguegothic-regular-webfont.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-
 body {
     padding: 0px;
     font-family: "Segoe UI", Tahoma !important;
@@ -65,40 +27,8 @@ h5 {
 }
 a { text-decoration: none; color: #000;  }
 a:hover { text-decoration: underline; color: #000;  }
-div.main { min-height: 100%; position: relative; }
+
+div.main { min-height: 100%; position: relative; z-index: 0; }
 div.header {  }
 div.content { padding-bottom: 50px; }
 div.footer { position: absolute; bottom: 0; width: 100%; }
-
-div#k-background { background:#000 url(../img/background.jpg) -1250px 0px; }
-div#k-ground { background:transparent url(../img/ground.png) top center; height:190px; }
-div#k-footer { padding:10px 15px 9px 5px; font: 11px Segoe UI; color:#807f7f; text-align: right; }
-
-div#nav-module { background-color: #000; height: 34px; }
-div#nav-module ul { position: relative; }
-div#nav-module ul li > a:hover { color:#ff9900;  }
-div#nav-module ul li > a {
-    cursor: pointer;
-    display: inline-block;
-    font-family: "NuvoWeb";
-    font-size: 13px;
-    font-weight: bold;
-    height: 18px;
-    color:#FFF; 
-    text-decoration:none;
-    text-transform: uppercase;
-    margin: 8px 0px 8px 0px;
-    padding: 8px 18px 18px 18px;
-    border-bottom: transparent solid 5px;
-}
-div#nav-module ul li.selected > a { border-bottom: #ff9900 solid 5px; color:#ff9900;  }
-div#nav-module ul li.selected::before > a {
-    content: "";
-    width: 0;
-    height: 0;
-    position: absolute;
-    border-style: solid;
-    border-width: 6px 6px 0 6px;
-    border-color: #ff9900 transparent transparent transparent;
-    bottom: 2px;
-}
