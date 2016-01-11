@@ -13,20 +13,28 @@
 <script language="javascript" src="/libs/js/vendor/html5shiv.min.js"></script>
 <script language="javascript" src="/libs/js/vendor/respond.min.js"></script>
 <script language="javascript" src="/libs/js/vendor/URI.min.js"></script>
-<script language="javascript" src="/libs/js/vendor/modernizr.js"></script>
-<script language="javascript" src="/libs/js/vendor/moment.min.js"></script>
-<script language="javascript" src="/libs/js/vendor/materialPreloader.min.js"></script>
 <script language="javascript" src="/libs/js/vendor/semantic.min.js"></script>
 <script language="javascript" src="/libs/js/touno.engine.js"></script>
 <script language="javascript" src="/libs/js/app.js"></script>
-<link rel="stylesheet" href="/libs/css/normalize.css" type="text/css">
 <link rel="stylesheet" href="/libs/css/semantic.min.css" type="text/css">
-<link rel="stylesheet" href="/libs/css/materialPreloader.min.css" type="text/css">
 <link rel="stylesheet" href="/libs/css/app.css" type="text/css">
 
+  <link rel="stylesheet" type="text/css" href="/libs/components/reset.css">
+  <link rel="stylesheet" type="text/css" href="/libs/components/site.css">
+  <link rel="stylesheet" type="text/css" href="/libs/components/grid.css">
+
+  <!--- Component CSS -->
+  <link rel="stylesheet" type="text/css" href="/libs/components/menu.css">
+  <link rel="stylesheet" type="text/css" href="/libs/components/input.css">
+  <link rel="stylesheet" type="text/css" href="/libs/components/dropdown.css">
+  <link rel="stylesheet" type="text/css" href="/libs/components/icon.css">
+  <link rel="stylesheet" type="text/css" href="/libs/components/button.css">
+  <link rel="stylesheet" type="text/css" href="/libs/components/transition.css">
+  <script type="text/javascript" src="/libs/components/transition.js"></script>
+  <script type="text/javascript" src="/libs/components/dropdown.js"></script>
+
+
 <script type="text/javascript">
-    window.loader = new $.materialPreloader({ position: 'top', height: '5px', fadeIn: 0, fadeOut: 200 });
-    loader.on();
 
     $.when(
         (function(){
@@ -52,32 +60,34 @@
             return module.promise();
         })()
     ).fail(function (ex) {
-        //loader.off();
         if (ex instanceof CallbackException) {
             alert(ex.exMessage);
         } else {
             alert(ex);
         }
     }).done(function (data) {
-        //loader.off();
         console.log('done.');
     });
      
 
 $(function(){
 
-  $('.ui.form').form({
+    $('.ui.menu .ui.dropdown').dropdown({ on: 'hover' });
+    $('.ui.menu a.item').on('click', function() {
+        $(this).addClass('active').siblings().removeClass('active');
+    });
+
+
+    $('.ui.form').form({
       fields: {
         email: {
           identifier  : 'email',
           rules: [
             {
-              type   : 'empty',
-              prompt : 'Please enter your e-mail'
+              type   : 'empty', prompt : 'Please enter your e-mail'
             },
             {
-              type   : 'email',
-              prompt : 'Please enter a valid e-mail'
+              type   : 'email', prompt : 'Please enter a valid e-mail'
             }
           ]
         },
@@ -85,12 +95,10 @@ $(function(){
           identifier  : 'password',
           rules: [
             {
-              type   : 'empty',
-              prompt : 'Please enter your password'
+              type   : 'empty', prompt : 'Please enter your password'
             },
             {
-              type   : 'length[6]',
-              prompt : 'Your password must be at least 6 characters'
+              type   : 'length[6]', prompt : 'Your password must be at least 6 characters'
             }
           ]
         }
@@ -104,7 +112,36 @@ $(function(){
     <div class="header">
     </div>
     <div class="content">
-        <div class="ui middle aligned center aligned grid">
+          <div class="ui menu top attached">
+          <div class="header item">Brand</div>
+          <a class="active item">Link</a>
+          <a class="item">Link</a>
+          <div class="ui dropdown item">
+            Dropdown
+            <i class="dropdown icon"></i>
+            <div class="menu">
+              <div class="item">Action</div>
+              <div class="item">Another Action</div>
+              <div class="item">Something else here</div>
+              <div class="divider"></div>
+              <div class="item">Separated Link</div>
+              <div class="divider"></div>
+              <div class="item">One more separated link</div>
+            </div>
+          </div>
+          <div class="right menu">
+            <div class="item">
+              <div class="ui action left icon input">
+                <i class="search icon"></i>
+                <input type="text" placeholder="Search">
+                <button class="ui button">Submit</button>
+              </div>
+            </div>
+            <a class="item">Link</a>
+          </div>
+          </div>
+
+        <div class="ui column centered grid" style="margin:0px;">
           <div class="column" style="max-width: 450px;">
             <form class="ui large form">
                 <div class="field">
@@ -121,12 +158,8 @@ $(function(){
                 </div>
                 <div class="ui fluid large teal submit button">Login</div>
               <div class="ui error message"></div>
-
             </form>
-
-            <div class="ui message">
-              New to us? <a href="#">Sign Up</a>
-            </div>
+            <div class="ui message">New to us? <a href="#">Sign Up</a> </div>
           </div>
         </div>
     </div>
