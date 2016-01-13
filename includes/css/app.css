@@ -9,16 +9,16 @@ body {
 
 div.main { min-height: 100%; position: relative; z-index: 0; }
 div.header {  }
-div.content { padding-bottom: 50px; }
+div.content { padding-bottom: 35px; }
 div.footer { 
     color: #5c5c5c; 
     font-size: 11px; 
     position: absolute; 
     bottom: 0; 
     width: 100%; 
-    height: 50px;
+    height: 35px;
     background-color:#ececec;
-    padding: 6px 15px; }
+    padding: 10px 15px; }
 
 div.ui.menu {
     background-color: #171d2c;
@@ -32,7 +32,7 @@ div.ui.input {
     background-color: #171d2c !important;
 }
 @media only screen and (max-width: 767px){
-    canvas.login-image{
+    div.login-image{
         display: none !important;
     }
 }
