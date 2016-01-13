@@ -83,24 +83,24 @@ $(function(){
   $('.ui.remember-id').checkbox({
     onChange: function(){
       console.log('ui', remember);
-      T.Storage('signin-remember-id', ($(this).prop('checked') ? 'check' : 'uncheck'));
+      T.Storage('signin-remember-id', ($(this).prop('checked') ? 'check': 'uncheck'));
     }
   });
-  $('.ui.sign-in').form({
+  $('.ui.sign-in.form').form({
     fields: {
       email: {
         onValid:function(){ console.log('onValid email'); },
-        identifier  : 'email',
+        identifier: 'email',
         rules: [
-          { type   : 'empty', prompt : 'Please enter your e-mail' },
-          { type   : 'email', prompt : 'Please enter a valid e-mail' }
+          { type: 'empty', prompt: 'Please enter your e-mail' },
+          { type: 'email', prompt: 'Please enter a valid e-mail' }
         ]
       },
       password: {
-        identifier  : 'password',
+        identifier: 'password',
         rules: [
-          { type   : 'empty', prompt : 'Please enter your password' },
-          { type   : 'length[6]', prompt : 'Your password must be at least 6 characters' }
+          { type: 'empty', prompt: 'Please enter your password' },
+          { type: 'length[6]', prompt: 'Your password must be at least 6 characters' }
         ]
       }
     },
@@ -111,7 +111,7 @@ $(function(){
     }
   });
 
-  $('.ui.sign-in').submit(function(e){ 
+  $('.ui.sign-in.button').submit(function(e){ 
       //e.preventDefault(); usually use this, but below works best here.
       return false;
   });
@@ -131,10 +131,10 @@ $(function(){
     <div class="content">
         <div class="ui menu top attached">
           <div class="header">
-            <img src="libs/img/pgm.png" width="200" height="39" style="margin: 8px 10px;" >
+            <img src="/libs/img/pgm.png" width="200" height="39" style="margin: 8px 10px;" >
           </div>
         </div>
-        <div>
+        <div class="ui user-sign-in">
           <div class="ui equal width stackable grid " style="margin:0px;">
             <div class="column login-image" style="background-image: url('/libs/img/login.jpg'); background-position: 0px 0px; background-repeat: no-repeat; background-size: cover; background-position: left center;"></div>
             <!-- <canvas id="login-image" class="column login-image"></canvas> -->
