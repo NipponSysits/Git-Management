@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-
+<html>
 <head>
 <meta charset="utf-8">
 <meta name="description" content="">
@@ -14,25 +14,26 @@
 <script language="javascript" src="/libs/js/vendor/respond.min.js"></script>
 <script language="javascript" src="/libs/js/vendor/URI.min.js"></script>
 <script language="javascript" src="/libs/js/vendor/semantic.min.js"></script>
-<script language="javascript" src="/libs/js/touno.engine.js"></script>
-<script language="javascript" src="/libs/js/app.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/libs/components/site.css">
+<link rel="stylesheet" type="text/css" href="/libs/components/grid.css">
+
+<!--- Component CSS -->
+<link rel="stylesheet" type="text/css" href="/libs/components/menu.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/components/input.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/components/dropdown.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/components/icon.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/components/button.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/components/transition.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/components/checkbox.min.css">
+<script type="text/javascript" src="/libs/components/transition.min.js"></script>
+<script type="text/javascript" src="/libs/components/dropdown.min.js"></script>
+<script type="text/javascript" src="/libs/components/checkbox.min.js"></script>
+
 <link rel="stylesheet" href="/libs/css/semantic.min.css" type="text/css">
 <link rel="stylesheet" href="/libs/css/app.css" type="text/css">
-
-  <link rel="stylesheet" type="text/css" href="/libs/components/reset.css">
-  <link rel="stylesheet" type="text/css" href="/libs/components/site.css">
-  <link rel="stylesheet" type="text/css" href="/libs/components/grid.css">
-
-  <!--- Component CSS -->
-  <link rel="stylesheet" type="text/css" href="/libs/components/menu.css">
-  <link rel="stylesheet" type="text/css" href="/libs/components/input.css">
-  <link rel="stylesheet" type="text/css" href="/libs/components/dropdown.css">
-  <link rel="stylesheet" type="text/css" href="/libs/components/icon.css">
-  <link rel="stylesheet" type="text/css" href="/libs/components/button.css">
-  <link rel="stylesheet" type="text/css" href="/libs/components/transition.css">
-  <script type="text/javascript" src="/libs/components/transition.js"></script>
-  <script type="text/javascript" src="/libs/components/dropdown.js"></script>
-
+<script language="javascript" src="/libs/js/touno.engine.js"></script>
+<script language="javascript" src="/libs/js/app.js"></script>
 
 <script type="text/javascript">
 
@@ -68,42 +69,39 @@
     }).done(function (data) {
         console.log('done.');
     });
-     
+
+
 
 $(function(){
+  var resizeImageLogin = function(){
+    $('.login-image').height($(window).height() - 136);
+  }
+  resizeImageLogin();
+  $(window).resize(resizeImageLogin);
+  $('.ui.menu .ui.dropdown').dropdown({ on: 'hover' });
+  $('.ui.menu a.item').on('click', function() {
+      $(this).addClass('active').siblings().removeClass('active');
+  });
+  $('.ui.checkbox').checkbox()
 
-    $('.ui.menu .ui.dropdown').dropdown({ on: 'hover' });
-    $('.ui.menu a.item').on('click', function() {
-        $(this).addClass('active').siblings().removeClass('active');
-    });
-
-
-    $('.ui.form').form({
-      fields: {
-        email: {
-          identifier  : 'email',
-          rules: [
-            {
-              type   : 'empty', prompt : 'Please enter your e-mail'
-            },
-            {
-              type   : 'email', prompt : 'Please enter a valid e-mail'
-            }
-          ]
-        },
-        password: {
-          identifier  : 'password',
-          rules: [
-            {
-              type   : 'empty', prompt : 'Please enter your password'
-            },
-            {
-              type   : 'length[6]', prompt : 'Your password must be at least 6 characters'
-            }
-          ]
-        }
+  $('.ui.form').form({
+    fields: {
+      email: {
+        identifier  : 'email',
+        rules: [
+          { type   : 'empty', prompt : 'Please enter your e-mail' },
+          { type   : 'email', prompt : 'Please enter a valid e-mail' }
+        ]
+      },
+      password: {
+        identifier  : 'password',
+        rules: [
+          { type   : 'empty', prompt : 'Please enter your password' },
+          { type   : 'length[6]', prompt : 'Your password must be at least 6 characters' }
+        ]
       }
-    });
+    }
+  });
 });
 </script>
 </head>
@@ -112,59 +110,46 @@ $(function(){
     <div class="header">
     </div>
     <div class="content">
-          <div class="ui menu top attached">
-          <div class="header item">Brand</div>
-          <a class="active item">Link</a>
-          <a class="item">Link</a>
-          <div class="ui dropdown item">
-            Dropdown
-            <i class="dropdown icon"></i>
-            <div class="menu">
-              <div class="item">Action</div>
-              <div class="item">Another Action</div>
-              <div class="item">Something else here</div>
-              <div class="divider"></div>
-              <div class="item">Separated Link</div>
-              <div class="divider"></div>
-              <div class="item">One more separated link</div>
-            </div>
+        <div class="ui menu top attached">
+          <div class="header">
+            <img src="libs/img/pgm.png" width="200" height="39" style="margin: 8px 10px;" >
           </div>
-          <div class="right menu">
-            <div class="item">
-              <div class="ui action left icon input">
-                <i class="search icon"></i>
-                <input type="text" placeholder="Search">
-                <button class="ui button">Submit</button>
-              </div>
-            </div>
-            <a class="item">Link</a>
-          </div>
-          </div>
-
-        <div class="ui column centered grid" style="margin:0px;">
-          <div class="column" style="max-width: 450px;">
-            <form class="ui large form">
-                <div class="field">
-                  <div class="ui left icon input">
-                    <i class="user icon"></i>
-                    <input type="text" name="email" placeholder="E-mail address">
+        </div>
+        <div class="ui equal width stackable grid " style="margin:0px;">
+          <canvas class="column login-image" id="tutorial"></canvas>
+          <div class="ui column centered grid">
+            <div class="column" style="max-width: 350px; padding-top:80px;">
+              <h2>Sign In</h2>
+              <form class="ui large form">
+                  <h4>Sign-In ID</h4>
+                  <div class="field">
+                    <div class="ui left icon input">
+                      <i class="user icon"></i>
+                      <input type="text" name="email" placeholder="E-mail address">
+                    </div>
                   </div>
-                </div>
-                <div class="field">
-                  <div class="ui left icon input">
-                    <i class="lock icon"></i>
-                    <input type="password" name="password" placeholder="Password">
+                  <div class="field">
+                    <div class="ui checkbox">
+                      <input type="checkbox" name="remember-id">
+                      <label>Remember My Sign-In ID</label>
+                    </div>
                   </div>
-                </div>
-                <div class="ui fluid large teal submit button">Login</div>
-              <div class="ui error message"></div>
-            </form>
-            <div class="ui message">New to us? <a href="#">Sign Up</a> </div>
+                  <h4>Password</h4>
+                  <div class="field">
+                    <div class="ui left icon input">
+                      <i class="lock icon"></i>
+                      <input type="password" name="password" placeholder="Password">
+                    </div>
+                  </div>
+                  <div class="ui fluid large green submit button">Login</div>
+                <div class="ui error message"></div>
+              </form>
+            </div>
           </div>
         </div>
     </div>
-    <div class="footer" style="background:url('/libs/img/footer-line.png') 0px 28px repeat-x;">
-        Designed by <strong>Touno.K &copy; Copyright</a></strong>
+    <div class="footer">
+        Designed by <strong>Mr.Kananek Thongkam</strong><br>Touno.K &copy; Copyright</a>
     </div>
 </div>
 <script language="javascript" src="/libs/js/vendor/what-input.min.js"></script>

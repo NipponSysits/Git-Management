@@ -2,33 +2,37 @@ body {
     padding: 0px;
     font-family: "Segoe UI", Tahoma !important;
     font-size: 12px;
-    background: #F7F7F7;
+    background-color: #F7F7F7;
     overflow: hidden !important;
     overflow-y: visible !important;
 }
-h1 {
-    font-family:"Tahoma";
-    font-weight:bold;
-    font-size:20px;
-    color:#5f5e5e;
-    border-bottom:#979797 solid 1px;
-    background:url(../img/module-h1.png) no-repeat;
-    padding:16px 5px 12px 24px;
-}
-h4 {
-    text-shadow: 1px 1px 2px #777;
-    font-size:350%;
-    margin:10px 10px 0 8px;
-}
-
-h5 {
-    font-size:150%;
-    margin:0 10px 10px 10px;
-}
-a { text-decoration: none; color: #000;  }
-a:hover { text-decoration: underline; color: #000;  }
 
 div.main { min-height: 100%; position: relative; z-index: 0; }
 div.header {  }
 div.content { padding-bottom: 50px; }
-div.footer { position: absolute; bottom: 0; width: 100%; }
+div.footer { 
+    color: #5c5c5c; 
+    font-size: 11px; 
+    position: absolute; 
+    bottom: 0; 
+    width: 100%; 
+    height: 50px;
+    background-color:#ececec;
+    padding: 6px 15px; }
+
+div.ui.menu {
+    background-color: #171d2c;
+    border:none !important;
+}
+div.ui.input input {
+    border-radius: 0px !important;
+    padding: .4em 1em !important;
+}
+div.ui.input {
+    background-color: #171d2c !important;
+}
+@media only screen and (max-width: 767px){
+    canvas.login-image{
+        display: none !important;
+    }
+}
