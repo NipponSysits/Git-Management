@@ -42,40 +42,45 @@
 <script language="javascript" src="/libs/js/app.js"></script>
 
 <script type="text/javascript">
-$.when(
-    (function(){
-        window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
-        window.origin = '<%= _HOST %>' || window.location.origin;
-
-        var module = $.Deferred();
-        if (localStorage == undefined) {
-            module.reject(new CallbackException("<%= _LANG.EXCEPTION.LOCALSTORAGE_TITLE %>", "<%= _LANG.EXCEPTION.LOCALSTORAGE_DESC %>"));
-        } else if (console == undefined) {
-            module.reject(new CallbackException("<%= _LANG.EXCEPTION.CONSOLE_TITLE %>", "<%= _LANG.EXCEPTION.CONSOLE_DESC %>"));
-        } else if (document.cookie == undefined) {
-            module.reject(new CallbackException("<%= _LANG.EXCEPTION.COOKIE_TITLE %>", "<%= _LANG.EXCEPTION.COOKIE_DESC %>"));
-        } else if (window.indexedDB == undefined) {
-            module.reject(new CallbackException("<%= _LANG.EXCEPTION.INDEXED_TITLE %>", "<%= _LANG.EXCEPTION.INDEXED_DESC %>"));
-        } else if (History == undefined) {
-            module.reject(new CallbackException("<%= _LANG.EXCEPTION.HISTORY_TITLE %>", "<%= _LANG.EXCEPTION.HISTORY_DESC %>"));
-        } else if (/MSIE 5.0|MSIE 5.5|MSIE 6.0|MSIE 7.0|MSIE 8.0/g.exec(navigator.userAgent)) {
-            module.reject(new CallbackException("<%= _LANG.EXCEPTION.IE9_TITLE %>", "<%= _LANG.EXCEPTION.IE9_DESC %>"));
-        } else {
-            module.resolve(true); 
-        }
-        return module.promise();
-    })()
-).fail(function (ex) {
-    if (ex instanceof CallbackException) {
-        alert(ex.exMessage);
-    } else {
-        alert(ex);
-    }
-}).done(function (data) {
-    console.log('done.');
-});
-
 $(function(){
+  $.when(
+      (function(){ // Prepare client feature.
+          window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+          window.origin = '<%= _HOST %>' || window.location.origin;
+
+          var module = $.Deferred();
+          if (localStorage == undefined) {
+              module.reject(new CallbackException("<%= _LANG.EXCEPTION.LOCALSTORAGE_TITLE %>", "<%= _LANG.EXCEPTION.LOCALSTORAGE_DESC %>"));
+          } else if (console == undefined) {
+              module.reject(new CallbackException("<%= _LANG.EXCEPTION.CONSOLE_TITLE %>", "<%= _LANG.EXCEPTION.CONSOLE_DESC %>"));
+          } else if (document.cookie == undefined) {
+              module.reject(new CallbackException("<%= _LANG.EXCEPTION.COOKIE_TITLE %>", "<%= _LANG.EXCEPTION.COOKIE_DESC %>"));
+          } else if (window.indexedDB == undefined) {
+              module.reject(new CallbackException("<%= _LANG.EXCEPTION.INDEXED_TITLE %>", "<%= _LANG.EXCEPTION.INDEXED_DESC %>"));
+          } else if (History == undefined) {
+              module.reject(new CallbackException("<%= _LANG.EXCEPTION.HISTORY_TITLE %>", "<%= _LANG.EXCEPTION.HISTORY_DESC %>"));
+          } else if (/MSIE 5.0|MSIE 5.5|MSIE 6.0|MSIE 7.0|MSIE 8.0/g.exec(navigator.userAgent)) {
+              module.reject(new CallbackException("<%= _LANG.EXCEPTION.IE9_TITLE %>", "<%= _LANG.EXCEPTION.IE9_DESC %>"));
+          } else {
+              module.resolve(true); 
+          }
+          return module.promise();
+      })(),
+      (function(){ // sign-in session re-connect.
+
+      })()
+  ).fail(function (ex) {
+      if (ex instanceof CallbackException) {
+          alert(ex.exMessage);
+      } else {
+          alert(ex);
+      }
+  }).done(function (data) {
+      console.log('done.');
+      $('.ui.prepare').fadeOut(300);
+  });
+
+
   $('.login-image').height($(window).height() - 121); 
   $(window).resize(function(){ $('.login-image').height($(window).height() - 121); });
 
@@ -124,7 +129,7 @@ $(function(){
 <body data-whatinput-formtyping>
 <div class="main">
     <div class="header">
-      <div class="ui dimmer">
+      <div class="ui prepare dimmer active">
         <div class="ui large text loader">Loading</div>
       </div>
     </div>
