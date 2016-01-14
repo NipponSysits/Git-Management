@@ -6,7 +6,7 @@
 <meta name="author" content="Mr.Kunanek Thongkam">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>PGM.NS.CO.TH</title>
+<title>PGM MANAGEMENT</title>
 
 <link rel="shortcut icon" href="/libs/icon/16.png">
 <link rel="apple-touch-icon" sizes="57x57" href="/libs/icon/57.png">
@@ -47,7 +47,7 @@ $(function(){
           } else if (/MSIE 5.0|MSIE 5.5|MSIE 6.0|MSIE 7.0|MSIE 8.0/g.exec(navigator.userAgent)) {
               module.reject(new CallbackException("<%= _LANG.EXCEPTION.IE9_TITLE %>", "<%= _LANG.EXCEPTION.IE9_DESC %>"));
           } else {
-              module.resolve(true); 
+              module.resolve(); 
           }
           return module.promise();
       })(),
@@ -130,7 +130,7 @@ $(function(){
     <div class="content">
         <div class="ui menu top attached">
           <div class="header">
-            <img src="/libs/img/pgm.png" width="200" height="39" style="margin: 8px 10px;" >
+            <div style="background-image: url('/libs/img/pgm.management.png'); background-position: 0px 0px; background-repeat: no-repeat; background-size: cover; width:200px; height: 39px; margin: 8px 10px;"></div>
           </div>
         </div>
         <div class="ui user-sign-in">
