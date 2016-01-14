@@ -81,7 +81,6 @@ $(function(){
   $('.ui.remember-id').checkbox(T.Storage('signin-remember-id') || 'uncheck');
   $('.ui.remember-id').checkbox({
     onChange: function(){
-      console.log('ui', remember);
       T.Storage('signin-remember-id', ($(this).prop('checked') ? 'check': 'uncheck'));
     }
   });
