@@ -1,7 +1,7 @@
 module.exports = {
 	dev: {
 		ip: '127.0.0.1',
-		port: 8220,
+		port: 8210,
 		mongo_db: {
 			domain: 'touno-k.noip.me',
 			dbname: 'store_anime',
@@ -19,7 +19,7 @@ module.exports = {
 	},
 	serv: {
 		ip: '10.0.1.21',
-		port: 8220,
+		port: 8210,
 		mongo_db: {
 			domain: 'touno-k.noip.me',
 			dbname: 'store_anime',
