@@ -107,6 +107,8 @@ $(function(){
       T.Storage('signin-remember-id', ($(this).prop('checked') ? 'check': 'uncheck'));
     }
   });
+
+  var signPopup = 0;
   $('.ui.sign-in.form').form({
     fields: {
       email: {
@@ -126,9 +128,23 @@ $(function(){
       }
     },
     onSuccess: function(event, fields){
-       console.log(event, fields);
-       $('.ui.sign-in.button').removeClass('submit green');
-       $('.ui.sign-in.button').addClass('loading');
+      console.log(event, fields);
+      $('.ui.sign-in.button').removeClass('submit green');
+      $('.ui.sign-in.button').addClass('loading');
+    },
+    onFailure: function(formErrors){
+      $('.ui.sign-in.message').removeClass('visible').addClass('hidden').transition('drop');
+      $('.ui.sign-in.message .list').empty();
+      formErrors.map(function(item){
+        $('.ui.sign-in.message .list').append('<li>' + item + '</li>');
+      });
+      clearTimeout(signPopup);
+      signPopup = setTimeout(function(){ 
+        $('.ui.sign-in.message').transition('drop');
+        console.log('hidden');
+      }, 5000)
+      console.log(formErrors);
+      return false;
     }
   });
 
@@ -187,13 +203,18 @@ $(function(){
                     </div>
                   </div>
                   <div class="ui sign-in fluid large submit green button">Login</div>
-                <div class="ui error message"></div>
               </form>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <div class="ui sign-in message ui error message hidden" style="position:absolute; top:0px;">
+      <i class="close icon"></i>
+      <div class="header">There was some errors with your submission</div>
+      <ul class="list"></ul>
+    </div>
+
 
     <div class="ui basic modal feature-exception">
       <div class="header"></div>
