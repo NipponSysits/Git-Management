@@ -17,11 +17,25 @@ app.get('*', function(req, res){
      });
 });
 
+app.use('*', function(req, res, next){
+	if(req.xhr) {
+		var session = (req.headers['session-client'] || 'null') === 'null' ? null : req.headers['session-client'];
+		console.log('check session in db', session);
+		if(session) {
+			
+		}
+	}
+	next();
+});
+
+app.post('/api/sign-init', function(req, res){
+	// var session
+	console.log(req.route.path, req.xhr);
+    res.send({ status: true });
+});
+
 module.exports = {
-	app: app,
 	config: config,
-	_USER: user,
-	_LANG: language,
 	Run: function(){
 		http.createServer(app).listen(config.port, config.ip, function() {
 		    console.log((new Date()) + ' Server is listening on port ' + config.port);

@@ -87,6 +87,14 @@ window.T = {
     _Handle: {
         Component: function(name){ },
         Module: {}
+    },
+    Init: function(){
+        
+        $.ajaxSetup({
+            dataType: 'JSON', type: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest', 'Session-Client': T.Storage('SESSION_CLIENT') },
+            data: {  }
+        });
     }
 }
 
