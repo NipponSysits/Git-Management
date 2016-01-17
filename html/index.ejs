@@ -27,6 +27,24 @@
 
 <script type="text/javascript">
 $(function(){
+  var exModal = function(ex) {
+    var uiEX = '.ui.modal.feature-exception';
+    $('.ui.prepare').hide();
+    $(uiEX).modal({ closable: false, duration: 0 });
+    $('.ui.button.refresh-exception').click(function(){
+      location.reload();
+    });
+
+    if (ex instanceof CallbackException) {
+      $(uiEX+' div.description>p').html(ex.exMessage);
+      $(uiEX+' div.header').html(ex.exTitle);
+    } else {
+      $(uiEX+' div.description>p').html(ex);
+      $(uiEX+' div.header').html("Exception fail.");
+    }
+    $(uiEX).modal('show');  
+  }
+  
   $.when(
     T.Init(),
     (function(){ // Prepare client feature.
@@ -56,44 +74,32 @@ $(function(){
       $.ajax({
         url: '/api/sign-init',
         error: function(xhr, e, s){
-          console.log(e, s);
-          sInit.reject(new CallbackException(e, s));
+          sInit.reject(new CallbackException("Inititial Exception", s));
         },
-        success: function(data){
-          sInit.resolve();
-        }
+        success: function(data){ sInit.resolve(data); }
       });
       return sInit.promise();
     })()
-  ).fail(function (ex) {
-    $('.ui.prepare').hide();
-    var ui = '.ui.modal.feature-exception';
-    $(ui).modal({ closable: false, duration: 0 });
-    $('.ui.button.refresh-exception').click(function(){
-      location.reload();
-    });
-
-    if (ex instanceof CallbackException) {
-      $(ui+' div.description>p').html(ex.exMessage);
-      $(ui+' div.header').html(ex.exTitle);
-    } else {
-      $(ui+' div.description>p').html(ex);
-      $(ui+' div.header').html("Exception fail.");
-    }
-    $(ui).modal('show');  
-  }).done(function (data) {
+  ).fail(exModal).done(function (i, f, s) {
+    var ex = new CallbackException(s);
+    console.log(ex.getItems);
     $('.ui.prepare').fadeOut(300);
-    if(T.Storage('CLIENT_SESSION')) {
-      
+    if(!ex.onError) {
+      if(T.Storage('CLIENT_SESSION')) {
+        
+      } else {
+        $('.ui.panel.sign-in').fadeIn(300);
+      }
     } else {
-      $('.ui.panel.sign-in').fadeIn(300);
+      exModal(ex); 
     }
+
 
   });
 
 
-  $('.login-image').height($(window).height() - 121); 
-  $(window).resize(function(){ $('.login-image').height($(window).height() - 121); });
+  $('.login-image').height($(window).height() - 118); 
+  $(window).resize(function(){ $('.login-image').height($(window).height() - 118); });
 
   $('.ui.remember-id').checkbox(T.Storage('signin-remember-id') || 'uncheck');
   $('.ui.remember-id').checkbox({

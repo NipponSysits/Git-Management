@@ -12,8 +12,10 @@ module.exports = {
 			port: 27017
 		},
 		mysql_db: {
-			username: 'root',
+			host: 'touno-k.noip.me',
+			user: 'root',
 			password: '123456',
+			database: '123456',
 			port: 3301
 		}
 	},
@@ -30,8 +32,10 @@ module.exports = {
 			port: 27017
 		},
 		mysql_db: {
-			username: 'root',
+			host: 'touno-k.noip.me',
+			user: 'root',
 			password: '123456',
+			database: '123456',
 			port: 3301
 		}
 	}

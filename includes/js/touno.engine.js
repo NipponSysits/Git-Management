@@ -100,8 +100,8 @@ window.T = {
 
 $.extend(window, {
     CallbackException : function(m1, m2) {
-        this.onError = m1.onError || true;
-        this.exTitle = m1.exTitle || ((m2!=undefined) ? m1 : undefined) || "ERROR";
+        this.onError = m1.onError || false;
+        this.exTitle = m1.exTitle || ((m2!=undefined) ? m1 : undefined) || "Exception";
         this.exMessage = m1.exMessage || m2 || m1 || "";
         this.getItems = m1.getItems || {};
         if(m1.getItems != undefined) this.getItems = jQuery.parseJSON(this.getItems);
