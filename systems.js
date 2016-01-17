@@ -14,7 +14,7 @@ var user = {};
 var config = require("./app.config")[/--(\w+)/.exec(process.argv[2] || '--serv')[1]];
 var language = require('./language/'+(user.language || 'en-EN'));
 
-app.get('*', function(req, res){	
+app.get('*', [ SessionClient ], function(req, res){
     res.render('index', { 
     	_LANG: language, _HOST: config.ip+':'+config.port
      });
@@ -24,11 +24,16 @@ var conn = mysql.createConnection(config.mysql_db);
 
 var SessionClient = function(req, res, next){
 	if(req.xhr) {
+		// Check Session id in db.
+		// if not exists creacted session and send back
+		// 
 		var session = (req.headers['session-client'] || 'null') === 'null' ? null : req.headers['session-client'];
 		console.log('check session in db', session);
 		if(session) {
-
+			req.sessionId = null;
 		}
+	} else {
+		// check session and update date time
 	}
 	next();
 }
@@ -50,12 +55,8 @@ walk.walk('\\modules', { followLinks: false }).on('file', function(root, stat, n
     next();
 });
 
-// app.api(function(req){
-
-// });
-
-app.post('/api/sign-init', [ SessionClient, dbConnected ], function(req, res){
-	// var session+
+app.post('/api/sign-in', [ SessionClient, dbConnected ], function(req, res){
+	// SignIn
 	console.log(req.route.path, req.xhr);
     res.send({ status: true });
 });
