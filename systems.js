@@ -1,6 +1,8 @@
 var http = require('http'), mongo = require('mongodb'), monk = require('monk');
 var engine = require('ejs-mate'), express = require('express'), app = express();
 var q = require('q'), mysql = require('mysql'), walk = require('walk');
+var bodyParser = require('body-parser')
+
 
 app.engine('ejs', engine);
 app.set('view engine', 'ejs');
@@ -13,13 +15,13 @@ var config = require("./app.config")[/--(\w+)/.exec(process.argv[2] || '--serv')
 var language = require('./language/'+(user.language || 'en-EN'));
 
 
-var conn = mysql.createConnection(config.mysql_db);
+var db = mysql.createConnection(config.mysql_db);
 
 var SessionClient = function(req, res, next){
 	if(req.xhr) {
 		// Check Session id in db.
 		// if not exists creacted session and send back
-		// 
+		// Math.random().toString()
 		var session = (req.headers['session-client'] || 'null') === 'null' ? null : req.headers['session-client'];
 		console.log('check session in db', session);
 		if(session) {
@@ -32,6 +34,7 @@ var SessionClient = function(req, res, next){
 }
 
 var dbConnected = function(req, res, next){
+
 	// conn.connect(function(err) {
 	// 	conn.end();
 	// 	// if (err) {
@@ -42,22 +45,25 @@ var dbConnected = function(req, res, next){
 	next();
 }
 
-walk.walk('\\modules', { followLinks: false }).on('file', function(root, stat, next) {
+app.api = function(path, callback){
+	console.log('API:', path);
+	app.post(path, [ bodyParser.json(), bodyParser.urlencoded(), SessionClient, dbConnected ], function(req, res){
+		callback(req, res, req.body);
+	});
+}
+
+
+walk.walk('modules', { followLinks: false }).on('file', function(root, stat, next) {
+	root = '\\'+root;
     var file = /(.*)\.js$/.exec(stat.name);
-    if(file) app.post(root.replace(/\\/ig, '/').replace('/modules', '/api')+'/'+file[1], require(__dirname+root+'\\'+stat.name))
+    if(file) app.api(root.replace(/\\/ig, '/').replace('/modules', '/api')+'/'+file[1], require(__dirname+root+'\\'+stat.name))
     next();
 });
 
-app.get('*', [ SessionClient ], function(req, res){
+app.get('*', [ SessionClient ], function(req, res) {
     res.render('index', { 
     	_LANG: language, _HOST: config.ip+':'+config.port
      });
-});
-
-app.post('/api/sign-in', [ SessionClient, dbConnected ], function(req, res){
-	// SignIn
-	console.log(req.route.path, req.xhr);
-    res.send({ status: true });
 });
 
 module.exports = {
