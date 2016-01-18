@@ -1,8 +1,6 @@
 var http = require('http'), mongo = require('mongodb'), monk = require('monk');
 var engine = require('ejs-mate'), express = require('express'), app = express();
-var q = require('q');
-var mysql = require('mysql');
-var walk    = require('walk');
+var q = require('q'), mysql = require('mysql'), walk = require('walk');
 
 app.engine('ejs', engine);
 app.set('view engine', 'ejs');
@@ -14,11 +12,6 @@ var user = {};
 var config = require("./app.config")[/--(\w+)/.exec(process.argv[2] || '--serv')[1]];
 var language = require('./language/'+(user.language || 'en-EN'));
 
-app.get('*', [ SessionClient ], function(req, res){
-    res.render('index', { 
-    	_LANG: language, _HOST: config.ip+':'+config.port
-     });
-});
 
 var conn = mysql.createConnection(config.mysql_db);
 
@@ -53,6 +46,12 @@ walk.walk('\\modules', { followLinks: false }).on('file', function(root, stat, n
     var file = /(.*)\.js$/.exec(stat.name);
     if(file) app.post(root.replace(/\\/ig, '/').replace('/modules', '/api')+'/'+file[1], require(__dirname+root+'\\'+stat.name))
     next();
+});
+
+app.get('*', [ SessionClient ], function(req, res){
+    res.render('index', { 
+    	_LANG: language, _HOST: config.ip+':'+config.port
+     });
 });
 
 app.post('/api/sign-in', [ SessionClient, dbConnected ], function(req, res){
