@@ -82,24 +82,43 @@ window.T = {
         }
     }, 
     Stop: function(){
-        if(T._Handle.Module.readyState != 4 && T._Handle.Module.readyState != undefined) T._Handle.Module.abort();
+        if(T.__handle.Module.readyState != 4 && T.__handle.Module.readyState != undefined) T.__handle.Module.abort();
     },
-    _Handle: {
-        Component: function(name){ },
-        Module: {}
+    CallAbort: function(){
+        if(T.__ajaxCall.readyState != 4 && T.__ajaxCall.readyState != undefined) T.__ajaxCall.abort();
+    },
+    Call: function(configs){
+      configs = configs || {};
+      var aCall = $.Deferred();
+      T.__ajaxCall = $.ajax({
+        url: configs.url || '',
+        data: configs.data || {},
+        error: function(xhr, e, s){
+          aCall.resolve(new CallbackException("Call function exception.", s));
+        },
+        success: function(data){ 
+          var ex = new CallbackException({ onError: false, getItems: data });
+          aCall.resolve(ex);
+        }
+      });
+      return aCall.promise();
     },
     Init: function(){
-        
         $.ajaxSetup({
             dataType: 'JSON', type: 'POST',
-            headers: { 'X-Requested-With': 'XMLHttpRequest', 'Session-Client': T.Storage('SESSION_CLIENT') },
-            data: {  }
+            headers: { 'X-Requested-With': 'XMLHttpRequest', 'Session-Client': T.Storage('SESSION_CLIENT') }
         });
-    }
+    },
+    __handle: {
+        Component: function(name){ },
+        Module: {},
+    },
+    __ajaxCall: undefined
 }
 
 $.extend(window, {
     CallbackException : function(m1, m2) {
+        m1 = m1 || {};
         this.onError = m1.onError || false;
         this.exTitle = m1.exTitle || ((m2!=undefined) ? m1 : undefined) || "Exception";
         this.exMessage = m1.exMessage || m2 || m1 || "";

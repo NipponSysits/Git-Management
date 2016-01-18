@@ -70,15 +70,7 @@ $(function(){
       return feature.promise();
     })(),
     (function(){ // sign-in session re-connect.
-      var sInit = $.Deferred();
-      $.ajax({
-        url: '/api/sign-init',
-        error: function(xhr, e, s){
-          sInit.reject(new CallbackException("Inititial Exception", s));
-        },
-        success: function(data){ sInit.resolve(data); }
-      });
-      return sInit.promise();
+
     })()
   ).fail(exModal).done(function (i, f, s) {
     var ex = new CallbackException(s);
@@ -107,6 +99,17 @@ $(function(){
       T.Storage('signin-remember-id', ($(this).prop('checked') ? 'check': 'uncheck'));
     }
   });
+  $('.ui.button.sign-back').click(function(){
+    $('.ui.sign-image').transition({ 
+      animation: 'fade left', 
+      onComplete: function(){
+        $('.ui.sign-id').transition('fade left');
+      }
+    });
+    $('.ui.button.sign-in').css({ 'border-radius': 0 });
+    $(this).hide();
+    $('.or.sign-or').hide();
+  });
 
   var signPopup = 0;
   $('.ui.sign-in.form').form({
@@ -131,6 +134,14 @@ $(function(){
       console.log(event, fields);
       $('.ui.sign-in.button').removeClass('submit green');
       $('.ui.sign-in.button').addClass('loading');
+      T.Call({ url:'/api/sign-in', data: fields }).then(function(e){
+        if (!e.onError) {
+          //e.getItems
+        } else {
+
+        }
+      });
+      return false;
     },
     onFailure: function(formErrors){
       $('.ui.sign-in.message').removeClass('visible').addClass('hidden').transition('drop');
@@ -143,15 +154,10 @@ $(function(){
         $('.ui.sign-in.message').transition('drop');
         console.log('hidden');
       }, 5000)
-      console.log(formErrors);
       return false;
     }
   });
 
-  $('.ui.sign-in.button').submit(function(e){ 
-      //e.preventDefault(); usually use this, but below works best here.
-      return false;
-  });
   // var ctx = document.getElementById('login-image').getContext('2d');
   // var text = ctx.measureText("foo"); // TextMetrics object
   // text.width; // 16;
@@ -182,17 +188,27 @@ $(function(){
             <div class="column" style="max-width: 350px; padding-top:80px;">
               <h2>Sign In</h2>
               <form class="ui large form sign-in">
-                  <h4>Sign-In ID</h4>
-                  <div class="field">
-                    <div class="ui left icon input">
-                      <i class="user icon"></i>
-                      <input type="text" name="email" placeholder="E-mail address">
+                  <div class="ui column" style="max-height:170px;">
+                    <div class="ui sign-image centered grid" style="position:relative;">
+                      <div class="column" style="max-width: 156px; text-align:center;">
+                        <img class="ui circular image" src="http://www.gravatar.com/avatar/c1ec9de8190fa568a2bd87b7713a7c57?s=128" height="128" width="128">
+                        <h3 style="margin-top: 5px;">kem@ns.co.th</h3>
+                      </div>
                     </div>
-                  </div>
-                  <div class="field">
-                    <div class="ui checkbox remember-id">
-                      <input type="checkbox" name="remember-id">
-                      <label>Remember My Sign-In ID</label>
+                    <div class="ui sign-id" style="position:relative; display:none;">
+                      <h4>Sign-In ID</h4>
+                      <div class="field">
+                        <div class="ui left icon input">
+                          <i class="user icon"></i>
+                          <input type="text" name="email" placeholder="E-mail address">
+                        </div>
+                      </div>
+                      <div class="field">
+                        <div class="ui checkbox remember-id">
+                          <input type="checkbox" name="remember-id">
+                          <label>Remember My Sign-In ID</label>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <h4>Password</h4>
@@ -202,7 +218,11 @@ $(function(){
                       <input type="password" name="password" placeholder="Password">
                     </div>
                   </div>
-                  <div class="ui sign-in fluid large submit green button">Login</div>
+                  <div class="ui buttons column" style="width:100%">
+                    <div class="ui sign-back button large" style="max-width:83px;">Back</div>
+                    <div class="or sign-or"></div>
+                    <div class="ui positive sign-in large submit button">Login</div>
+                  </div>
               </form>
             </div>
           </div>
