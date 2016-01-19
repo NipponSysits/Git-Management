@@ -89,6 +89,9 @@ $(function(){
 
   });
 
+  $('.ui.button.sign-in').css({ 'border-radius': 0 });
+  $('.ui.button.sign-back').hide();
+  $('.or.sign-or').hide();
 
   $('.login-image').height($(window).height() - 118); 
   $(window).resize(function(){ $('.login-image').height($(window).height() - 118); });
@@ -137,6 +140,9 @@ $(function(){
       T.Call({ url:'/api/sign-in', data: fields }).then(function(e){
         if (!e.onError) {
           //e.getItems
+          var a = 'c1ec9de8190fa568a2bd87b7713a7c57';
+          $('.ui.sign-avartar').css('background-image',"url('http://www.gravatar.com/avatar/"+a+"?d=mm&s=256')");
+          $('.ui.sign-email').html('kem@ns.co.th');
         } else {
 
         }
@@ -189,13 +195,13 @@ $(function(){
               <h2>Sign In</h2>
               <form class="ui large form sign-in">
                   <div class="ui column" style="max-height:170px;">
-                    <div class="ui sign-image centered grid" style="position:relative;">
+                    <div class="ui sign-image centered grid" style="position:relative; display:none;">
                       <div class="column" style="max-width: 156px; text-align:center;">
-                        <img class="ui circular image" src="http://www.gravatar.com/avatar/c1ec9de8190fa568a2bd87b7713a7c57?s=128" height="128" width="128">
-                        <h3 style="margin-top: 5px;">kem@ns.co.th</h3>
+                        <div class="ui circular image sign-avartar"  style="background-size:cover;width:128px;height:128px;"></div>
+                        <h3 class="ui sign-email" style="margin-top: 5px;"></h3>
                       </div>
                     </div>
-                    <div class="ui sign-id" style="position:relative; display:none;">
+                    <div class="ui sign-id" style="position:relative;">
                       <h4>Sign-In ID</h4>
                       <div class="field">
                         <div class="ui left icon input">
