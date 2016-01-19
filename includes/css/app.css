@@ -31,8 +31,16 @@ div.ui.input input {
 div.ui.input {
     background-color: #171d2c !important;
 }
+div.or.sign-or::before{
+    top:57% !important;
+    line-height: 1.785714em !important;
+}
+
 @media only screen and (max-width: 767px){
     div.login-image{
         display: none !important;
+    }
+    div.footer{
+        text-align: center;
     }
 }
