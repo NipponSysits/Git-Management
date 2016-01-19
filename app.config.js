@@ -4,7 +4,7 @@ module.exports = {
 		port: 8210,
 		mongo_db: {
 			domain: 'touno-k.noip.me',
-			dbname: 'store_anime',
+			dbname: 'ns_develop',
 			access: {
 				username: 'root',
 				password: '123456'
@@ -24,7 +24,7 @@ module.exports = {
 		port: 8210,
 		mongo_db: {
 			domain: 'touno-k.noip.me',
-			dbname: 'store_anime',
+			dbname: 'ns_develop',
 			access: {
 				username: 'root',
 				password: '123456'
