@@ -3,40 +3,40 @@ module.exports = {
 		ip: '127.0.0.1',
 		port: 8210,
 		mongo_db: {
-			domain: 'touno-k.noip.me',
+			domain: 'dev.ns.co.th',
 			dbname: 'ns_develop',
 			access: {
 				username: 'root',
 				password: '123456'
 			},
-			port: 27017
+			port: 20317
 		},
 		mysql_db: {
-			host: 'touno-k.noip.me',
+			host: 'dev.ns.co.th',
 			user: 'root',
 			password: '123456',
 			database: '123456',
-			port: 3301
+			port: 20400
 		}
 	},
 	serv: {
 		ip: '10.0.1.21',
 		port: 8210,
 		mongo_db: {
-			domain: 'touno-k.noip.me',
+			domain: 'dev.ns.co.th',
 			dbname: 'ns_develop',
 			access: {
 				username: 'root',
 				password: '123456'
 			},
-			port: 27017
+			port: 20317
 		},
 		mysql_db: {
-			host: 'touno-k.noip.me',
+			host: 'dev.ns.co.th',
 			user: 'root',
 			password: '123456',
 			database: '123456',
-			port: 3301
+			port: 20400
 		}
 	}
 }
