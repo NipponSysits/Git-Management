@@ -14,8 +14,8 @@ module.exports = {
 		mysql_db: {
 			host: 'dev.ns.co.th',
 			user: 'root',
-			password: '123456',
-			database: '123456',
+			password: 'pgm1234',
+			database: 'ns_develop',
 			port: 20400
 		}
 	},
@@ -35,7 +35,7 @@ module.exports = {
 			host: 'dev.ns.co.th',
 			user: 'root',
 			password: '123456',
-			database: '123456',
+			database: 'ns_develop',
 			port: 20400
 		}
 	}

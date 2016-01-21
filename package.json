@@ -10,9 +10,8 @@
     "ejs-mate": "^2.3.0",
     "express": "^4.13.3",
     "md5": "^2.0.0",
-    "mongodb": "^2.0.52",
-    "monk": "^0.1.4",
-    "mysql": "github:felixge/node-mysql",
+    "mysql": "^2.10.2",
+    "mysql-wrap": "^0.5.3",
     "q": "^1.4.1",
     "walk": "^2.3.9"
   },

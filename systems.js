@@ -11,11 +11,9 @@ app.set('view options', { layout:false, root: __dirname + '/html' } );
 app.use("/libs", express.static(__dirname+'/includes'));
 
 var user = {};
-var config = require("./app.config")[(/--(\w+)/.exec(process.argv[2] || '--serv') || ['', 'serv'])[1]];
+var config = require('configuration');
 var language = require('./language/'+(user.language || 'en-EN'));
 
-
-var conn = mysql.createConnection(config.mysql_db);
 
 var SessionClient = function(req, res, next){
 
@@ -34,20 +32,11 @@ var SessionClient = function(req, res, next){
 	next();
 }
 
-var dbConnected = function(req, res, next){
-	conn.connect(function(err) {
-		conn.end();
-		if (err) {
-			res.send({ onError: true, exTitle: "MySql Connecting..", exMessage: err.stack.replace(/\n/ig, "<br>")});
-		}
-		next();
-	});
-}
-
 app.api = function(path, callback){
 	console.log('API:', path);
-	app.post(path, [ dbConnected, SessionClient, bodyParser.json(), bodyParser.urlencoded() ], function(req, res){
+	app.post(path, [ SessionClient, bodyParser.json(), bodyParser.urlencoded() ], function(req, res){
 		callback(req, res, req.body);
+		//res.end();
 	});
 }
 
