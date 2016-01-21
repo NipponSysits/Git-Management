@@ -1,2 +1,3 @@
-node_modules/
 .component/
+/node_modules/*
+!/node_modules/configuration
