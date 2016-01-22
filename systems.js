@@ -2,6 +2,8 @@ var http = require('http'), engine = require('ejs-mate'), express = require('exp
 var q = require('q'), mysql = require('mysql'), walk = require('walk');
 var bodyParser = require('body-parser')
 
+var PrimaryKey = { key: 'T0UnO.K-Sentinel' };
+var conn = require('./library/db');
 
 app.engine('ejs', engine);
 app.set('view engine', 'ejs');
@@ -13,22 +15,30 @@ var user = {};
 var config = require('configuration');
 var language = require('./language/'+(user.language || 'en-EN'));
 
+var crypto = require('crypto').createHmac('sha256', PrimaryKey.key);
+var encryptor = require('simple-encryptor')(PrimaryKey.key);
 
 var SessionClient = function(req, res, next){
+	var onTimestamp = Date.now();
+	var onExpire = 86400000 + onTimestamp;
+	var session = (req.headers['x-session-client'] || 'null') === 'null' ? null : req.headers['x-session-client'];
+	var requested = req.headers['x-requested'] != undefined && req.headers['x-session-client'] != undefined;
 
-	var session = (req.headers['session-client'] || 'null') === 'null' ? null : req.headers['session-client'];
-	console.log('check session in db', session);
+	req.timestamp = onTimestamp;
+	req.expire = onExpire;
+
+	if(req.xhr && requested) { 
+		req.session = session;
+		var decrypted = crypto.publicEncrypt(PrimaryKey, session);
+		next();
+	}
+
 	if(!session) {
-
-		req.sessionId = '';
-
+		//var hash = crypto.update(onTimestamp.toString()).digest('hex');
+		var encrypted = encryptor.encrypt(PrimaryKey.key+'>+<'+onTimestamp.toString());
+		req.session = encrypted;
+		next();
 	}
-
-	if(req.xhr) { 
-
-	}
-
-	next();
 }
 
 app.api = function(path, callback){
@@ -48,9 +58,12 @@ walk.walk('api', { followLinks: false }).on('file', function(root, stat, next) {
 });
 
 app.get('*', [ SessionClient ], function(req, res) {
-    res.render('index', { 
-    	_LANG: language, _HOST: config.ip+':'+config.port
-     });
+	var db = conn.connect();
+  	var $scope = {};
+  	db.select('sys_sessions', { session_id: req.session }, function(err, row, field){
+  		if(row.length == 0) db.insert('sys_sessions', { session_id: req.session, email: null, expire_at: (10 * 60 * 1000) + req.timestamp });
+  		res.render('index', { _LANG: language, _HOST: config.ip+':'+config.port, _SESSION_ : req.session });
+  	});
 });
 
 module.exports = {
