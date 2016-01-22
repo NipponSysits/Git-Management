@@ -90,9 +90,12 @@ window.T = {
     Call: function(configs){
       configs = configs || {};
       var aCall = $.Deferred();
+      var _t = Date.now();
+      console.log(md5(_t));
       T.__ajaxCall = $.ajax({
         url: configs.url || '',
         data: configs.data || {},
+        headers: { 'X-Requested': md5(_t) },
         error: function(xhr, e, s){
           aCall.resolve(new CallbackException("Call function exception.", s));
         },
@@ -103,10 +106,11 @@ window.T = {
       });
       return aCall.promise();
     },
-    Init: function(){
+    Init: function(session){
+        T.Storage('SESSION_CLIENT', session);
         $.ajaxSetup({
             dataType: 'JSON', type: 'POST',
-            headers: { 'X-Requested-With': 'XMLHttpRequest', 'Session-Client': T.Storage('SESSION_CLIENT') }
+            headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-Session-Client': T.Storage('SESSION_CLIENT') || session }
         });
     },
     __handle: {

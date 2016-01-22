@@ -15,6 +15,7 @@
 
 <!--[if IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 <script language="javascript" src="/libs/js/vendor/jquery.min.js"></script>
+<script language="javascript" src="/libs/js/vendor/md5.min.js"></script>
 <script language="javascript" src="/libs/js/vendor/db.js"></script>
 <script language="javascript" src="/libs/js/vendor/respond.min.js"></script>
 <script language="javascript" src="/libs/js/vendor/URI.min.js"></script>
@@ -46,7 +47,7 @@ $(function(){
   }
   
   $.when(
-    T.Init(),
+    T.Init("<%= _SESSION_ %>"),
     (function(){ // Prepare client feature.
       window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
       window.origin = '<%= _HOST %>' || window.location.origin;
@@ -85,8 +86,6 @@ $(function(){
     } else {
       exModal(ex); 
     }
-
-
   });
 
   $('.ui.button.sign-in').css({ 'border-radius': 0 });
