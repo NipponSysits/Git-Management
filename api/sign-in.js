@@ -11,7 +11,7 @@ module.exports = function(req, res, data){
 	var db = conn.connect();
   	var $scope = {};
 
-	db.insert('sys_sessions', { session_id: 'plum', email: 'purple' , ipaddress: 'purple' }, function(err, row, field){
+	db.insert('sys_sessions', { session_id: 'plum', email: 'purple' , ipaddress: 'purple', expire_at: 1453465421355 }, function(err, row, field){
 		console.log(err);
 		console.log(row);
 		console.log(field);

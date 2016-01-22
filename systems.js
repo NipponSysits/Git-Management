@@ -1,5 +1,4 @@
-var http = require('http'), mongo = require('mongodb');
-var engine = require('ejs-mate'), express = require('express'), app = express();
+var http = require('http'), engine = require('ejs-mate'), express = require('express'), app = express();
 var q = require('q'), mysql = require('mysql'), walk = require('walk');
 var bodyParser = require('body-parser')
 
