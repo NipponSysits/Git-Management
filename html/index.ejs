@@ -66,12 +66,16 @@ $(function(){
       } else if (/MSIE 5.0|MSIE 5.5|MSIE 6.0|MSIE 7.0|MSIE 8.0/g.exec(navigator.userAgent)) {
           feature.reject(new CallbackException("<%= _LANG.EXCEPTION.IE9_TITLE %>", "<%= _LANG.EXCEPTION.IE9_DESC %>"));
       } else {
-          feature.resolve(); 
+          feature.resolve({ feature: true }); 
       }
       return feature.promise();
     })(),
-    (function(){ // sign-in session re-connect.
-
+    (function(){ 
+      var session = $.Deferred();
+      if("<%= _EX_NAME %>" !== "undefined") session.reject(new CallbackException("<%= _EX_NAME %>", "<%= _EX_MESSAGE %>")); 
+      session.resolve({ feature: true }); 
+      //session.reject(new CallbackException("<%= _LANG.EXCEPTION.IE9_TITLE %>", "<%= _LANG.EXCEPTION.IE9_DESC %>"));
+      return session.promise();
     })()
   ).fail(exModal).done(function (i, f, s) {
     var ex = new CallbackException(s);
@@ -163,8 +167,6 @@ $(function(){
      
     },
     onSuccess: function(event, fields){
-      
-
       $('.ui.sign-in.button').removeClass('positive green').addClass('loading');
       $('.fields.username, .fields.remember, .fields.password, .ui.button.sign-back').addClass('disabled');
 
@@ -172,7 +174,6 @@ $(function(){
         $('.fields.username, .fields.remember, .fields.password, .ui.button.sign-back').removeClass('disabled');
         $('.ui.sign-in.button').removeClass('loading').addClass('positive green');
         if (!e.onError) {
-
 
 
         } else {
@@ -184,7 +185,7 @@ $(function(){
           if(!res.password) {
             console.log('password fail');
             $('.fields.password').addClass('error');
-            $('.ui.sign-in.form').form('get field','password').val('');
+            $('.ui.sign-in.form').form('get field','password').val('').focus().blur();
           }
         }
 
@@ -203,7 +204,10 @@ $(function(){
       });
       return false;
     },
-    onFailure: function(){ return false; }
+    onFailure: function(){ 
+      console.log('onFailure');
+      return false; 
+    }
   });
   // var ctx = document.getElementById('login-image').getContext('2d');
   // var text = ctx.measureText("foo"); // TextMetrics object
@@ -251,12 +255,12 @@ $(function(){
                       <div class="username field">
                         <div class="ui left icon input">
                           <i class="user icon"></i>
-                          <input type="text" id="email" placeholder="E-mail address">
+                          <input type="text" id="email" name="email" placeholder="E-mail address">
                         </div>
                       </div>
                       <div class="remember field">
                         <div class="ui checkbox remember-id">
-                          <input type="checkbox" id="remember-id">
+                          <input type="checkbox" id="remember-id" name="remember-id">
                           <label>Remember My Sign-In ID</label>
                         </div>
                       </div>
@@ -266,7 +270,7 @@ $(function(){
                   <div class="password field">
                     <div class="ui left icon input">
                       <i class="lock icon"></i>
-                      <input type="password" id="password" placeholder="Password">
+                      <input type="password" id="password" name="password" placeholder="Password">
                     </div>
                   </div>
                   <div class="ui buttons column" style="width:100%">
