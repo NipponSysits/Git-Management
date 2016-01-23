@@ -26,10 +26,13 @@ var SessionClient = function(req, res, next){
 
 	req.timestamp = onTimestamp;
 	req.expire = onExpire;
+	req.XHRRequested = req.xhr && requested;
 
 	if(req.xhr && requested) { 
 		req.session = session;
-		var decrypted = crypto.publicEncrypt(PrimaryKey, session);
+		var decrypted = encryptor.decrypt(session);
+
+		console.log('decrypted', /(.+?)>\+</.exec(decrypted));
 		next();
 	}
 
@@ -44,7 +47,11 @@ var SessionClient = function(req, res, next){
 app.api = function(path, callback){
 	console.log('API:', path);
 	app.post(path, [ SessionClient, bodyParser.json(), bodyParser.urlencoded() ], function(req, res){
-		callback(req, res, req.body);
+		if(req.XHRRequested) {
+			callback(req, res, req.body);
+		} else {
+			res.code(404);
+		}
 		//res.end();
 	});
 }
@@ -63,7 +70,7 @@ app.get('*', [ SessionClient ], function(req, res) {
   	db.select('sys_sessions', { session_id: req.session }, function(err, row, field){
   		if(row.length == 0) db.insert('sys_sessions', { session_id: req.session, email: null, expire_at: (10 * 60 * 1000) + req.timestamp });
   		res.render('index', { _LANG: language, _HOST: config.ip+':'+config.port, _SESSION_ : req.session });
-  	});
+	});
 });
 
 module.exports = {
