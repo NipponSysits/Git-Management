@@ -88,29 +88,48 @@ $(function(){
     }
   });
 
-  $('.ui.button.sign-in').css({ 'border-radius': 0 });
-  $('.ui.button.sign-back').hide();
-  $('.or.sign-or').hide();
+
+
+  var onSignIn = function(email) {
+    $('.ui.sign-avartar').css('background-image',"url('http://www.gravatar.com/avatar/"+md5(email)+"?d=mm&s=256')");
+    $('.ui.sign-email').html(email);
+    $('.ui.button.sign-in').css({ 'border-radius': 2 });
+    $('.ui.button.sign-back, .or.sign-or').show();
+  }
+  var offSignIn = function() {
+    $('.ui.button.sign-in').css({ 'border-radius': 0 });
+    $('.ui.button.sign-back, .or.sign-or').hide();
+  }
 
   $('.login-image').height($(window).height() - 118); 
   $(window).resize(function(){ $('.login-image').height($(window).height() - 118); });
 
+  // Remember Event
   $('.ui.remember-id').checkbox(T.Storage('signin-remember-id') || 'uncheck');
   $('.ui.remember-id').checkbox({
     onChange: function(){
       T.Storage('signin-remember-id', ($(this).prop('checked') ? 'check': 'uncheck'));
     }
   });
+  if(T.Storage('signin-remember-id') == 'check' && T.Storage('signin-username')) {
+    $('.ui.sign-id').hide()
+    $('.ui.sign-image').show();
+    onSignIn(T.Storage('signin-username'));
+    $('.ui.sign-in.form').form('get field','email').val(T.Storage('signin-username'));
+  } else {
+    offSignIn();
+  }
+
+
+
   $('.ui.button.sign-back').click(function(){
-    $('.ui.sign-image').transition({ 
+    $('.ui.sign-image').transition('remove looping').transition({ 
       animation: 'fade left', 
       onComplete: function(){
         $('.ui.sign-id').transition('fade left');
       }
     });
-    $('.ui.button.sign-in').css({ 'border-radius': 0 });
-    $(this).hide();
-    $('.or.sign-or').hide();
+    offSignIn();
   });
 
   var signPopup = 0;
@@ -121,14 +140,14 @@ $(function(){
       email: {
         identifier: 'email',
         rules: [
-          { type: 'empty', prompt: 'Please enter your e-mail' },
+          { type: 'empty', prompt: 'Please enter your e-mail again' },
           { type: 'email', prompt: 'Please enter a valid e-mail' }
         ]
       },
       password: {
         identifier: 'password',
         rules: [
-          { type: 'empty', prompt: 'Please enter your password' },
+          { type: 'empty', prompt: 'Please enter your password again' },
           { type: 'length[6]', prompt: 'Your password must be at least 6 characters' }
         ]
       }
@@ -144,19 +163,43 @@ $(function(){
      
     },
     onSuccess: function(event, fields){
-      console.log(fields);
-      $('.ui.sign-in.button').removeClass('submit green');
-      $('.ui.sign-in.button').addClass('loading');
-      T.Call({ url:'/api/sign-in', data: fields }).then(function(e){
-        console.log('then', e);
+      
+
+      $('.ui.sign-in.button').removeClass('positive green').addClass('loading');
+      $('.fields.username, .fields.remember, .fields.password, .ui.button.sign-back').addClass('disabled');
+
+      T.Call({ url:'/api/sign-in', data: fields }).then(function(e, res){
+        $('.fields.username, .fields.remember, .fields.password, .ui.button.sign-back').removeClass('disabled');
+        $('.ui.sign-in.button').removeClass('loading').addClass('positive green');
         if (!e.onError) {
-          //e.getItems
-          var a = 'c1ec9de8190fa568a2bd87b7713a7c57';
-          $('.ui.sign-avartar').css('background-image',"url('http://www.gravatar.com/avatar/"+a+"?d=mm&s=256')");
-          $('.ui.sign-email').html('kem@ns.co.th');
+
+
+
         } else {
-          
+          if(!res.username) {
+            console.log('username fail');
+            $('.fields.username').addClass('error');
+            $('.ui.sign-in.form').form('get field','email').focus();
+          }
+          if(!res.password) {
+            console.log('password fail');
+            $('.fields.password').addClass('error');
+            $('.ui.sign-in.form').form('get field','password').val('');
+          }
         }
+
+        if(res.username && $('.ui.sign-image').css('display') == 'none') {
+          T.Storage('signin-username', $('.ui.sign-in.form').form('get field','email').val());
+          $('.ui.sign-id').transition('remove looping').transition({ 
+            animation: 'fade right', 
+            onComplete: function(){
+              $('.ui.sign-image').transition('fade right');
+            }
+          });
+          onSignIn($('.ui.sign-in.form').form('get field','email').val());
+        }
+
+
       });
       return false;
     },
@@ -205,24 +248,25 @@ $(function(){
                     </div>
                     <div class="ui sign-id" style="position:relative;">
                       <h4>Sign-In ID</h4>
-                      <div class="field">
+                      <div class="username field">
                         <div class="ui left icon input">
                           <i class="user icon"></i>
-                          <input type="text" name="email" placeholder="E-mail address">
+                          <input type="text" id="email" placeholder="E-mail address">
                         </div>
                       </div>
-                      <div class="field">
+                      <div class="remember field">
                         <div class="ui checkbox remember-id">
-                          <input type="checkbox" name="remember-id">
+                          <input type="checkbox" id="remember-id">
                           <label>Remember My Sign-In ID</label>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <h4>Password</h4>                  <div class="field">
+                  <h4>Password</h4>
+                  <div class="password field">
                     <div class="ui left icon input">
                       <i class="lock icon"></i>
-                      <input type="password" name="password" placeholder="Password">
+                      <input type="password" id="password" placeholder="Password">
                     </div>
                   </div>
                   <div class="ui buttons column" style="width:100%">

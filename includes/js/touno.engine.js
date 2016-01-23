@@ -102,11 +102,14 @@ window.T = {
         headers: { 'X-Requested': _m },
         error: function(xhr, e, s){
             console.log('error');
-            aCall.resolve(new CallbackException("Call function exception.", s));
+            aCall.resolve(new CallbackException("Call function exception.", s), {});
         },
         success: function(data){ 
             var ex = new CallbackException({ onError: false, exTitle: "Successful", getItems: data });
-            aCall.resolve(ex);
+            if(typeof data == 'object') {
+                if(data.onError != undefined) ex = new CallbackException(data);
+            }
+            aCall.resolve(ex, ex.getItems);
         }
       });
       return aCall.promise();

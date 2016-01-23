@@ -7,7 +7,13 @@ module.exports = function(req, res, data){
 
 	console.log(data);
 	console.log(req.session);
-	res.send({ onError: true });
+
+	res.error({ username: true, password: false });
+
+	// Unknow User and Password
+	// Unknow Password
+	// pass
+
 	// var hash = crypto.createHmac('sha256', text).update('password').digest('hex');
 	// console.log(hash);
 	// console.log(data);

@@ -48,6 +48,9 @@ app.api = function(path, callback){
 	console.log('API:', path);
 	app.post(path, [ SessionClient, bodyParser.json(), bodyParser.urlencoded() ], function(req, res){
 		if(req.XHRRequested) {
+			res.error = function(data, title, message){
+				res.send({ onError: true, exTitle: title || "", onMessage: message || "", getItems: data })
+			}
 			callback(req, res, req.body);
 		} else {
 			res.code(404);
