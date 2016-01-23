@@ -15,12 +15,12 @@
 
 <!--[if IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 <script language="javascript" src="/libs/js/vendor/jquery.min.js"></script>
+<script language="javascript" src="/libs/js/vendor/jquery.cookie.js"></script>
 <script language="javascript" src="/libs/js/vendor/md5.min.js"></script>
 <script language="javascript" src="/libs/js/vendor/db.js"></script>
 <script language="javascript" src="/libs/js/vendor/respond.min.js"></script>
 <script language="javascript" src="/libs/js/vendor/URI.min.js"></script>
 <script language="javascript" src="/libs/js/vendor/semantic.min.js"></script>
-
 <link rel="stylesheet" href="/libs/css/semantic.min.css" type="text/css">
 <link rel="stylesheet" href="/libs/css/app.css" type="text/css">
 <script language="javascript" src="/libs/js/touno.engine.js"></script>
@@ -115,54 +115,53 @@ $(function(){
 
   var signPopup = 0;
   $('.ui.sign-in.form').form({
+    inline : true,
+    on     : 'blur',
     fields: {
       email: {
-        onValid:function(){ console.log('onValid email'); },
         identifier: 'email',
-        // rules: [
-        //   { type: 'empty', prompt: 'Please enter your e-mail' },
-        //   { type: 'email', prompt: 'Please enter a valid e-mail' }
-        // ]
+        rules: [
+          { type: 'empty', prompt: 'Please enter your e-mail' },
+          { type: 'email', prompt: 'Please enter a valid e-mail' }
+        ]
       },
       password: {
         identifier: 'password',
-        // rules: [
-        //   { type: 'empty', prompt: 'Please enter your password' },
-        //   { type: 'length[6]', prompt: 'Your password must be at least 6 characters' }
-        // ]
+        rules: [
+          { type: 'empty', prompt: 'Please enter your password' },
+          { type: 'length[6]', prompt: 'Your password must be at least 6 characters' }
+        ]
       }
+
+    },
+    onInvalid: function() {
+      $('div.ui.panel.sign-in div.ui.basic.prompt.label').each(function(i, e){
+        if(!$(e).hasClass('pointing below')) $(e).removeClass('pointing').addClass('pointing below');
+      });
+
+    },
+    onValid: function(){
+     
     },
     onSuccess: function(event, fields){
-      console.log(event, fields);
+      console.log(fields);
       $('.ui.sign-in.button').removeClass('submit green');
       $('.ui.sign-in.button').addClass('loading');
       T.Call({ url:'/api/sign-in', data: fields }).then(function(e){
+        console.log('then', e);
         if (!e.onError) {
           //e.getItems
           var a = 'c1ec9de8190fa568a2bd87b7713a7c57';
           $('.ui.sign-avartar').css('background-image',"url('http://www.gravatar.com/avatar/"+a+"?d=mm&s=256')");
           $('.ui.sign-email').html('kem@ns.co.th');
         } else {
-
+          
         }
       });
       return false;
     },
-    onFailure: function(formErrors){
-      $('.ui.sign-in.message').removeClass('visible').addClass('hidden').transition('drop');
-      $('.ui.sign-in.message .list').empty();
-      formErrors.map(function(item){
-        $('.ui.sign-in.message .list').append('<li>' + item + '</li>');
-      });
-      clearTimeout(signPopup);
-      signPopup = setTimeout(function(){ 
-        $('.ui.sign-in.message').transition('drop');
-        console.log('hidden');
-      }, 5000)
-      return false;
-    }
+    onFailure: function(){ return false; }
   });
-
   // var ctx = document.getElementById('login-image').getContext('2d');
   // var text = ctx.measureText("foo"); // TextMetrics object
   // text.width; // 16;
@@ -181,6 +180,10 @@ $(function(){
         <div class="header">
           <div style="background-image: url('/libs/img/pgm.management.png'); background-position: 0px 0px; background-repeat: no-repeat; background-size: cover; width:200px; height: 39px; margin: 8px 10px;"></div>
         </div>
+      </div>
+      <div class="ui notify nag" style="position: absolute;top: 55px;backround-color:rgba(184, 11, 11, 0.79);">
+        <span class="title"></span>
+        <i class="close icon"></i>
       </div>
       <div class="ui panel main" style="display:none;">
 
@@ -216,8 +219,7 @@ $(function(){
                       </div>
                     </div>
                   </div>
-                  <h4>Password</h4>
-                  <div class="field">
+                  <h4>Password</h4>                  <div class="field">
                     <div class="ui left icon input">
                       <i class="lock icon"></i>
                       <input type="password" name="password" placeholder="Password">

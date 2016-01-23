@@ -82,26 +82,31 @@ window.T = {
         }
     }, 
     Stop: function(){
-        if(T.__handle.Module.readyState != 4 && T.__handle.Module.readyState != undefined) T.__handle.Module.abort();
+        if(T.__handle != undefined) {
+            if(T.__handle.Module.readyState != 4 && T.__handle.Module.readyState != undefined) T.__handle.Module.abort();
+        }
     },
     CallAbort: function(){
-        if(T.__ajaxCall.readyState != 4 && T.__ajaxCall.readyState != undefined) T.__ajaxCall.abort();
+        if(T.__ajaxCall != undefined) {
+            if(T.__ajaxCall.readyState != 4 && T.__ajaxCall.readyState != undefined) T.__ajaxCall.abort();
+        }
     },
     Call: function(configs){
       configs = configs || {};
       var aCall = $.Deferred();
-      var _t = Date.now();
-      console.log(md5(_t));
+      var _t = Date.now(), _m = md5(_t);
+      T.CallAbort();
       T.__ajaxCall = $.ajax({
         url: configs.url || '',
         data: configs.data || {},
-        headers: { 'X-Requested': md5(_t) },
+        headers: { 'X-Requested': _m },
         error: function(xhr, e, s){
-          aCall.resolve(new CallbackException("Call function exception.", s));
+            console.log('error');
+            aCall.resolve(new CallbackException("Call function exception.", s));
         },
         success: function(data){ 
-          var ex = new CallbackException({ onError: false, getItems: data });
-          aCall.resolve(ex);
+            var ex = new CallbackException({ onError: false, exTitle: "Successful", getItems: data });
+            aCall.resolve(ex);
         }
       });
       return aCall.promise();
@@ -125,9 +130,11 @@ $.extend(window, {
         m1 = m1 || {};
         this.onError = m1.onError || false;
         this.exTitle = m1.exTitle || ((m2!=undefined) ? m1 : undefined) || "Exception";
-        this.exMessage = m1.exMessage || m2 || m1 || "";
+        this.exMessage = m1.exMessage || m2 || "";
         this.getItems = m1.getItems || {};
-        if(m1.getItems != undefined) this.getItems = jQuery.parseJSON(this.getItems);
+        try{
+            if(m1.getItems != undefined) this.getItems = jQuery.parseJSON(this.getItems);
+        } catch(e) { }
         this.toString = function(){ return this.exTitle + ' >>> ' + this.exMessage; }
     },
     Performance : function(funcName) {
