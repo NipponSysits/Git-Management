@@ -47,7 +47,7 @@ $(function(){
   }
   
   $.when(
-    T.Init("<%= _SESSION_ %>"),
+    T.Init("<%= _SESSION.ID %>", <%= _SESSION.LOGIN %>),
     (function(){ // Prepare client feature.
       window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
       window.origin = '<%= _HOST %>' || window.location.origin;
@@ -72,7 +72,7 @@ $(function(){
     })(),
     (function(){ 
       var session = $.Deferred();
-      if("<%= _EX_NAME %>" !== "undefined") session.reject(new CallbackException("<%= _EX_NAME %>", "<%= _EX_MESSAGE %>")); 
+      if("<%= _SESSION.NAME %>" !== "") session.reject(new CallbackException("<%= _SESSION.NAME %>", "<%= _SESSION.MESSAGE %>")); 
       session.resolve({ feature: true }); 
       //session.reject(new CallbackException("<%= _LANG.EXCEPTION.IE9_TITLE %>", "<%= _LANG.EXCEPTION.IE9_DESC %>"));
       return session.promise();
@@ -171,25 +171,29 @@ $(function(){
       $('.fields.username, .fields.remember, .fields.password, .ui.button.sign-back').addClass('disabled');
 
       T.Call({ url:'/api/sign-in', data: fields }).then(function(e, res){
+        console.log('sign-in', e.onError, res);
         $('.fields.username, .fields.remember, .fields.password, .ui.button.sign-back').removeClass('disabled');
         $('.ui.sign-in.button').removeClass('loading').addClass('positive green');
         if (!e.onError) {
-
+          $('.ui.panel.sign-in').fadeOut(300, function(){
+            $('.ui.panel.main').fadeIn(300);
+          });
 
         } else {
-          if(!res.username) {
+          if(!res.name) {
             console.log('username fail');
             $('.fields.username').addClass('error');
             $('.ui.sign-in.form').form('get field','email').focus();
           }
-          if(!res.password) {
+          if(!res.pass) {
             console.log('password fail');
             $('.fields.password').addClass('error');
             $('.ui.sign-in.form').form('get field','password').val('').focus().blur();
           }
+
         }
 
-        if(res.username && $('.ui.sign-image').css('display') == 'none') {
+        if(res.name && $('.ui.sign-image').css('display') == 'none') {
           T.Storage('signin-username', $('.ui.sign-in.form').form('get field','email').val());
           $('.ui.sign-id').transition('remove looping').transition({ 
             animation: 'fade right', 

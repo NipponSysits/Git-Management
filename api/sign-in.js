@@ -4,42 +4,23 @@ var text = 'T0UnO.K';
 var conn = require('../library/db');
 
 module.exports = function(req, res, data){
-
-	console.log(data);
-	console.log(req.session);
-
-	res.error({ username: true, password: false });
-
-	// Unknow User and Password
-	// Unknow Password
-	// pass
-
-	// var hash = crypto.createHmac('sha256', text).update('password').digest('hex');
-	// console.log(hash);
-	// console.log(data);
-
-	// var db = conn.connect();
- //  	var $scope = {};
-
-	// db.insert('sys_sessions', { session_id: 'plum', email: 'purple' , ipaddress: 'purple', expire_at: 1453465421355 }, function(err, row, field){
-	// 	console.log(err);
-	// 	console.log(row);
-	// 	console.log(field);
-	// 	res.send({ session_id: 'aaa' });
-	// });
-
-// 	db.query({
-//     sql: 'SELECT * FROM repository',
-//     nestTables: true,
-//     paginate: {
-//         page: 1,
-//         resultsPerPage: 15
-//     }
-// }).then(function(err, row, field){
-// 		console.log(err);
-// 		console.log(row);
-// 		console.log(field);
-// 		res.send({ session_id: 'aaa' });
-// 	});
-
-}
+	var db = conn.connect();
+	var user = { 
+		name: false, 
+		pass: false,
+		display: '',
+		email: data.email
+	};
+	var table = { table: 'users', fields: ['name', 'surname', 'password' ] };
+  	db.selectOne(table, { email: data.email }, function(err, row, field){ //LEVEL 3
+  		if(row) { // Usernamne found
+  			user.name = true;
+  			if(row.password === data.password) {
+  				user.pass = true;
+  				user.display = row.name + ' ' + row.surname;
+	  			db.update('sys_sessions', { email: data.email, expire_at: req.expire }, { session_id: req.session });
+  			}
+  		}
+  		if(user.name && user.pass) res.success(user); else res.error(user);
+	});
+};

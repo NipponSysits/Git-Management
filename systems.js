@@ -39,10 +39,14 @@ var SessionClient = function(req, res, next){
 			var db = conn.connect();
 		  	db.select('sys_sessions', { session_id: req.session }, function(err, row, field){ //LEVEL 3
 		  		if(!err) {
-		  			q.all([ // LEVEL 4
+		  			var whereTime = { yesterday: onTimestamp-Hour24, tomorrow:onTimestamp+Hour24, today:onTimestamp };
+		  			var sqlSession = 'DELETE FROM sys_sessions ' +
+		  				'WHERE created_at <= :yesterday OR created_at >= :tomorrow OR (expire_at < :today AND expire_at IS NOT NULL)';
+		  			q.all([
 			  			db.insert('sys_requested', { request_id: req.headers['x-requested'], created_at: req.timestamp }),
 			  			db.update('sys_sessions', { session_id: req.session }, { created_at: req.timestamp }),
-			  			db.query('DELETE FROM sys_requested WHERE created_at <= :yesterday OR created_at >= :tomorrow', { yesterday: onTimestamp-Hour24, tomorrow:onTimestamp+Hour24 }),
+			  			db.query('DELETE FROM sys_requested WHERE created_at <= :yesterday OR created_at >= :tomorrow', whereTime),  // LEVEL 4
+			  			db.query(sqlSession, whereTime)
 		  			]).then(function(){
 		  				req.XHRRequested = true;
 		  				next();
@@ -81,12 +85,15 @@ walk.walk('api', { followLinks: false }).on('file', function(root, stat, next) {
 
 app.get('*', [ SessionClient ], function(req, res) {
 	var db = conn.connect();
-  	var $scope = {};
   	db.select('sys_sessions', { session_id: req.session }, function(err, row, field){
-  		if(row == null) db.insert('sys_sessions', { session_id: req.session, email: null, expire_at: 0, created_at: req.timestamp });
-  		err = err || {};
-  		var message = (err != null ? '('+err.statusCode+') '+err.code+' - '+err.message : "");
-  		res.render('index', { _LANG: language, _HOST: config.ip+':'+config.port, _SESSION_ : req.session, _EX_NAME : err.name , _EX_MESSAGE : message });
+  		if((row || []).length == 0) db.insert('sys_sessions', { session_id: req.session, email: null, expire_at: 0, created_at: req.timestamp });
+  		var name = ((err || {}).name != undefined ? err.name : "");
+  		var message = ((err || {}).message != undefined ? '('+err.statusCode+') '+err.code+' - '+err.message : "");
+  		res.render('index', { 
+  			_LANG: language, 
+  			_HOST: config.ip+':'+config.port, 
+  			_SESSION : { ID: req.session, NAME: name, MESSAGE: message }
+  		});
 	});
 });
 
