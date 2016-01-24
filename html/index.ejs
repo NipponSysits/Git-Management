@@ -47,7 +47,7 @@ $(function(){
   }
   
   $.when(
-    T.Init("<%= _SESSION.ID %>", <%= _SESSION.LOGIN %>),
+    T.Init("<%= _SESSION.ID %>"),
     (function(){ // Prepare client feature.
       window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
       window.origin = '<%= _HOST %>' || window.location.origin;
@@ -171,15 +171,17 @@ $(function(){
       $('.fields.username, .fields.remember, .fields.password, .ui.button.sign-back').addClass('disabled');
 
       T.Call({ url:'/api/sign-in', data: fields }).then(function(e, res){
-        console.log('sign-in', e.onError, res);
-        $('.fields.username, .fields.remember, .fields.password, .ui.button.sign-back').removeClass('disabled');
-        $('.ui.sign-in.button').removeClass('loading').addClass('positive green');
+        $('.ui.sign-in.button').removeClass('loading');
         if (!e.onError) {
+          // display: "Kananek T.", email: "kem@ns.co.th"
           $('.ui.panel.sign-in').fadeOut(300, function(){
             $('.ui.panel.main').fadeIn(300);
+            $('.fields.username, .fields.remember, .fields.password, .ui.button.sign-back').removeClass('disabled');
+            $('.ui.sign-in.button').addClass('positive green');
           });
-
         } else {
+          $('.fields.username, .fields.remember, .fields.password, .ui.button.sign-back').removeClass('disabled');
+          $('.ui.sign-in.button').addClass('positive green');
           if(!res.name) {
             console.log('username fail');
             $('.fields.username').addClass('error');
