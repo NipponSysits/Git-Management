@@ -41,7 +41,7 @@ var SessionClient = function(req, res, next){
 		  		if(!err) {
 		  			var whereTime = { yesterday: onTimestamp-Hour24, tomorrow:onTimestamp+Hour24, today:onTimestamp };
 		  			var sqlSession = 'DELETE FROM sys_sessions ' +
-		  				'WHERE created_at <= :yesterday OR created_at >= :tomorrow OR (expire_at < :today AND expire_at IS NOT NULL)';
+		  				'WHERE created_at <= :yesterday OR created_at >= :tomorrow OR (expire_at < :today AND expire_at > 0)';
 		  			q.all([
 			  			db.insert('sys_requested', { request_id: req.headers['x-requested'], created_at: req.timestamp }),
 			  			db.update('sys_sessions', { session_id: req.session }, { created_at: req.timestamp }),

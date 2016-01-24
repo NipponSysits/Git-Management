@@ -18,7 +18,10 @@ module.exports = function(req, res, data){
   			if(row.password === data.password) {
   				user.pass = true;
   				user.display = row.name + ' ' + row.surname;
-	  			db.update('sys_sessions', { email: data.email, expire_at: req.expire }, { session_id: req.session });
+	  			db.delete('sys_sessions', { email: data.email }, function(){
+	  				db.update('sys_sessions', { email: data.email, expire_at: req.expire }, { session_id: req.session });
+	  			});
+	  			
   			}
   		}
   		if(user.name && user.pass) res.success(user); else res.error(user);
