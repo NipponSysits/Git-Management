@@ -42,7 +42,11 @@ div.ui.panel.sign-in div.ui.basic.prompt.label {
     margin-top: -70px; 
 }
 
+a.item.user, a.item.setting { padding: 5px !important; }
+a.item.user div.content { padding: 7px 15px 7px 11px; !important; }
 
+
+a.item.user * { color:#FFFFFF !important }
 
 @media only screen and (max-width: 767px){
     div.login-image{
