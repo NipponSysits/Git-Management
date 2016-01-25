@@ -1,4 +1,6 @@
 .component/
 /node_modules/*
+/node_modules/configuration/*
 !/node_modules/configuration/index.js
+/node_modules/mysql-wrap/*
 !/node_modules/mysql-wrap/mysql-wrap.js
