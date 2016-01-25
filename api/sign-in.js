@@ -1,6 +1,3 @@
-
-var crypto = require('crypto');
-var text = 'T0UnO.K';
 var conn = require('../library/db');
 
 module.exports = function(req, res, data){
