@@ -23,7 +23,7 @@ var SQLError = function(err){ err = err || {}; return { name: err.name, message:
 var SessionClient = function(req, res, next){
 	var onTimestamp = Date.now();
 	var Hour24 = 86400000; // milisecond
-	var onExpire = Hour24 + onTimestamp;
+	var onExpire = Math.round(Hour24 / 4) + onTimestamp;
 	var session = (req.headers['x-session-client'] || 'null') === 'null' ? null : req.headers['x-session-client'];
 	var requested = req.headers['x-requested'] != undefined && req.headers['x-session-client'] != undefined;
 
@@ -45,7 +45,7 @@ var SessionClient = function(req, res, next){
 		  			q.all([
 			  			db.insert('sys_requested', { request_id: req.headers['x-requested'], created_at: req.timestamp }),
 			  			db.update('sys_sessions', { session_id: req.session }, { created_at: req.timestamp }),
-			  			db.query('DELETE FROM sys_requested WHERE created_at <= :yesterday OR created_at >= :tomorrow', whereTime),  // LEVEL 4
+			  			db.query('DELETE FROM sys_requested WHERE created_at <= :yesterday OR created_at >= :tomorrow ', whereTime),  // LEVEL 4
 			  			db.query(sqlSession, whereTime)
 		  			]).then(function(){
 		  				req.XHRRequested = true;
