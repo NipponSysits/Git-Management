@@ -30,6 +30,7 @@ var SessionClient = function(req, res, next){
 	req.timestamp = onTimestamp;
 	req.expire = onExpire;
 	req.XHRRequested = req.xhr && requested;
+	req.pathname = req._parsedUrl.pathname;
 
 	if(req.xhr && requested) { // LEVEL 1 
 		req.XHRRequested = false;
@@ -84,17 +85,27 @@ walk.walk('api', { followLinks: false }).on('file', function(root, stat, next) {
 });
 
 app.get('*', [ SessionClient ], function(req, res) {
-	var db = conn.connect();
-  	db.select('sys_sessions', { session_id: req.session }, function(err, row, field){
-  		if((row || []).length == 0) db.insert('sys_sessions', { session_id: req.session, email: null, expire_at: 0, created_at: req.timestamp });
-  		var name = ((err || {}).name != undefined ? err.name : "");
-  		var message = ((err || {}).message != undefined ? '('+err.statusCode+') '+err.code+' - '+err.message : "");
-  		res.render('index', { 
-  			_LANG: language, 
-  			_HOST: config.ip+':'+config.port, 
-  			_SESSION : { ID: req.session, NAME: name, MESSAGE: message }
-  		});
-	});
+	var libs = /\/libs\//.exec(req.pathname);
+	if(!libs) {
+		var ip = req.headers['x-forwarded-for'] || 
+		     req.connection.remoteAddress || 
+		     req.socket.remoteAddress ||
+		     req.connection.socket.remoteAddress;
+		console.log(ip);
+		var db = conn.connect();
+	  	db.select('sys_sessions', { session_id: req.session }, function(err, row, field){
+	  		if((row || []).length == 0) db.insert('sys_sessions', { session_id: req.session, email: null, expire_at: 0, created_at: req.timestamp });
+	  		var name = ((err || {}).name != undefined ? err.name : "");
+	  		var message = ((err || {}).message != undefined ? '('+err.statusCode+') '+err.code+' - '+err.message : "");
+	  		res.render('index', { 
+	  			_LANG: language, 
+	  			_HOST: config.ip+':'+config.port, 
+	  			_SESSION : { ID: req.session, NAME: name, MESSAGE: message }
+	  		});
+		});
+	} else {
+		res.status(404).send('Not found');
+	}
 });
 
 module.exports = {
