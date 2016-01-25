@@ -79,12 +79,15 @@ $(function(){
     })()
   ).fail(exModal).done(function (i, f, s) {
     var ex = new CallbackException(s);
-    console.log(ex.getItems);
-    $('.ui.prepare').fadeOut(300);
+    console.log('then', ex.onError);
     if(!ex.onError) {
-      if(T.Storage('CLIENT_SESSION')) {
-        
+      if(T.Storage('SESSION_CLIENT')) {
+        T.Call({ url: '/api/sign-renew', data: { email: T.Storage('signin-username') } }).then(function(e, res){
+          $('.ui.prepare').fadeOut(300);
+          if(res.access_again) $('.ui.panel.main').fadeIn(300); else $('.ui.panel.sign-in').fadeIn(300);
+        });
       } else {
+        $('.ui.prepare').fadeOut(300);
         $('.ui.panel.sign-in').fadeIn(300);
       }
     } else {
