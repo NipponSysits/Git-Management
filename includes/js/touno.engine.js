@@ -91,6 +91,9 @@ window.T = {
             if(T.__ajaxCall.readyState != 4 && T.__ajaxCall.readyState != undefined) T.__ajaxCall.abort();
         }
     },
+    Thread: function(configs) {
+
+    },
     Call: function(configs){
       configs = configs || {};
       var aCall = $.Deferred();
@@ -115,12 +118,21 @@ window.T = {
       return aCall.promise();
     },
     Init: function(session){
-        T.Storage('SESSION_CLIENT', session);
+        var aInit = $.Deferred();
+        
+        if(session !== 'undefined') T.Storage('SESSION_CLIENT', session);
         $.ajaxSetup({
             dataType: 'JSON', type: 'POST',
-            headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-Session-Client': T.Storage('SESSION_CLIENT') || session }
+            headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-Session-Client': session === 'undefined' ? T.Storage('SESSION_CLIENT') : session }
         });
-    },
+
+        if(!$.cookie('ACCESS')) {
+            $.getScript( "http://l2.io/ip.js?var=myip", function() { $.cookie('ACCESS', md5(myip)); aInit.resolve({ init: true}); });
+        } else {
+            aInit.resolve({ init: true });
+        }
+        return aInit.promise();
+     },
     __handle: {
         Component: function(name){ },
         Module: {},
