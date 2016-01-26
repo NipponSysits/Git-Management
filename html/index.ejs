@@ -84,6 +84,10 @@ $(function(){
         T.Call({ url: '/api/sign-access', data: { email: T.Storage('signin-username') } }).then(function(e, res){
           $('.ui.prepare').fadeOut(300);
           if(res.access) $('.ui.panel.main').fadeIn(300); else $('.ui.panel.sign-in').fadeIn(300);
+          if(!res.found) {
+            $.removeCookie('ACCESS');
+            T.StorageClear();
+          }
         });
       } else {
         $('.ui.prepare').fadeOut(300);
