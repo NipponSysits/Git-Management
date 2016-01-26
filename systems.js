@@ -38,7 +38,6 @@ var SessionClient = function(req, res, next){
 		req.session = session;
 		var decrypted = encryptor.decrypt(session);
 
-
 		if((/(.+?)>\+</.exec(decrypted) || [])[1] === PrimaryKey.key) { // LEVEL 2
 			var db = conn.connect();
 		  	db.select('sys_sessions', { session_id: req.session }, function(err, row, field){ //LEVEL 3
