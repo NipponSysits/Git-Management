@@ -39,16 +39,20 @@ var QuotaSick = function(quota) {
 }
 
 var QuotaVacation = function(q){
-	return (limit.Vacation(q.Y) * (q.Y==1 || q.Y==3 || q.Y==5 ? q.DY/365 : 1) + (q.Y==3 || q.Y==5 ? limit.Vacation(q.Y-1)*q.D/365 : 0)).toFixed(2);
+	return parseFloat((limit.Vacation(q.Y) * (q.Y==1 || q.Y==3 || q.Y==5 ? q.DY/365 : 1) + (q.Y==3 || q.Y==5 ? limit.Vacation(q.Y-1)*q.D/365 : 0)).toFixed(2));
 }
 
-var date = '2012-04-29';
+var date = '2013-04-29';
 var User = getQuota(date);
 
+var Age = getPeriod(date);
 // 246
 console.log('User', getPeriod(date));
 console.log('Quota', User);
 console.log('Sick', QuotaSick(User), 'Vacation', QuotaVacation(User));
+
+console.log({ age: Age.Y+' Year '+Age.M+' Month '+Age.D+' Day', sick: QuotaSick(User), vacation:QuotaVacation(User) });
+
 // if(quota.Y<1) {
 // 	51*60*DAY/365
 // } else {
