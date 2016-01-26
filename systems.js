@@ -47,7 +47,7 @@ var SessionClient = function(req, res, next){
 		  				'WHERE created_at <= :yesterday OR created_at >= :tomorrow OR (expire_at < :today AND expire_at > 0)';
 		  			q.all([
 			  			db.insert('sys_requested', { access_id: req.access, request_id: req.headers['x-requested'], created_at: req.timestamp }),
-			  			db.update('sys_sessions', { expire_at: req.timestamp }, { session_id: req.session }),
+			  			db.update('sys_sessions', { expire_at: req.expire }, { session_id: req.session }),
 			  			db.query('DELETE FROM sys_requested WHERE created_at <= :yesterday OR created_at >= :tomorrow ', whereTime),  // LEVEL 4
 			  			db.query(sqlSession, whereTime)
 		  			]).then(function(){
@@ -99,11 +99,12 @@ app.get('*', [ cookieParser(), SessionClient ], function(req, res) {
 	  		if((row || []).length == 0) {
 	  			db.insert('sys_sessions', { access_id: 'UNKNOW', session_id: req.session, email: null, expire_at: 0, created_at: req.timestamp });
 	  		}
+	  		console.log('INDEX', (row || []).length == 0);
 	  		res.render('index', { 
 	  			_LANG: language, 
 	  			_HOST: config.ip+':'+config.port, 
 	  			_SESSION : { 
-	  				ID: (!req.access) ? req.session : undefined , 
+	  				ID: (row || []).length == 0 ? req.session : undefined , 
 	  				NAME: (err || {}).name != undefined ? err.name : "", 
 	  				MESSAGE: (err || {}).message != undefined ? '('+err.statusCode+') '+err.code+' - '+err.message : "" 
 	  			}

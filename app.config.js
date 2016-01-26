@@ -6,7 +6,7 @@ module.exports = {
 			domain: 'dev.ns.co.th',
 			dbname: 'ns_develop',
 			access: {
-				username: 'root',
+				username: 'pgm',
 				password: '123456'
 			},
 			port: 20317
@@ -14,7 +14,7 @@ module.exports = {
 		mysql_db: {
 			host: 'dev.ns.co.th',
 			database: 'ns_develop',
-			user: 'root',
+			user: 'pgm',
 			password: 'pgm1234',
 			port: 20400
 		}
@@ -26,7 +26,7 @@ module.exports = {
 			domain: 'dev.ns.co.th',
 			dbname: 'ns_develop',
 			access: {
-				username: 'root',
+				username: 'pgm',
 				password: '123456'
 			},
 			port: 20317
@@ -34,8 +34,8 @@ module.exports = {
 		mysql_db: {
 			host: 'dev.ns.co.th',
 			database: 'ns_develop',
-			user: 'root',
-			password: '123456',
+			user: 'pgm',
+			password: 'pgm1234',
 			port: 20400
 		}
 	}
