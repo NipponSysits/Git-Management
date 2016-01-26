@@ -42,11 +42,39 @@ div.ui.panel.sign-in div.ui.basic.prompt.label {
     margin-top: -70px; 
 }
 
-a.item.user, a.item.setting { padding: 5px !important; }
-a.item.user div.content { padding: 7px 15px 7px 11px; !important; }
+.item.user, .item.setting { padding: 5px !important; }
+.item.user div.content { padding: 7px 15px 7px 11px; !important; }
 
+.menu.access * { color:#FFFFFF; }
 
-a.item.user * { color:#FFFFFF !important }
+.menu.access .ui.item.dropdown .menu {
+    border-radius: 0px;
+    border:none;
+    background-color: #171d2c;
+}
+/*.menu.access .ui.item.dropdown > .menu > .item.signout > i, .menu.access .ui.item.dropdown > .menu > .item.signout {
+    color:#db2828 !important;
+    font-weight: bold !important;
+}*/
+.menu.access .ui.item.dropdown > .menu > .item.signout {
+    margin-bottom: 5px;
+}
+.menu.access .ui.item.dropdown > .menu > .item:hover {
+    background-color: #2d3341 !important;
+}
+.menu.access .ui.item.dropdown > .menu > .item {
+    color:#FFFFFF !important;
+}
+.menu.access .ui.dropdown .menu>.divider { border-top: 1px solid rgba(187, 187, 187, 0.57); }
+
+.menu.access .ui.item i { margin: 0px 5px; }
+.menu.access .ui.item:hover, .menu.access .ui.item.active { 
+    background-color: #2d3341;
+}
+.menu.access .ui.item.active { 
+    color: #171d2c; 
+}
+
 
 @media only screen and (max-width: 767px){
     div.login-image{
@@ -54,5 +82,8 @@ a.item.user * { color:#FFFFFF !important }
     }
     div.footer{
         text-align: center;
+    }
+    .menu.access {
+        display: none !important;
     }
 }

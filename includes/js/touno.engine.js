@@ -123,7 +123,7 @@ window.T = {
         if(session !== 'undefined') T.Storage('SESSION_CLIENT', session);
         $.ajaxSetup({
             dataType: 'JSON', type: 'POST',
-            headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-Session-Client': session === 'undefined' ? T.Storage('SESSION_CLIENT') : session }
+            headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-Session-Client': T.Storage('SESSION_CLIENT') || session }
         });
 
         if(!$.cookie('ACCESS')) {
