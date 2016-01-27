@@ -3,7 +3,7 @@ var q = require('q'), mysql = require('mysql'), walk = require('walk');
 var bodyParser = require('body-parser'), cookieParser = require('cookie-parser')
 
 var PrimaryKey = { key: 'T0UnO.K-Sentinel' };
-var conn = require('./library/db');
+var conn = require('./libs/db');
 
 app.engine('ejs', engine);
 app.set('view engine', 'ejs');
@@ -51,9 +51,11 @@ var SessionClient = function(req, res, next){
 			  			db.query('DELETE FROM requested WHERE created_at <= :yesterday OR created_at >= :tomorrow ', whereTime),  // LEVEL 4
 			  			db.query(sqlSession, whereTime)
 		  			]).then(function(){
+		  				db.end();
 		  				req.XHRRequested = true;
 		  				next();
 		  			}).catch(function(ex){
+		  				db.end();
 		  				console.log(ex);
 		  				req.XHRRequested = false;
 		  				next();
@@ -81,7 +83,26 @@ app.api = function(path, callback){
 	});
 }
 
+app.html = function(path, render_name){
+	console.log('HTML:', path);
+	app.patch(path, [ cookieParser(), SessionClient ], function(req, res){
+		if(req.XHRRequested) {
+			res.render(render_name);
+		} else {
+			res.status(404).send('Not found');
+		}
+	});
+}
 
+// HTML Router
+walk.walk('html\\component', { followLinks: false }).on('file', function(root, stat, next) {
+	root = root.replace(/\\component/, '');
+    var file = /(.*)\.ejs$/.exec(stat.name);
+    if(file) app.html(root.replace(/\\/ig, '/')+'/'+file[1], root+'\\'+file[1])
+    next();
+});
+
+// API Router
 walk.walk('api', { followLinks: false }).on('file', function(root, stat, next) {
 	root = '\\'+root;
     var file = /(.*)\.js$/.exec(stat.name);
@@ -89,15 +110,16 @@ walk.walk('api', { followLinks: false }).on('file', function(root, stat, next) {
     next();
 });
 
+
 app.get('*', [ cookieParser(), SessionClient ], function(req, res) {
 	var libs = /\/libs\//.exec(req.pathname);
 	if(!libs) {
-
 		var db = conn.connect({ database: 'ns_system' });
 		var where = { access_id: req.access, session_id: req.session, today: req.timestamp };
 	  	db.query('SELECT * FROM sessions WHERE (session_id = :session_id OR access_id = :access_id)', where, function(err, row, field){
 	  		if((row || []).length == 0) {
-	  			db.insert('sessions', { access_id: 'UNKNOW', session_id: req.session, email: null, expire_at: 0, created_at: req.timestamp });
+	  			var data = { access_id: 'UNKNOW', session_id: req.session, email: null, expire_at: 0, created_at: req.timestamp };
+	  			db.insert('sessions', data, function(){ db.end(); });
 	  		}
 	  		console.log('INDEX', (row || []).length == 0);
 	  		res.render('index', { 
