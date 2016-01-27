@@ -1,4 +1,4 @@
-var conn = require('../library/db');
+var conn = require('../libs/db');
 
 module.exports = function(req, res, data){
 	var ns = conn.connect();
@@ -10,6 +10,7 @@ module.exports = function(req, res, data){
 	};
 	var table = { table: 'user', fields: ['name', 'surname', 'password' ] };
   	ns.selectOne(table, { email: data.email }, function(err, row, field){ //LEVEL 3
+  		ns.end();
   		if(row) { // Usernamne found
   			user.name = true;
   			if(row.password === data.password) {
@@ -17,7 +18,9 @@ module.exports = function(req, res, data){
   				user.display = row.name + ' ' + row.surname;
 				var db = conn.connect({ database: 'ns_system' });
 	  			db.delete('sessions', { email: data.email }, function(){
-	  				db.update('sessions', { email: data.email, expire_at: req.expire }, { session_id: req.session });
+	  				db.update('sessions', { email: data.email, expire_at: req.expire }, { session_id: req.session }, function(){ 
+		  				db.end(); 
+		  			});
 	  			});
 	  			
   			}

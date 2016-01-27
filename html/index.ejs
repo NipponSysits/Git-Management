@@ -84,7 +84,13 @@ $(function(){
         T.Call({ url: '/api/sign-access', data: { email: T.Storage('signin-username') } }).then(function(e, res){
           $('.ui.prepare').fadeOut(300);
           console.log('sign-access', res);
-          if(res.access) $('.ui.panel.main').fadeIn(300); else $('.ui.panel.sign-in').fadeIn(300);
+          if(res.access) { 
+            $('.ui.panel.main').fadeIn(300); 
+            $('.menu.access').show();
+          } else {
+            $('.ui.panel.sign-in').fadeIn(300);
+            $('.menu.access').hide();
+          } 
           // if(!res.found) {
           //   $.removeCookie('ACCESS');
           //   T.StorageClear();
@@ -189,8 +195,10 @@ $(function(){
             $('.ui.panel.main').fadeIn(300);
             $('.fields.username, .fields.remember, .fields.password, .ui.button.sign-back').removeClass('disabled');
             $('.ui.sign-in.button').addClass('positive green');
+            $('.menu.access').show();
           });
         } else {
+          $('.menu.access').hide();
           $('.fields.username, .fields.remember, .fields.password, .ui.button.sign-back').removeClass('disabled');
           $('.ui.sign-in.button').addClass('positive green');
           if(!res.name) {
@@ -222,7 +230,6 @@ $(function(){
       return false;
     },
     onFailure: function(){ 
-      console.log('onFailure');
       return false; 
     }
   });
@@ -245,7 +252,7 @@ $(function(){
         <div class="header">
           <div style="background-image: url('/libs/img/pgm.management.png'); background-position: 0px 0px; background-repeat: no-repeat; background-size: cover; width:200px; height: 39px; margin: 8px 10px;"></div>
         </div>
-        <div class="right menu access">
+        <div class="right menu access" style="display:none;">
           <a class="ui item setting">
             <i class="setting icon big inverted"></i>
           </a>
