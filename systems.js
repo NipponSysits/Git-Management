@@ -39,16 +39,16 @@ var SessionClient = function(req, res, next){
 		var decrypted = encryptor.decrypt(session);
 
 		if((/(.+?)>\+</.exec(decrypted) || [])[1] === PrimaryKey.key) { // LEVEL 2
-			var db = conn.connect();
-		  	db.select('sys_sessions', { session_id: req.session }, function(err, row, field){ //LEVEL 3
+			var db = conn.connect({ database: 'ns_system' });
+		  	db.select('sessions', { session_id: req.session }, function(err, row, field){ //LEVEL 3
 		  		if(!err) {
 		  			var whereTime = { yesterday: req.timestamp-Hour24, tomorrow:req.timestamp+Hour24, today:req.timestamp };
-		  			var sqlSession = 'DELETE FROM sys_sessions ' +
+		  			var sqlSession = 'DELETE FROM sessions ' +
 		  				'WHERE created_at <= :yesterday OR created_at >= :tomorrow OR (expire_at < :today AND expire_at > 0)';
 		  			q.all([
-			  			db.insert('sys_requested', { access_id: req.access, request_id: req.headers['x-requested'], created_at: req.timestamp }),
-			  			db.update('sys_sessions', { expire_at: req.expire }, { session_id: req.session }),
-			  			db.query('DELETE FROM sys_requested WHERE created_at <= :yesterday OR created_at >= :tomorrow ', whereTime),  // LEVEL 4
+			  			db.insert('requested', { access_id: req.access, request_id: req.headers['x-requested'], created_at: req.timestamp }),
+			  			db.update('sessions', { expire_at: req.expire }, { session_id: req.session }),
+			  			db.query('DELETE FROM requested WHERE created_at <= :yesterday OR created_at >= :tomorrow ', whereTime),  // LEVEL 4
 			  			db.query(sqlSession, whereTime)
 		  			]).then(function(){
 		  				req.XHRRequested = true;
@@ -93,11 +93,11 @@ app.get('*', [ cookieParser(), SessionClient ], function(req, res) {
 	var libs = /\/libs\//.exec(req.pathname);
 	if(!libs) {
 
-		var db = conn.connect();
+		var db = conn.connect({ database: 'ns_system' });
 		var where = { access_id: req.access, session_id: req.session, today: req.timestamp };
-	  	db.query('SELECT * FROM sys_sessions WHERE (session_id = :session_id OR access_id = :access_id)', where, function(err, row, field){
+	  	db.query('SELECT * FROM sessions WHERE (session_id = :session_id OR access_id = :access_id)', where, function(err, row, field){
 	  		if((row || []).length == 0) {
-	  			db.insert('sys_sessions', { access_id: 'UNKNOW', session_id: req.session, email: null, expire_at: 0, created_at: req.timestamp });
+	  			db.insert('sessions', { access_id: 'UNKNOW', session_id: req.session, email: null, expire_at: 0, created_at: req.timestamp });
 	  		}
 	  		console.log('INDEX', (row || []).length == 0);
 	  		res.render('index', { 

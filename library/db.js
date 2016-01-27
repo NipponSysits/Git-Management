@@ -5,33 +5,36 @@ var appconfig = require('configuration');
 
 console.log('configuration', appconfig.mysql_db);
 
-var pool = mysql.createPool({
-  connectionLimit: appconfig.mysql_db.connLimit || 100,
-  host: appconfig.mysql_db.host || 'localhost',
-  port: appconfig.mysql_db.port || 3306,
-  database: appconfig.mysql_db.database || 'mysql',
-  user: appconfig.mysql_db.user || 'root',
-  password: appconfig.mysql_db.password || '',
-  debug: appconfig.mysql_db.debug || false,
-  supportBigNumbers: true,
-  timezone:'+7:00',
-  dateStrings:true,
-  queryFormat: function (query, values) {
-    if (!values) {
-      return query;
-    }
-    return query.replace(/\:(\w+)/g, function (txt, key) {
-      if (values.hasOwnProperty(key)) {
-        return this.escape(values[key]);
-      }
-      return txt;
-    }.bind(this));
-  }
-});
-
 module.exports = {
-  connect: function() {
+  connect: function(cn) {
+    cn = cn || {};
+    var pool = mysql.createPool({
+      connectionLimit: cn.connLimit || appconfig.mysql_db.connLimit || 100,
+      host: cn.host || appconfig.mysql_db.host || 'localhost',
+      port: cn.port || appconfig.mysql_db.port || 3306,
+      database: cn.database || appconfig.mysql_db.database || 'mysql',
+      user: cn.user || appconfig.mysql_db.user || 'root',
+      password: cn.password || appconfig.mysql_db.password || '',
+      debug: cn.debug || appconfig.mysql_db.debug || false,
+      supportBigNumbers: true,
+      timezone:'+7:00',
+      dateStrings:true,
+      queryFormat: function (query, values) {
+        if (!values) {
+          return query;
+        }
+        return query.replace(/\:(\w+)/g, function (txt, key) {
+          if (values.hasOwnProperty(key)) {
+            return this.escape(values[key]);
+          }
+          return txt;
+        }.bind(this));
+      }
+    });
+
+
     return mysqlWrap(pool);
+
   },
   getPool: function() {
     return pool;
