@@ -1,6 +1,7 @@
 var http = require('http'), engine = require('ejs-mate'), express = require('express'), app = express();
 var q = require('q'), mysql = require('mysql'), walk = require('walk');
 var bodyParser = require('body-parser'), cookieParser = require('cookie-parser')
+var methods = require('methods');
 
 var PrimaryKey = { key: 'T0UnO.K-Sentinel' };
 var conn = require('./libs/db');
@@ -83,24 +84,24 @@ app.api = function(path, callback){
 	});
 }
 
-app.html = function(path, render_name){
-	console.log('HTML:', path);
-	app.patch(path, [ cookieParser(), SessionClient ], function(req, res){
-		if(req.XHRRequested) {
-			res.render(render_name);
-		} else {
-			res.status(404).send('Not found');
-		}
-	});
-}
+// app.html = function(path, render_name){
+// 	console.log('HTML:', path);
+// 	app.trace(path, [ cookieParser(), SessionClient ], function(req, res){
+// 		if(req.XHRRequested) {
+// 			res.render(render_name);
+// 		} else {
+// 			res.status(404).send('Not found');
+// 		}
+// 	});
+// }
 
-// HTML Router
-walk.walk('html\\component', { followLinks: false }).on('file', function(root, stat, next) {
-	root = root.replace(/\\component/, '');
-    var file = /(.*)\.ejs$/.exec(stat.name);
-    if(file) app.html(root.replace(/\\/ig, '/')+'/'+file[1], root+'\\'+file[1])
-    next();
-});
+// // HTML Router
+// walk.walk('html\\component', { followLinks: false }).on('file', function(root, stat, next) {
+// 	root = root.replace(/\\component/, '');
+//     var file = /(.*)\.ejs$/.exec(stat.name);
+//     if(file) app.html(root.replace(/\\/ig, '/')+'/'+file[1], root+'\\'+file[1])
+//     next();
+// });
 
 // API Router
 walk.walk('api', { followLinks: false }).on('file', function(root, stat, next) {
@@ -113,7 +114,8 @@ walk.walk('api', { followLinks: false }).on('file', function(root, stat, next) {
 
 app.get('*', [ cookieParser(), SessionClient ], function(req, res) {
 	var libs = /\/libs\//.exec(req.pathname);
-	if(!libs) {
+	var html = /\/html\//.exec(req.pathname);
+	if(!libs && !html) {
 		var db = conn.connect({ database: 'ns_system' });
 		var where = { access_id: req.access, session_id: req.session, today: req.timestamp };
 	  	db.query('SELECT * FROM sessions WHERE (session_id = :session_id OR access_id = :access_id)', where, function(err, row, field){
@@ -132,6 +134,8 @@ app.get('*', [ cookieParser(), SessionClient ], function(req, res) {
 	  			}
 	  		});
 		});
+	} else if(html) {
+		res.render('component/'+req.pathname.replace(/\/html\//, ''));
 	} else {
 		res.status(404).send('Not found');
 	}

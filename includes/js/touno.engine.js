@@ -66,7 +66,7 @@ window.T = {
             (function(){
                 var defer = $.Deferred();
                 T.Stop();
-                // T._Handle.Module = $.ajax({ 
+                // $.ajax({ 
                 //     url: window.origin + '/component/home/index.php',
                 //     error: function(){
                 //         defer.reject();
@@ -139,6 +139,16 @@ window.T = {
     },
     __ajaxCall: undefined
 }
+
+                $.ajax({ 
+                    url: '/html/dashboard',
+                    error: function(){
+                        console.log('error', '/html/dashboard');
+                    },
+                    success: function(data){
+                        console.log('success', data);
+                    }
+                });
 
 $.extend(window, {
     CallbackException : function(m1, m2) {
