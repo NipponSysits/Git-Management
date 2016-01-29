@@ -42,7 +42,7 @@ div.ui.panel.sign-in div.ui.basic.prompt.label {
     margin-top: -70px; 
 }
 
-.item.user, .item.setting { padding: 5px !important; }
+.item.user, .item.setting { padding: 5px 10px 5px 10px !important; }
 .item.user div.content { padding: 7px 15px 7px 11px; !important; }
 
 .menu.access * { color:#FFFFFF; }
