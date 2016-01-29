@@ -236,16 +236,16 @@ $(function(){
   });
 
   $('.menu.access .menu .item.signout').click(function(){
-    $('.small.modal').modal({
+    $('.signout.modal').modal({
       closable  : false,
       onDeny : function() {
-        $('.small.modal .actions .ok.button').addClass('disabled');
-        $('.small.modal .actions .negative.button').addClass('loading');
+        $('.signout.modal .actions .ok.button').addClass('disabled');
+        $('.signout.modal .actions .negative.button').addClass('loading');
         T.Call({ url:'/api/sign-out' }).then(function(e, res){
-          $('.small.modal .actions .ok.button').removeClass('disabled');
-          $('.small.modal .actions .negative.button').removeClass('loading');
+          $('.signout.modal .actions .ok.button').removeClass('disabled');
+          $('.signout.modal .actions .negative.button').removeClass('loading');
           if(!e.onError) {
-            $('.small.modal').modal('hide');
+            $('.signout.modal').modal('hide');
             $('.menu.access').hide();
             $('.ui.panel.main').fadeOut(100, function(){ $('.ui.panel.sign-in').fadeIn(300); $('.ui.prepare').fadeOut(300); }); 
           } else {
@@ -271,30 +271,26 @@ $(function(){
       </div>
     </div>
     <div class="content">
-
       <div class="ui attached menu">
         <div class="header">
           <div style="background-image: url('/libs/img/pgm.management.png'); background-position: 0px 0px; background-repeat: no-repeat; background-size: cover; width:200px; height: 39px; margin: 8px 10px;">
-
-
-<div class="ui small test modal">
-    <div class="header">
-      Delete Your Account
-    </div>
-    <div class="content">
-      <p>Are you sure you want to delete your account</p>
-    </div>
-    <div class="actions">
-      <div class="ui ok button">
-        Cancel
-      </div>
-      <div class="ui negative right labeled icon button">
-        Signout
-        <i class="checkmark icon"></i>
-      </div>
-    </div>
-  </div>
-
+            <div class="ui small signout modal">
+              <div class="header">
+                PGM-Management
+              </div>
+              <div class="content">
+                <p>Are you sure you want to sign-out your account</p>
+              </div>
+              <div class="actions">
+                <div class="ui ok button">
+                  Cancel
+                </div>
+                <div class="ui negative right labeled icon button">
+                  Signout
+                  <i class="checkmark icon"></i>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="right menu access" style="display:none;">
@@ -327,7 +323,7 @@ $(function(){
         <i class="close icon"></i>
       </div>
       <div class="ui panel main container" style="display:none;">
-        container
+        
       </div>
       <div class="ui panel sign-in" style="display:none;">
         <div class="ui equal width stackable grid " style="margin:0px;">
