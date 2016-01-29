@@ -191,6 +191,7 @@ $(function(){
         $('.ui.sign-in.button').removeClass('loading');
         if (!e.onError) {
           // display: "Kananek T.", email: "kem@ns.co.th"
+          $('.ui.sign-in.form').form('get field','password').val('');
           $('.ui.panel.sign-in').fadeOut(300, function(){
             $('.ui.panel.main').fadeIn(300);
             $('.fields.username, .fields.remember, .fields.password, .ui.button.sign-back').removeClass('disabled');
@@ -209,7 +210,7 @@ $(function(){
           if(!res.pass) {
             console.log('password fail');
             $('.fields.password').addClass('error');
-            $('.ui.sign-in.form').form('get field','password').val('').focus().blur();
+            $('.ui.sign-in.form').form('get field','password').val('').focus().blur().focus();
           }
 
         }
@@ -233,6 +234,29 @@ $(function(){
       return false; 
     }
   });
+
+  $('.menu.access .menu .item.signout').click(function(){
+    $('.small.modal').modal({
+      closable  : false,
+      onDeny : function() {
+        $('.small.modal .actions .ok.button').addClass('disabled');
+        $('.small.modal .actions .negative.button').addClass('loading');
+        T.Call({ url:'/api/sign-out' }).then(function(e, res){
+          $('.small.modal .actions .ok.button').removeClass('disabled');
+          $('.small.modal .actions .negative.button').removeClass('loading');
+          if(!e.onError) {
+            $('.small.modal').modal('hide');
+            $('.menu.access').hide();
+            $('.ui.panel.main').fadeOut(100, function(){ $('.ui.panel.sign-in').fadeIn(300); $('.ui.prepare').fadeOut(300); }); 
+          } else {
+            
+          }
+        });
+        return false;
+      }
+    }).modal('show');
+
+  });
   // var ctx = document.getElementById('login-image').getContext('2d');
   // var text = ctx.measureText("foo"); // TextMetrics object
   // text.width; // 16;
@@ -250,7 +274,28 @@ $(function(){
 
       <div class="ui attached menu">
         <div class="header">
-          <div style="background-image: url('/libs/img/pgm.management.png'); background-position: 0px 0px; background-repeat: no-repeat; background-size: cover; width:200px; height: 39px; margin: 8px 10px;"></div>
+          <div style="background-image: url('/libs/img/pgm.management.png'); background-position: 0px 0px; background-repeat: no-repeat; background-size: cover; width:200px; height: 39px; margin: 8px 10px;">
+
+
+<div class="ui small test modal">
+    <div class="header">
+      Delete Your Account
+    </div>
+    <div class="content">
+      <p>Are you sure you want to delete your account</p>
+    </div>
+    <div class="actions">
+      <div class="ui ok button">
+        Cancel
+      </div>
+      <div class="ui negative right labeled icon button">
+        Signout
+        <i class="checkmark icon"></i>
+      </div>
+    </div>
+  </div>
+
+          </div>
         </div>
         <div class="right menu access" style="display:none;">
           <a class="ui item setting">
@@ -263,7 +308,7 @@ $(function(){
               <div>Programmer</div>
             </div>
             <div class="menu">
-              <div class="item">
+              <div class="item profile">
                 <i class="user icon"></i>
                 Profiles
               </div>
