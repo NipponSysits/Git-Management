@@ -74,7 +74,6 @@ $(function(){
       var session = $.Deferred();
       if("<%= _SESSION.NAME %>" !== "") session.reject(new CallbackException("<%= _SESSION.NAME %>", "<%= _SESSION.MESSAGE %>")); 
       session.resolve({ feature: true }); 
-      //session.reject(new CallbackException("<%= _LANG.EXCEPTION.IE9_TITLE %>", "<%= _LANG.EXCEPTION.IE9_DESC %>"));
       return session.promise();
     })()
   ).fail(exModal).done(function (i, f, s) {
@@ -82,48 +81,55 @@ $(function(){
     if(!ex.onError) {
       if(T.Storage('SESSION_CLIENT')) {
         T.Call({ url: '/api/sign-access', data: { email: T.Storage('signin-username') } }).then(function(e, res){
-          $('.ui.prepare').fadeOut(300);
-          console.log('sign-access', res);
-          if(res.access) { 
-            $('.ui.panel.main').fadeIn(300); 
-            $('.menu.access').show();
-          } else {
-            $('.ui.panel.sign-in').fadeIn(300);
-            $('.menu.access').hide();
-          } 
-          // if(!res.found) {
-          //   $.removeCookie('ACCESS');
-          //   T.StorageClear();
-          // }
+          if(res.access) onAccess(); else onSignOut();
         });
       } else {
-        $('.ui.prepare').fadeOut(300);
-        $('.ui.panel.sign-in').fadeIn(300);
+        onSignOut();
       }
     } else {
       exModal(ex); 
     }
   });
 
+  var onAccess = function(){
+    T.Content('dashboard').then(function(data){
+      $('.ui.prepare').fadeOut(300);
+      $('.ui.panel.main.container').html(data);
+      $('.ui.panel.main.container').fadeIn(300); 
+      $('.ui.access.grid').show();
+    });
+  }
+  var onSignOut = function(){
+    $('.ui.prepare').fadeOut(300);
+    $('.ui.panel.sign-in').fadeIn(300);
+    $('.ui.access.grid').hide();
+  }
 
-
-  $('.menu.access > .item.user').dropdown();
-
-
-
-  var onSignIn = function(email) {
+  var eventRememberSignIn = function(email) {
     $('.ui.sign-avartar').css('background-image',"url('http://www.gravatar.com/avatar/"+md5(email)+"?d=mm&s=256')");
     $('.ui.sign-email').html(email);
     $('.ui.button.sign-in').css({ 'border-radius': 2 });
     $('.ui.button.sign-back, .or.sign-or').show();
   }
-  var offSignIn = function() {
+  
+  var eventBackSignIn = function() {
     $('.ui.button.sign-in').css({ 'border-radius': 0 });
     $('.ui.button.sign-back, .or.sign-or').hide();
   }
 
+  var eventSignInWait = function(){
+    $('.ui.sign-in.button').removeClass('positive green').addClass('loading');
+    $('.fields.username, .fields.remember, .fields.password, .ui.button.sign-back').addClass('disabled');
+  }
+  var eventSignInSuccess = function(){
+    $('.fields.username, .fields.remember, .fields.password, .ui.button.sign-back').removeClass('disabled');
+    $('.ui.sign-in.button').addClass('positive green');
+  }
+
+  $('.user-menu > .item.user').dropdown();
   $('.login-image').height($(window).height() - 118); 
   $(window).resize(function(){ $('.login-image').height($(window).height() - 118); });
+
 
   // Remember Event
   $('.ui.remember-id').checkbox(T.Storage('signin-remember-id') || 'uncheck');
@@ -135,13 +141,11 @@ $(function(){
   if(T.Storage('signin-remember-id') == 'check' && T.Storage('signin-username')) {
     $('.ui.sign-id').hide()
     $('.ui.sign-image').show();
-    onSignIn(T.Storage('signin-username'));
+    eventRememberSignIn(T.Storage('signin-username'));
     $('.ui.sign-in.form').form('get field','email').val(T.Storage('signin-username'));
   } else {
-    offSignIn();
+    eventBackSignIn();
   }
-
-
 
   $('.ui.button.sign-back').click(function(){
     $('.ui.sign-image').transition('remove looping').transition({ 
@@ -150,7 +154,7 @@ $(function(){
         $('.ui.sign-id').transition('fade left');
       }
     });
-    offSignIn();
+    eventBackSignIn();
   });
 
   var signPopup = 0;
@@ -184,24 +188,19 @@ $(function(){
      
     },
     onSuccess: function(event, fields){
-      $('.ui.sign-in.button').removeClass('positive green').addClass('loading');
-      $('.fields.username, .fields.remember, .fields.password, .ui.button.sign-back').addClass('disabled');
+      eventSignInWait();
 
       T.Call({ url:'/api/sign-in', data: fields }).then(function(e, res){
         $('.ui.sign-in.button').removeClass('loading');
         if (!e.onError) {
           // display: "Kananek T.", email: "kem@ns.co.th"
           $('.ui.sign-in.form').form('get field','password').val('');
-          $('.ui.panel.sign-in').fadeOut(300, function(){
-            $('.ui.panel.main').fadeIn(300);
-            $('.fields.username, .fields.remember, .fields.password, .ui.button.sign-back').removeClass('disabled');
-            $('.ui.sign-in.button').addClass('positive green');
-            $('.menu.access').show();
-          });
+          $('.ui.panel.sign-in').fadeOut(300);
+          onAccess();
+          eventSignInSuccess();
         } else {
-          $('.menu.access').hide();
-          $('.fields.username, .fields.remember, .fields.password, .ui.button.sign-back').removeClass('disabled');
-          $('.ui.sign-in.button').addClass('positive green');
+          eventSignInSuccess();
+          $('.ui.access.grid').hide();
           if(!res.name) {
             console.log('username fail');
             $('.fields.username').addClass('error');
@@ -223,7 +222,7 @@ $(function(){
               $('.ui.sign-image').transition('fade right');
             }
           });
-          onSignIn($('.ui.sign-in.form').form('get field','email').val());
+          eventRememberSignIn($('.ui.sign-in.form').form('get field','email').val());
         }
 
 
@@ -235,7 +234,7 @@ $(function(){
     }
   });
 
-  $('.menu.access .menu .item.signout').click(function(){
+  $('.ui.access.grid .menu .item.signout').click(function(){
     $('.signout.modal').modal({
       closable  : false,
       onDeny : function() {
@@ -246,8 +245,8 @@ $(function(){
           $('.signout.modal .actions .negative.button').removeClass('loading');
           if(!e.onError) {
             $('.signout.modal').modal('hide');
-            $('.menu.access').hide();
-            $('.ui.panel.main').fadeOut(100, function(){ $('.ui.panel.sign-in').fadeIn(300); $('.ui.prepare').fadeOut(300); }); 
+            $('.ui.access.grid').hide();
+            $('.ui.panel.main.container').fadeOut(100, function(){ $('.ui.panel.sign-in').fadeIn(300); $('.ui.prepare').fadeOut(300); }); 
           } else {
             
           }
@@ -271,7 +270,7 @@ $(function(){
       </div>
     </div>
     <div class="content">
-      <div class="ui attached menu">
+      <div class="ui attached menu top">
         <div class="header">
           <div style="background-image: url('/libs/img/pgm.management.png'); background-position: 0px 0px; background-repeat: no-repeat; background-size: cover; width:200px; height: 39px; margin: 8px 10px;">
             <div class="ui small signout modal">
@@ -293,25 +292,30 @@ $(function(){
             </div>
           </div>
         </div>
-        <div class="right menu access" style="display:none;">
-          <a class="ui item setting">
-            <i class="setting icon big inverted"></i>
-          </a>
-          <div class="ui dropdown icon item user">
-            <div class="ui mini circular image" style="background-image: url('http://www.gravatar.com/avatar/c1ec9de8190fa568a2bd87b7713a7c57?d=mm&s=256'); background-position: 0px 0px; background-repeat: no-repeat; background-size: cover; width:32px; height: 32px;"></div>
-            <div class="content">
-              <div class="ui sub header">Kananek Thongkam</div>
-              <div>Programmer</div>
-            </div>
-            <div class="menu">
-              <div class="item profile">
-                <i class="user icon"></i>
-                Profiles
+        <div class="ui access grid" style="display:none;display:flex;margin-left:auto!important;">
+          <div class="computer tablet only row user-menu">
+            <a class="ui item home active">
+              <i class="home icon big inverted"></i>
+            </a>
+            <a class="ui item setting">
+              <i class="setting icon big inverted"></i>
+            </a>
+            <div class="ui dropdown icon item user">
+              <div class="ui mini circular image" style="background-image: url('http://www.gravatar.com/avatar/c1ec9de8190fa568a2bd87b7713a7c57?d=mm&s=256'); background-position: 0px 0px; background-repeat: no-repeat; background-size: cover; width:32px; height: 32px;"></div>
+              <div class="content">
+                <div class="ui sub header">Kananek Thongkam</div>
+                <div>Programmer</div>
               </div>
-              <div class="divider"></div>
-              <div class="item signout">
-                <i class="sign out icon"></i>
-                Sign out
+              <div class="menu">
+                <div class="item profile">
+                  <i class="user icon"></i>
+                  Profiles
+                </div>
+                <div class="divider"></div>
+                <div class="item signout">
+                  <i class="sign out icon"></i>
+                  Sign out
+                </div>
               </div>
             </div>
           </div>

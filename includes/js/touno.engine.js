@@ -65,7 +65,7 @@ window.T = {
         if(window.State.Module || window.State.StorageName) {
             (function(){
                 var defer = $.Deferred();
-                T.Stop();
+                T.Abort(T.__handle);
                 // $.ajax({ 
                 //     url: window.origin + '/component/home/index.php',
                 //     error: function(){
@@ -81,24 +81,19 @@ window.T = {
             });
         }
     }, 
-    Stop: function(){
-        if(T.__handle != undefined) {
-            if(T.__handle.Module.readyState != 4 && T.__handle.Module.readyState != undefined) T.__handle.Module.abort();
-        }
-    },
-    CallAbort: function(){
-        if(T.__ajaxCall != undefined) {
-            if(T.__ajaxCall.readyState != 4 && T.__ajaxCall.readyState != undefined) T.__ajaxCall.abort();
+    Abort: function(A){
+        if(A != undefined) {
+            if(A.readyState != 4 && A.readyState != undefined) A.abort();
         }
     },
     Thread: function(configs) {
 
     },
     Call: function(configs){
-      configs = configs || {};
+      configs = (typeof configs == 'string' ? { url: configs } : configs) || {};
       var aCall = $.Deferred();
       var _t = Date.now(), _m = md5(_t);
-      T.CallAbort();
+      T.Abort(T.__ajaxCall);
       T.__ajaxCall = $.ajax({
         url: configs.url || '',
         data: configs.data || {},
@@ -116,6 +111,22 @@ window.T = {
         }
       });
       return aCall.promise();
+    },
+    Content: function(configs){
+      configs = (typeof configs == 'string' ? { url: configs } : configs) || {};
+      var aContent = $.Deferred();
+      var _t = Date.now(), _m = md5(_t);
+      T.Abort(T.__ajaxContent);
+      T.__ajaxContent = $.ajax({
+        url: '/html/'+(configs.url || ''),
+        data: configs.data || {},
+        type: 'get',
+        dataType: 'html',
+        headers: { 'X-Requested': _m },
+        error: function(xhr, e, s){ aContent.resolve(s); },
+        success: function(data){ aContent.resolve(data); }
+      });
+      return aContent.promise();
     },
     Init: function(session){
         var aInit = $.Deferred();
@@ -137,18 +148,11 @@ window.T = {
         Component: function(name){ },
         Module: {},
     },
-    __ajaxCall: undefined
+    __ajaxCall: undefined,
+    __ajaxContent: undefined
 }
 
-                $.ajax({ 
-                    url: '/html/dashboard',
-                    error: function(){
-                        console.log('error', '/html/dashboard');
-                    },
-                    success: function(data){
-                        console.log('success', data);
-                    }
-                });
+
 
 $.extend(window, {
     CallbackException : function(m1, m2) {

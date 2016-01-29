@@ -20,9 +20,12 @@ div.footer {
     background-color:#ececec;
     padding: 10px 15px; }
 
-div.ui.menu {
+div.ui.menu.attached.top {
     background-color: #171d2c;
     border:none !important;
+}
+div.ui.main.container {
+    padding-top: 40px;
 }
 div.ui.input input {
     border-radius: 0px !important;
@@ -41,38 +44,54 @@ div.ui.panel.sign-in div.ui.basic.prompt.label {
     right: 0px;
     margin-top: -70px; 
 }
-
-.item.user, .item.setting { padding: 5px 10px 5px 10px !important; }
+div.ui.menu.navigator {
+    border-radius: 0px;
+    box-shadow: none;
+}
+.item.user, .item.setting, .item.home { padding: 5px 3px 0px 3px !important }
+.item.setting { margin-right: 12px !important }
 .item.user div.content { padding: 7px 15px 7px 11px; !important; }
 
-.menu.access * { color:#FFFFFF; }
+.ui.access.grid * { color:#FFFFFF; }
 
-.menu.access .ui.item.dropdown .menu {
+.ui.access.grid .ui.item.dropdown .menu {
     border-radius: 0px;
     border:none;
     background-color: #171d2c;
 }
-/*.menu.access .ui.item.dropdown > .menu > .item.signout > i, .menu.access .ui.item.dropdown > .menu > .item.signout {
+/*.ui.access.grid .ui.item.dropdown > .menu > .item.signout > i, .ui.access.grid .ui.item.dropdown > .menu > .item.signout {
     color:#db2828 !important;
     font-weight: bold !important;
 }*/
-.menu.access .ui.item.dropdown > .menu > .item.signout {
+.ui.access.grid .ui.item.dropdown > .menu > .item.signout {
     margin-bottom: 5px;
 }
-.menu.access .ui.item.dropdown > .menu > .item:hover {
-    background-color: #2d3341 !important;
+.ui.access.grid .ui.item.dropdown > .menu > .item:hover {
+    /*background-color: rgb(45, 103, 160) !important;*/
 }
-.menu.access .ui.item.dropdown > .menu > .item {
+.ui.access.grid .ui.item.dropdown > .menu > .item {
     color:#FFFFFF !important;
 }
-.menu.access .ui.dropdown .menu>.divider { border-top: 1px solid rgba(187, 187, 187, 0.57); }
+.ui.access.grid .ui.dropdown .menu>.divider { border-top: 1px solid rgba(187, 187, 187, 0.57); }
 
-.menu.access .ui.item i { margin: 0px 5px; }
-.menu.access .ui.item:hover, .menu.access .ui.item.active { 
-    background-color: #2d3341;
+.ui.access.grid .ui.item i { margin: 0px 5px; }
+.ui.access.grid .ui.item { 
+    border-bottom: transparent solid 5px;
 }
-.menu.access .ui.item.active { 
+.ui.access.grid .ui.item:hover { 
+    background-color: rgb(45, 103, 160);
+}
+.ui.access.grid .ui.item.active { 
+    border-bottom: rgb(45, 103, 160) solid 5px;
+}
+
+.ui.access.grid .ui.item.active { 
     color: #171d2c; 
+}
+.navigator.text {
+    text-align:right;
+    color:#2c71a5;
+    padding-bottom: 3px !important;
 }
 
 
@@ -82,8 +101,5 @@ div.ui.panel.sign-in div.ui.basic.prompt.label {
     }
     div.footer{
         text-align: center;
-    }
-    .menu.access {
-        display: none !important;
     }
 }
