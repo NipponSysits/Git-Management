@@ -75,7 +75,7 @@ i.icon.nippon {
     height: 30px;
 }
 .item.profile, .item.user, .item.setting, .item.home, .item.nippon { padding: 5px 3px 0px 3px !important }
-.item.profile div.content { padding: 7px 15px 7px 11px; !important; }
+.item.profile div.content { padding: 7px 15px 7px 5px; !important; }
 
 .ui.access.grid * { color:#FFFFFF; }
 
@@ -100,7 +100,7 @@ i.user-image {
 }
 div.ui.floating.label{
     top: 4px;
-    left: calc(100% - 5px);
+    left: calc(100% - 7px);
     padding: 5px 4px 4px 3px;
     border-radius: 30px;
     width: 22px;
@@ -165,7 +165,10 @@ div.ui.floating.label{
 
 @media only screen and (max-width: 767px){
     .ui.grid.main-dashboard > .column.module {
-        margin-right: 1px;
+        margin-right: 1px !important;
+    }
+    .ui.grid.main-dashboard > .column.module:first-child{
+        padding-top: 0px !important;
     }
     div.login-image{
         display: none !important;
