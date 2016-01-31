@@ -9,7 +9,9 @@ body {
 
 div.main { min-height: 100%; position: relative; z-index: 0; }
 div.header {  }
-div.content { padding-bottom: 35px; }
+div.content { 
+    padding-bottom: 35px;
+}
 div.footer { 
     color: #5c5c5c; 
     font-size: 11px; 
@@ -26,6 +28,7 @@ div.ui.menu.attached.top {
 }
 div.ui.main.container {
     padding-top: 40px;
+
 }
 div.ui.input input {
     border-radius: 0px !important;
@@ -45,11 +48,32 @@ div.ui.panel.sign-in div.ui.basic.prompt.label {
     margin-top: -70px; 
 }
 div.ui.menu.navigator {
+    min-height: 37px;
+    font-family: "open_sansregular", "Segoe UI" !important;
+    font-size: 16px;
+    border-radius: 0px;
+    box-shadow: none;
+    background-color: #08326c;
+    border: #4a77a1 solid 1px;
+}
+div.ui.menu.navigator a.item, div.ui.menu.navigator a.item:hover {
+    height: 35px;
+    padding: 0px 30px !important;
+    color: #FFF;
+}
+div.ui.menu.navigator a.item.active {
+    background-color: #2b71a5;
     border-radius: 0px;
     box-shadow: none;
 }
-.item.user, .item.setting, .item.home { padding: 5px 3px 0px 3px !important }
-.item.setting { margin-right: 12px !important }
+i.icon.nippon {
+    background-image: url('/libs/icon/ns-icon.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 30px;
+    height: 30px;
+}
+.item.user, .item.setting, .item.home, .item.nippon { padding: 5px 3px 0px 3px !important }
 .item.user div.content { padding: 7px 15px 7px 11px; !important; }
 
 .ui.access.grid * { color:#FFFFFF; }
@@ -74,7 +98,7 @@ div.ui.menu.navigator {
 }
 .ui.access.grid .ui.dropdown .menu>.divider { border-top: 1px solid rgba(187, 187, 187, 0.57); }
 
-.ui.access.grid .ui.item i { margin: 0px 5px; }
+.ui.access.grid .ui.item i { margin: 0px 8px; }
 .ui.access.grid .ui.item { 
     border-bottom: transparent solid 5px;
 }
