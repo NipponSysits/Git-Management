@@ -130,8 +130,8 @@ window.T = {
     },
     Init: function(session){
         var aInit = $.Deferred();
-        
-        if(session !== 'undefined') T.Storage('SESSION_CLIENT', session);
+
+        if(T.Storage('SESSION_CLIENT') == null) T.Storage('SESSION_CLIENT', session);
         $.ajaxSetup({
             dataType: 'JSON', type: 'POST',
             headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-Session-Client': T.Storage('SESSION_CLIENT') || session }
