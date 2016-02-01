@@ -57,6 +57,9 @@ div.ui.menu.navigator {
     border: #4a77a1 solid 1px;
     margin-bottom: 1px;
 }
+div.ui.menu .item.user:before {
+    width:0px;
+}
 div.ui.menu.navigator a.item, div.ui.menu.navigator a.item:hover {
     height: 35px;
     padding: 0px 30px !important;
@@ -128,6 +131,9 @@ div.ui.floating.label{
 }
 .ui.access.grid .ui.item.active { 
     border-bottom: rgb(45, 103, 160) solid 5px;
+}
+.ui.access.grid .ui.item.active:hover { 
+    background-color: transparent;
 }
 .ui.access.grid .ui.dropdown::has(.menu > .item.active) {
     border-bottom:rgb(45, 103, 160) solid 5px;

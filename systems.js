@@ -127,11 +127,8 @@ app.get('*', [ cookieParser(), SessionClient ], function(req, res) {
 	  			var data = { access_id: 'UNKNOW', session_id: req.session, email: null, expire_at: 0, created_at: req.timestamp };
 	  			db.insert('sessions', data, function(){ db.end(); });
 	  		}
-	  		console.log('INDEX', (row || []).length == 0);
 	  		res.render('index', { 
-	  			_LANG: language, 
-	  			_HOST: config.ip+':'+config.port, 
-	  			_SESSION : { 
+	  			_LANG: language,  _HOST: config.ip+':'+config.port, _SESSION : { 
 	  				ID: (row || []).length == 0 ? req.session : undefined , 
 	  				NAME: (err || {}).name != undefined ? err.name : "", 
 	  				MESSAGE: (err || {}).message != undefined ? '('+err.statusCode+') '+err.code+' - '+err.message : "" 

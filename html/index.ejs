@@ -235,12 +235,33 @@ $(function(){
     }
   });
 
+  $('.ui.access.grid > .row.user-menu > .ui.item.home').click(function(){
+    if (!$(this).hasClass('active')) {
+      $('.ui.access.grid > .row.user-menu > .ui.item').removeClass('active');
+      $(this).addClass('active');
+      //
+    }
+  });
+  $('.ui.access.grid > .row.user-menu > .ui.item.nippon').click(function(){
+    if (!$(this).hasClass('active')) {
+      $('.ui.access.grid > .row.user-menu > .ui.item').removeClass('active');
+      $(this).addClass('active');
+      ///
+    }
+  });
+  $('.ui.access.grid > .row.user-menu > .ui.item.setting').click(function(){
+    if (!$(this).hasClass('active')) {
+      $('.ui.access.grid > .row.user-menu > .ui.item').removeClass('active');
+      $(this).addClass('active');
+      //
+    }
+  });
 
-  $('.ui.access.grid .menu .item.profile').click(function(){
-
+  $('.ui.access.grid .dropdown.profile .item.profile').click(function(){
 
   });
-  $('.ui.access.grid .menu .item.signout').click(function(){
+
+  $('.ui.access.grid .dropdown.profile .item.signout').click(function(){
     $('.signout.modal').modal({
       closable  : false,
       onDeny : function() {
@@ -260,7 +281,6 @@ $(function(){
         return false;
       }
     }).modal('show');
-
   });
   // var ctx = document.getElementById('login-image').getContext('2d');
   // var text = ctx.measureText("foo"); // TextMetrics object
@@ -309,10 +329,10 @@ $(function(){
             <a class="ui item setting">
               <i class="setting icon big"></i>
             </a>
-            <a class="ui item user">
-              <i class="user-image icon big"><div class="floating ui red label">22</div></i>
-            </a>
             <div class="ui dropdown icon item profile">
+              <a class="ui item user">
+                <i class="user-image icon big"><div class="floating ui red label">22</div></i>
+              </a>
               <div class="content">
                 <div class="ui sub header">Kananek Thongkam</div>
                 <div>Programmer</div>
