@@ -31,7 +31,7 @@
 $(function(){
   var exModal = function(ex) {
     var uiEX = '.ui.modal.feature-exception';
-    $('.ui.prepare').hide();
+    $('.ui.dimmer.prepare').hide();
     $(uiEX).modal({ closable: false, duration: 0 });
     $('.ui.button.refresh-exception').click(function(){
       location.reload();
@@ -93,15 +93,18 @@ $(function(){
   });
 
   var onAccess = function(){
-    T.Content('dashboard').then(function(data){
-      $('.ui.prepare').fadeOut(300);
+    T.Content(!window.State.Component ? 'dashboard' : window.State.Component.toLowerCase()).then(function(data){
+      $('.ui.dimmer.prepare').fadeOut(300);
       $('.ui.panel.main.container > .ui.panel.html').html(data);
       $('.ui.panel.main.container').fadeIn(300); 
       $('.ui.access.grid').show();
+      $('.ui.dimmer.component').hide();
     });
   }
+
+
   var onSignOut = function(){
-    $('.ui.prepare').fadeOut(300);
+    $('.ui.dimmer.prepare').fadeOut(300);
     $('.ui.panel.sign-in').fadeIn(300);
     $('.ui.access.grid').hide();
   }
@@ -131,6 +134,13 @@ $(function(){
   $('.login-image').height($(window).height() - 118); 
   $(window).resize(function(){ $('.login-image').height($(window).height() - 118); });
 
+  T.SetComponent(function(){
+    $('.ui.dimmer.component').fadeIn(200);
+    T.Content(!window.State.Component ? 'dashboard' : window.State.Component.toLowerCase()).then(function(data){
+      $('.ui.panel.main.container > .ui.panel.html').html(data);
+      $('.ui.dimmer.component').fadeOut(200);
+    });
+  });
 
   // Remember Event
   $('.ui.remember-id').checkbox(T.Storage('signin-remember-id') || 'uncheck');
@@ -251,7 +261,6 @@ var MenuSelected = function(e){
     if (!$(this).hasClass('selected')) {
       MenuSelected(this);
       T.SetState('NipponSystis');
-      $('.ui.panel.main.container > .ui.dimmer').dimmer('show').dimmer('hide');
       ///
     }
   });
@@ -259,7 +268,6 @@ var MenuSelected = function(e){
     if (!$(this).hasClass('selected')) {
       MenuSelected(this);
       T.SetState('Setting');
-      $('.ui.panel.main.container > .ui.dimmer').dimmer('show').dimmer('hide');
     }
   });
 
@@ -267,7 +275,6 @@ var MenuSelected = function(e){
     if (!$('.ui.access.grid .dropdown.profile').hasClass('selected')) {
       MenuSelected('.ui.access.grid .dropdown.profile');
       T.SetState('User', 'dvgamer');
-      $('.ui.panel.main.container > .ui.dimmer').dimmer('show').dimmer('hide');
 
     }
   });
@@ -284,7 +291,7 @@ var MenuSelected = function(e){
           if(!e.onError) {
             $('.signout.modal').modal('hide');
             $('.ui.access.grid').hide();
-            $('.ui.panel.main.container').fadeOut(100, function(){ $('.ui.panel.sign-in').fadeIn(300); $('.ui.prepare').fadeOut(300); }); 
+            $('.ui.panel.main.container').fadeOut(100, function(){ $('.ui.panel.sign-in').fadeIn(300); $('.ui.dimmer.prepare').fadeOut(300); }); 
           } else {
             
           }
@@ -369,8 +376,8 @@ var MenuSelected = function(e){
         <span class="title"></span>
         <i class="close icon"></i>
       </div>
-      <div class="ui panel main container" style="display:none;">    
-        <div class="ui dimmer inverted"><div class="ui text loader">Loading</div></div> 
+      <div class="ui panel main container" style="display:none;">     
+        <div class="ui dimmer component inverted active"><div class="ui text loader"></div></div>
         <div class="ui panel html"></div>
       </div>
       <div class="ui panel sign-in" style="display:none;">

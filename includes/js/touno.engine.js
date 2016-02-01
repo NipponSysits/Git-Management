@@ -34,7 +34,7 @@ window.T = {
         return this;
     },
     SetComponent : function(func) {
-        if(typeof func == 'function') T._Handle.Component = func;
+        if(typeof func == 'function') T.__handle.Component = func;
     },
     SetModule: function (module) { // Event in Click menu in app.
         window.State.Module = module || null;
@@ -54,9 +54,7 @@ window.T = {
         var found = null;
 
         //if(!found){
-        //window.State = window.State || { Component: '' };
-            //T._Handle.Component(window.State.Component);
-        //}
+        T.__handle.Component();
 
         console.log('StateCompile::', 'StateName:', T.StateName(), '- GetItems:', T.GetItems(), window.State);
         if(!event) window.history.pushState(T.GetItems(), T.StateName(), T.StateURL());

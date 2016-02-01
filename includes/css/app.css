@@ -87,6 +87,9 @@ i.icon.nippon {
     border:none;
     background-color: #171d2c;
 }
+.ui.dimmer.component > .ui.loader {
+    top: 200px !important;
+}
 
 /*.ui.access.grid .ui.item.dropdown > .menu > .item.signout > i, .ui.access.grid .ui.item.dropdown > .menu > .item.signout {
     color:#db2828 !important;
