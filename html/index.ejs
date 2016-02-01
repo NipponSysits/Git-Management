@@ -94,9 +94,9 @@ $(function(){
 
   var onAccess = function(){
     T.Content(!window.State.Component ? 'dashboard' : window.State.Component.toLowerCase()).then(function(data){
-      $('.ui.dimmer.prepare').fadeOut(300);
+      $('.ui.dimmer.prepare').transition('fade');
       $('.ui.panel.main.container > .ui.panel.html').html(data);
-      $('.ui.panel.main.container').fadeIn(300); 
+      $('.ui.panel.main.container').transition('fade', '100ms'); 
       $('.ui.access.grid').show();
       $('.ui.dimmer.component').hide();
     });
@@ -135,13 +135,13 @@ $(function(){
   $(window).resize(function(){ $('.login-image').height($(window).height() - 118); });
 
   T.SetComponent(function(){
-    $('.ui.dimmer.component').fadeIn(200);
+    $('.ui.dimmer.component').show(); 
     T.Content(!window.State.Component ? 'dashboard' : window.State.Component.toLowerCase()).then(function(data){
-      $('.ui.panel.main.container > .ui.panel.html').html(data);
-      $('.ui.dimmer.component').fadeOut(200);
+      if(data != 'abort') $('.ui.panel.main.container > .ui.panel.html').html(data);
+      $('.ui.dimmer.component').hide(); 
     });
   });
-
+      
   // Remember Event
   $('.ui.remember-id').checkbox(T.Storage('signin-remember-id') || 'uncheck');
   $('.ui.remember-id').checkbox({

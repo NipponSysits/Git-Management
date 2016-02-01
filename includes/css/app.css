@@ -96,7 +96,7 @@ i.icon.nippon {
     font-weight: bold !important;
 }*/
 .ui.panel.main.container > .ui.dimmer {
-    background-color: rgba(236,236,236,1);
+    background-color: rgba(236,236,236,0.75);
 }
 i.user-image {
     border-radius: 30px;
