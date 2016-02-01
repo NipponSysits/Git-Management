@@ -51,7 +51,7 @@ window.T = {
         return T.Storage(window.State.StorageName);
     },
     StateCompile: function(event){
-        //var found = T._Handle.Component(window.State.Component);
+        var found = null;
 
         //if(!found){
         //window.State = window.State || { Component: '' };
@@ -59,27 +59,27 @@ window.T = {
         //}
 
         console.log('StateCompile::', 'StateName:', T.StateName(), '- GetItems:', T.GetItems(), window.State);
-        //if(!event) window.history.pushState(T.GetItems(), T.StateName(), T.StateURL());
-        //if(!found) window.history.replaceState(T.GetItems(), T.StateName(), T.StateURL());
+        if(!event) window.history.pushState(T.GetItems(), T.StateName(), T.StateURL());
+        if(!found) window.history.replaceState(T.GetItems(), T.StateName(), T.StateURL());
 
-        if(window.State.Module || window.State.StorageName) {
-            (function(){
-                var defer = $.Deferred();
-                T.Abort(T.__handle);
-                // $.ajax({ 
-                //     url: window.origin + '/component/home/index.php',
-                //     error: function(){
-                //         defer.reject();
-                //     },
-                //     success: function(data){
-                //         defer.resolve();
-                //     }
-                // });
-                return defer.promise();
-            })().then(function(){
-                loader.off();
-            });
-        }
+        // if(window.State.Module || window.State.StorageName) {
+        //     (function(){
+        //         var defer = $.Deferred();
+        //         // T.Abort(T.__handle);
+        //         // $.ajax({ 
+        //         //     url: window.origin + '/component/home/index.php',
+        //         //     error: function(){
+        //         //         defer.reject();
+        //         //     },
+        //         //     success: function(data){
+        //                  defer.resolve();
+        //         //     }
+        //         // });
+        //         return defer.promise();
+        //     })().then(function(){
+        //         loader.off();
+        //     });
+        // }
     }, 
     Abort: function(A){
         if(A != undefined) {

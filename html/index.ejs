@@ -235,30 +235,38 @@ $(function(){
     }
   });
 
+var MenuSelected = function(e){
+  $('.ui.access.grid > .row.user-menu > .ui.item').removeClass('selected');
+  $('.ui.access.grid .dropdown.profile .item.profile').removeClass('selected');
+  $(e).addClass('selected');
+}
+
   $('.ui.access.grid > .row.user-menu > .ui.item.home').click(function(){
-    if (!$(this).hasClass('active')) {
-      $('.ui.access.grid > .row.user-menu > .ui.item').removeClass('active');
-      $(this).addClass('active');
-      //
+    if (!$(this).hasClass('selected')) {
+      MenuSelected(this);
+      T.SetState();
     }
   });
   $('.ui.access.grid > .row.user-menu > .ui.item.nippon').click(function(){
-    if (!$(this).hasClass('active')) {
-      $('.ui.access.grid > .row.user-menu > .ui.item').removeClass('active');
-      $(this).addClass('active');
+    if (!$(this).hasClass('selected')) {
+      MenuSelected(this);
+      T.SetState('NipponSystis');
       ///
     }
   });
   $('.ui.access.grid > .row.user-menu > .ui.item.setting').click(function(){
-    if (!$(this).hasClass('active')) {
-      $('.ui.access.grid > .row.user-menu > .ui.item').removeClass('active');
-      $(this).addClass('active');
-      //
+    if (!$(this).hasClass('selected')) {
+      MenuSelected(this);
+      T.SetState('Setting');
     }
   });
 
   $('.ui.access.grid .dropdown.profile .item.profile').click(function(){
+    if (!$('.ui.access.grid .dropdown.profile').hasClass('selected')) {
+      MenuSelected('.ui.access.grid .dropdown.profile');
+      T.SetState('User', 'dvgamer');
 
+    }
   });
 
   $('.ui.access.grid .dropdown.profile .item.signout').click(function(){
@@ -320,7 +328,7 @@ $(function(){
         </div>
         <div class="ui access grid" style="display:none;display:flex;margin-left:auto!important;">
           <div class="computer tablet only row user-menu">
-            <a class="ui item home active">
+            <a class="ui item home selected">
               <i class="home icon big"></i>
             </a>
             <a class="ui item nippon">
