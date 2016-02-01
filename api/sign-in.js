@@ -17,12 +17,9 @@ module.exports = function(req, res, data){
   				user.pass = true;
   				user.display = row.name + ' ' + row.surname;
 				var db = conn.connect({ database: 'ns_system' });
-	  			db.delete('sessions', { email: data.email }, function(){
-	  				db.update('sessions', { email: data.email, expire_at: req.expire }, { session_id: req.session }, function(){ 
-		  				db.end(); 
-		  			});
+  				db.update('sessions', { email: data.email, expire_at: req.expire }, { session_id: req.session, access_id: req.access }, function(){ 
+	  				db.end(); 
 	  			});
-	  			
   			}
   		}
   		if(user.name && user.pass) res.success(user); else res.error(user);

@@ -33,6 +33,7 @@ var SessionClient = function(req, res, next){
 	req.XHRRequested = req.xhr && requested;
 	req.pathname = req._parsedUrl.pathname;
 	req.access = req.cookies.ACCESS || '';
+	req.isHtml = false;
 
 	if(req.xhr && requested) { // LEVEL 1 
 		req.XHRRequested = false;
@@ -48,7 +49,7 @@ var SessionClient = function(req, res, next){
 		  				'WHERE created_at <= :yesterday OR created_at >= :tomorrow OR (expire_at < :today AND expire_at > 0)';
 		  			q.all([
 			  			db.insert('requested', { access_id: req.access, request_id: req.headers['x-requested'], created_at: req.timestamp }),
-			  			db.update('sessions', { expire_at: req.expire }, { session_id: req.session }),
+			  			db.update('sessions', { expire_at: req.expire }, { access_id: req.access, session_id: req.session, email: null }),
 			  			db.query('DELETE FROM requested WHERE created_at <= :yesterday OR created_at >= :tomorrow ', whereTime),  // LEVEL 4
 			  			db.query(sqlSession, whereTime)
 		  			]).then(function(){
@@ -65,7 +66,10 @@ var SessionClient = function(req, res, next){
 			});
 		}
 	} else {
-		if(!session) req.session = encryptor.encrypt(PrimaryKey.key+'>+<'+req.timestamp.toString());
+		if(!session) {
+			req.isHtml = true;
+			req.session = encryptor.encrypt(PrimaryKey.key+'>+<'+req.timestamp.toString());
+		}
 		next();
 	}
 
@@ -118,7 +122,7 @@ app.get('*', [ cookieParser(), SessionClient ], function(req, res) {
 	if(!libs && !html) {
 		var db = conn.connect({ database: 'ns_system' });
 		var where = { access_id: req.access, session_id: req.session, today: req.timestamp };
-	  	db.query('SELECT * FROM sessions WHERE (session_id = :session_id OR access_id = :access_id)', where, function(err, row, field){
+	  	db.query('SELECT session_id FROM sessions WHERE session_id = :session_id', where, function(err, row, field){
 	  		if((row || []).length == 0) {
 	  			var data = { access_id: 'UNKNOW', session_id: req.session, email: null, expire_at: 0, created_at: req.timestamp };
 	  			db.insert('sessions', data, function(){ db.end(); });
