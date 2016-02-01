@@ -95,7 +95,7 @@ $(function(){
   var onAccess = function(){
     T.Content('dashboard').then(function(data){
       $('.ui.prepare').fadeOut(300);
-      $('.ui.panel.main.container').html(data);
+      $('.ui.panel.main.container > .ui.panel.html').html(data);
       $('.ui.panel.main.container').fadeIn(300); 
       $('.ui.access.grid').show();
     });
@@ -251,6 +251,7 @@ var MenuSelected = function(e){
     if (!$(this).hasClass('selected')) {
       MenuSelected(this);
       T.SetState('NipponSystis');
+      $('.ui.panel.main.container > .ui.dimmer').dimmer('show').dimmer('hide');
       ///
     }
   });
@@ -258,6 +259,7 @@ var MenuSelected = function(e){
     if (!$(this).hasClass('selected')) {
       MenuSelected(this);
       T.SetState('Setting');
+      $('.ui.panel.main.container > .ui.dimmer').dimmer('show').dimmer('hide');
     }
   });
 
@@ -265,6 +267,7 @@ var MenuSelected = function(e){
     if (!$('.ui.access.grid .dropdown.profile').hasClass('selected')) {
       MenuSelected('.ui.access.grid .dropdown.profile');
       T.SetState('User', 'dvgamer');
+      $('.ui.panel.main.container > .ui.dimmer').dimmer('show').dimmer('hide');
 
     }
   });
@@ -302,8 +305,7 @@ var MenuSelected = function(e){
       <div class="ui prepare dimmer active">
         <div class="ui large text loader">Loading</div>
       </div>
-    </div>
-    <div class="content">
+
       <div class="ui attached menu top">
         <div class="header">
           <div style="background-image: url('/libs/img/pgm.management.png'); background-position: 0px 0px; background-repeat: no-repeat; background-size: cover; width:200px; height: 39px; margin: 8px 10px;">
@@ -361,12 +363,15 @@ var MenuSelected = function(e){
         </div>
       </div>
 
+    </div>
+    <div class="ui content">
       <div class="ui notify nag" style="position: absolute;top: 55px;backround-color:rgba(184, 11, 11, 0.79);">
         <span class="title"></span>
         <i class="close icon"></i>
       </div>
-      <div class="ui panel main container" style="display:none;">
-        
+      <div class="ui panel main container" style="display:none;">    
+        <div class="ui dimmer inverted"><div class="ui text loader">Loading</div></div> 
+        <div class="ui panel html"></div>
       </div>
       <div class="ui panel sign-in" style="display:none;">
         <div class="ui equal width stackable grid " style="margin:0px;">

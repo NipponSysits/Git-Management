@@ -92,7 +92,9 @@ i.icon.nippon {
     color:#db2828 !important;
     font-weight: bold !important;
 }*/
-
+.ui.panel.main.container > .ui.dimmer {
+    background-color: rgba(236,236,236,1);
+}
 i.user-image {
     border-radius: 30px;
     background-image: url('http://www.gravatar.com/avatar/c1ec9de8190fa568a2bd87b7713a7c57?d=mm&s=256'); 
