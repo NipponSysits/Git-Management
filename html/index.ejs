@@ -29,6 +29,28 @@
 
 <script type="text/javascript">
 $(function(){
+
+  $.fn.avatar = function(email, size){
+    size = size || 256;
+    var url = 'http://www.gravatar.com/avatar/'+md5(email || none)+'?d=mm&s='+size;
+    return $(this).css('background-image',"url('"+url+"')");
+  }
+
+  $.fn.MenuActiveClick = function(com, mod){
+    if (!$(this).hasClass('selected')) {
+      MenuSelected(this);
+      T.SetState(com, mod);
+    }
+  }
+
+  $.fn.MenuDropdownctiveClick = function(com, mod){
+    if (!$('.ui.access.grid .dropdown.profile').hasClass('selected')) {
+      MenuSelected('.ui.access.grid .dropdown.profile');
+      T.SetState(com, mod);
+    }
+  }
+
+
   var exModal = function(ex) {
     var uiEX = '.ui.modal.feature-exception';
     $('.ui.dimmer.prepare').hide();
@@ -82,8 +104,7 @@ $(function(){
     if(!ex.onError) {
       if(T.Storage('SESSION_CLIENT')) {
         T.Call({ url: '/api/sign-access', data: { email: T.Storage('signin-username') } }).then(function(e, res){
-          console.log('/'+State.Component);
-          if(res.access) onAccess(!State.Component || State.Component == ''  ? 'dashboard' : State.Component.toLowerCase()); else onSignOut();
+          if(res.access) onAccess(res.user, !State.Component || State.Component == ''  ? 'dashboard' : State.Component.toLowerCase()); else onSignOut();
         });
       } else {
         onSignOut();
@@ -93,17 +114,34 @@ $(function(){
     }
   });
 
-  var onAccess = function(com){
+  var onAccess = function(user, com){
+    T.User = user;
+    if(State.Component == 'Sysits') {
+      $('.ui.access.grid > .row.user-menu > .ui.item.nippon').MenuActiveClick(State.Component);
+    } else if(State.Component == 'Setting') {
+      $('.ui.access.grid > .row.user-menu > .ui.item.setting').MenuActiveClick(State.Component);
+    } else if(State.Component == 'User') {
+      $('.ui.access.grid .dropdown.profile .item.profile').MenuDropdownctiveClick(State.Component, State.Module);
+    } else {
+      $('.ui.access.grid > .row.user-menu > .ui.item.home').MenuActiveClick();
+    }
+
+    $('.user-menu .item.profile .user-image').avatar(T.User.email, 64);
+    $('.user-menu .item.profile .ui.fullname').html(T.User.fullname);
+    $('.user-menu .item.profile .ui.position').html(T.User.position);
 
     T.Content(com).then(function(data){
       $('.ui.dimmer.prepare').transition('fade');
       $('.ui.panel.main.container > .ui.panel.html').html(data);
       $('.ui.panel.main.container').transition('fade', '100ms'); 
       $('.ui.access.grid').show();
-      $('.ui.dimmer.component').hide();
+      $('.ui.dimmer.component').transition('fade', '100ms'); 
     });
   }
 
+  var onPermission = function(){
+
+  }
 
   var onSignOut = function(){
     $('.ui.dimmer.prepare').fadeOut(300);
@@ -112,7 +150,7 @@ $(function(){
   }
 
   var eventRememberSignIn = function(email) {
-    $('.ui.sign-avartar').css('background-image',"url('http://www.gravatar.com/avatar/"+md5(email)+"?d=mm&s=256')");
+    $('.ui.sign-avartar').avatar(email, 256);
     $('.ui.sign-email').html(email);
     $('.ui.button.sign-in').css({ 'border-radius': 2 });
     $('.ui.button.sign-back, .or.sign-or').show();
@@ -137,10 +175,10 @@ $(function(){
   $(window).resize(function(){ $('.login-image').height($(window).height() - 118); });
 
   T.SetComponent(function(){
-    $('.ui.dimmer.component').show(); 
+    $('.ui.dimmer.component').transition('fade','100ms'); 
     T.Content(!window.State.Component ? 'dashboard' : window.State.Component.toLowerCase()).then(function(data){
       if(data != 'abort') $('.ui.panel.main.container > .ui.panel.html').html(data);
-      $('.ui.dimmer.component').hide(); 
+      $('.ui.dimmer.component').transition('fade','100ms'); 
     });
   });
       
@@ -210,7 +248,7 @@ $(function(){
           $('.ui.sign-in.form').form('get field','password').val('');
           $('.ui.dimmer.prepare').transition('fade');
           $('.ui.panel.sign-in').fadeOut(300, function(){
-            onAccess();
+            onAccess(res.user, 'dashboard');
           });
           eventSignInSuccess();
         } else {
@@ -249,39 +287,18 @@ $(function(){
     }
   });
 
-var MenuSelected = function(e){
-  $('.ui.access.grid > .row.user-menu > .ui.item').removeClass('selected');
-  $('.ui.access.grid .dropdown.profile .item.profile').removeClass('selected');
-  $(e).addClass('selected');
-}
 
-  $('.ui.access.grid > .row.user-menu > .ui.item.home').click(function(){
-    if (!$(this).hasClass('selected')) {
-      MenuSelected(this);
-      T.SetState();
-    }
-  });
-  $('.ui.access.grid > .row.user-menu > .ui.item.nippon').click(function(){
-    if (!$(this).hasClass('selected')) {
-      MenuSelected(this);
-      T.SetState('NipponSystis');
-      ///
-    }
-  });
-  $('.ui.access.grid > .row.user-menu > .ui.item.setting').click(function(){
-    if (!$(this).hasClass('selected')) {
-      MenuSelected(this);
-      T.SetState('Setting');
-    }
-  });
+  var MenuSelected = function(e){
+    $('.ui.access.grid > .row.user-menu > .ui.item').removeClass('selected');
+    $('.ui.access.grid .dropdown.profile .item.profile').removeClass('selected');
+    $(e).addClass('selected');
+  }
 
-  $('.ui.access.grid .dropdown.profile .item.profile').click(function(){
-    if (!$('.ui.access.grid .dropdown.profile').hasClass('selected')) {
-      MenuSelected('.ui.access.grid .dropdown.profile');
-      T.SetState('User', 'dvgamer');
 
-    }
-  });
+  $('.ui.access.grid > .row.user-menu > .ui.item.home').click(function(){ $(this).MenuActiveClick(); });
+  $('.ui.access.grid > .row.user-menu > .ui.item.nippon').click(function(){ $(this).MenuActiveClick('Sysits'); });
+  $('.ui.access.grid > .row.user-menu > .ui.item.setting').click(function(){ $(this).MenuActiveClick('Setting'); });
+  $('.ui.access.grid .dropdown.profile .item.profile').click(function(){ $(this).MenuDropdownctiveClick('User', 'dvgamer'); });
 
   $('.ui.access.grid .dropdown.profile .item.signout').click(function(){
     $('.signout.modal').modal({
@@ -348,7 +365,7 @@ var MenuSelected = function(e){
         <div class="ui access grid" style="display:none;display:flex;margin-left:auto!important;">
           <div class="computer tablet only row user-menu">
             <a class="ui item home selected">
-              <i class="home icon big"></i>
+              <i class="git square icon big"></i>
             </a>
             <a class="ui item nippon">
               <i class="nippon icon big"></i>
@@ -361,8 +378,8 @@ var MenuSelected = function(e){
                 <i class="user-image icon big"></i>
               </a>
               <div class="content">
-                <div class="ui sub header">Kananek Thongkam</div>
-                <div>Programmer</div>
+                <div class="ui fullname sub header"></div>
+                <div class="ui position"></div>
               </div>
               <div class="menu">
                 <div class="item profile">
