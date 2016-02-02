@@ -136,6 +136,7 @@ $(function(){
       $('.ui.panel.main.container').transition('fade', '100ms'); 
       $('.ui.access.grid').show();
       $('.ui.dimmer.component').transition('fade', '100ms'); 
+      sign.aIn = false;
     });
   }
 
@@ -207,8 +208,7 @@ $(function(){
     });
     eventBackSignIn();
   });
-
-  var signPopup = 0;
+  var sign = { aIn: false, aOut: false };
   $('.ui.sign-in.form').form({
     inline : true,
     on     : 'blur',
@@ -240,46 +240,48 @@ $(function(){
     },
     onSuccess: function(event, fields){
       eventSignInWait();
-
-      T.Call({ url:'/api/sign-in', data: fields }).then(function(e, res){
-        $('.ui.sign-in.button').removeClass('loading');
-        if (!e.onError) {
-          // display: "Kananek T.", email: "kem@ns.co.th"
-          $('.ui.sign-in.form').form('get field','password').val('');
-          $('.ui.dimmer.prepare').transition('fade');
-          $('.ui.panel.sign-in').fadeOut(300, function(){
-            onAccess(res.user, 'dashboard');
-          });
-          eventSignInSuccess();
-        } else {
-          eventSignInSuccess();
-          $('.ui.access.grid').hide();
-          if(!res.name) {
-            console.log('username fail');
-            $('.fields.username').addClass('error');
-            $('.ui.sign-in.form').form('get field','email').focus();
-          }
-          if(!res.pass) {
-            console.log('password fail');
-            $('.fields.password').addClass('error');
-            $('.ui.sign-in.form').form('get field','password').val('').focus().blur().focus();
-          }
-
-        }
-
-        if(res.name && $('.ui.sign-image').css('display') == 'none') {
-          T.Storage('signin-username', $('.ui.sign-in.form').form('get field','email').val());
-          $('.ui.sign-id').transition('remove looping').transition({ 
-            animation: 'fade right', 
-            onComplete: function(){
-              $('.ui.sign-image').transition('fade right');
+      if(!sign.aIn) {
+        sign.aIn = true;
+        T.Call({ url:'/api/sign-in', data: fields }).then(function(e, res){
+          $('.ui.sign-in.button').removeClass('loading');
+          if (!e.onError) {
+            // display: "Kananek T.", email: "kem@ns.co.th"
+            $('.ui.sign-in.form').form('get field','password').val('');
+            $('.ui.dimmer.prepare').transition('fade');
+            $('.ui.panel.sign-in').fadeOut(300, function(){
+              onAccess(res.user, 'dashboard');
+              eventSignInSuccess();
+            });
+          } else {
+            eventSignInSuccess();
+            $('.ui.access.grid').hide();
+            if(!res.name) {
+              console.log('username fail');
+              $('.fields.username').addClass('error');
+              $('.ui.sign-in.form').form('get field','email').focus();
             }
-          });
-          eventRememberSignIn($('.ui.sign-in.form').form('get field','email').val());
-        }
+            if(!res.pass) {
+              console.log('password fail');
+              $('.fields.password').addClass('error');
+              $('.ui.sign-in.form').form('get field','password').val('').focus().blur().focus();
+            }
+
+          }
+
+          if(res.name && $('.ui.sign-image').css('display') == 'none') {
+            T.Storage('signin-username', $('.ui.sign-in.form').form('get field','email').val());
+            $('.ui.sign-id').transition('remove looping').transition({ 
+              animation: 'fade right', 
+              onComplete: function(){
+                $('.ui.sign-image').transition('fade right');
+              }
+            });
+            eventRememberSignIn($('.ui.sign-in.form').form('get field','email').val());
+          }
 
 
-      });
+        });
+      }
       return false;
     },
     onFailure: function(){ 
@@ -304,25 +306,29 @@ $(function(){
     $('.signout.modal').modal({
       closable  : false,
       onDeny : function() {
-        $('.ui.dimmer.prepare').transition('fade');
-        $('.signout.modal .actions .ok.button').addClass('disabled');
-        $('.signout.modal .actions .negative.button').addClass('loading');
-        T.Call({ url:'/api/sign-out' }).then(function(e, res){
-          T.SetState();
-          $('.signout.modal .actions .ok.button').removeClass('disabled');
-          $('.signout.modal .actions .negative.button').removeClass('loading');
-          if(!e.onError) {
-            $('.signout.modal').modal('hide');
-            $('.ui.access.grid').hide();
-            $('.ui.panel.main.container').removeClass('transition visible');
-            $('.ui.panel.main.container').fadeOut(100, function(){ 
-              $('.ui.panel.sign-in').fadeIn(300); 
-              $('.ui.dimmer.prepare').transition('fade');
-            }); 
-          } else {
-            
-          }
-        });
+        if(!sign.aOut) {
+          sign.aOut = true;
+          $('.ui.dimmer.prepare').transition('fade');
+          $('.signout.modal .actions .ok.button').addClass('disabled');
+          $('.signout.modal .actions .negative.button').addClass('loading');
+          T.Call({ url:'/api/sign-out' }).then(function(e, res){
+            T.SetState();
+            $('.signout.modal .actions .ok.button').removeClass('disabled');
+            $('.signout.modal .actions .negative.button').removeClass('loading');
+            if(!e.onError) {
+              $('.signout.modal').modal('hide');
+              $('.ui.access.grid').hide();
+              $('.ui.panel.main.container').removeClass('transition visible');
+              $('.ui.panel.main.container').fadeOut(100, function(){ 
+                $('.ui.panel.sign-in').fadeIn(300); 
+                $('.ui.dimmer.prepare').transition('fade');
+                sign.aOut = false;
+              }); 
+            } else {
+              sign.aOut = false;
+            }
+          });
+        }
         return false;
       }
     }).modal('show');
