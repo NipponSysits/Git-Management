@@ -2,26 +2,30 @@ var conn = require('../libs/db');
 
 module.exports = function(req, res, data){
 	var ns = conn.connect();
-	var user = { 
+	var access = { 
 		name: false, 
 		pass: false,
-		display: '',
-		email: data.email
+		user: null
 	};
 	var table = { table: 'user', fields: ['name', 'surname', 'password' ] };
   	ns.selectOne(table, { email: data.email }, function(err, row, field){ //LEVEL 3
-  		ns.end();
-  		if(row) { // Usernamne found
-  			user.name = true;
-  			if(row.password === data.password) {
-  				user.pass = true;
-  				user.display = row.name + ' ' + row.surname;
-				var db = conn.connect({ database: 'ns_system' });
-  				db.update('sessions', { email: data.email, expire_at: req.expire }, { session_id: req.session, access_id: req.access }, function(){ 
-	  				db.end(); 
-	  			});
-  			}
-  		}
-  		if(user.name && user.pass) res.success(user); else res.error(user);
+  		// if(row) { // Usernamne found
+		access.name = (row ? true : false);
+		ns.selectOne('user_access', { email: data.email }, function(err, user, field){
+  			ns.end();
+			if(user) {
+				if(row.password === data.password) {
+					access.user = user;
+					access.pass = true;
+					var db = conn.connect({ database: 'ns_system' });
+						db.update('sessions', { email: data.email, expire_at: req.expire }, { session_id: req.session, access_id: req.access }, function(){ 
+		  				db.end(); 
+		  			});
+				}
+
+			}
+  			if(access.name && access.pass) res.success(access); else res.error(access);
+		});
+  		// }
 	});
 };
