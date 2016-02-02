@@ -82,7 +82,8 @@ $(function(){
     if(!ex.onError) {
       if(T.Storage('SESSION_CLIENT')) {
         T.Call({ url: '/api/sign-access', data: { email: T.Storage('signin-username') } }).then(function(e, res){
-          if(res.access) onAccess(!State.Component ? 'dashboard' : State.Component.toLowerCase()); else onSignOut();
+          console.log('/'+State.Component);
+          if(res.access) onAccess(!State.Component || State.Component == ''  ? 'dashboard' : State.Component.toLowerCase()); else onSignOut();
         });
       } else {
         onSignOut();
@@ -357,7 +358,7 @@ var MenuSelected = function(e){
             </a>
             <div class="ui dropdown icon item profile">
               <a class="ui item user">
-                <i class="user-image icon big"><div class="floating ui red label">22</div></i>
+                <i class="user-image icon big"></i>
               </a>
               <div class="content">
                 <div class="ui sub header">Kananek Thongkam</div>
