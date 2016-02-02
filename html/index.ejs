@@ -82,8 +82,7 @@ $(function(){
     if(!ex.onError) {
       if(T.Storage('SESSION_CLIENT')) {
         T.Call({ url: '/api/sign-access', data: { email: T.Storage('signin-username') } }).then(function(e, res){
-
-          if(res.access) onAccess('dashboard'); else onSignOut();
+          if(res.access) onAccess(!State.Component ? 'dashboard' : State.Component.toLowerCase()); else onSignOut();
         });
       } else {
         onSignOut();
@@ -94,6 +93,7 @@ $(function(){
   });
 
   var onAccess = function(com){
+
     T.Content(com).then(function(data){
       $('.ui.dimmer.prepare').transition('fade');
       $('.ui.panel.main.container > .ui.panel.html').html(data);
