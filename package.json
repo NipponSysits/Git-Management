@@ -22,7 +22,8 @@
   },
   "main": "app.js",
   "scripts": {
-    "start": "webpack"
+    "start": "node app.js",
+    "dev": "node app.js --dev"
   },
   "author": "Touno.K",
   "license": "ISC",
