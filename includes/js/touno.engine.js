@@ -51,11 +51,13 @@ window.T = {
         return T.Storage(window.State.StorageName);
     },
     StateCompile: function(event){
-        var found = null;
-
-        //if(!found){
-        T.__handle.Component();
-
+        var main = T.Storage('component-default') || '';
+        var found = T.__handle.Component(window.State.Component);
+        if(!found){
+            window.State.Component = main;
+            T.__handle.Component(window.State.Component);
+        }
+        
         console.log('StateCompile::', 'StateName:', T.StateName(), '- GetItems:', T.GetItems(), window.State);
         if(!event) window.history.pushState(T.GetItems(), T.StateName(), T.StateURL());
         if(!found) window.history.replaceState(T.GetItems(), T.StateName(), T.StateURL());
