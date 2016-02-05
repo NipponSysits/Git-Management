@@ -38,6 +38,7 @@ var SessionClient = function(req, res, next){
 	req.XHRRequested = req.xhr && requested;
 	req.pathname = req._parsedUrl.pathname;
 	req.access = req.cookies.ACCESS || '';
+	req.user = req.headers['x-sign'] !== 'undefined' && req.headers['x-sign'] != undefined ? req.headers['x-sign'] : null;
 
 	if(req.xhr && requested) { // LEVEL 1 
 		req.XHRRequested = false;
@@ -62,8 +63,22 @@ var SessionClient = function(req, res, next){
 		  				} else {
 		  					db.end();
 		  				}
-		  				req.XHRRequested = true;
-		  				next();
+
+		  				if(req.user) {
+		  					var ns = conn.connect();
+								ns.selectOne('user_access', { username: req.user }, function(err, access, field){
+									ns.end();
+			  					req.XHRRequested = false;
+									if(!err && access) {
+										req.user = access;
+				  					req.XHRRequested = true;
+									}
+			  					next();
+								});
+		  				} else {
+		  					req.XHRRequested = true;
+		  					next();
+		  				}
 		  			}).catch(function(ex){
 		  				db.end();
 		  				console.log(ex);
@@ -84,8 +99,8 @@ var SessionClient = function(req, res, next){
 }
 
 app.api = function(path, callback){
-	console.log('API:', path);
-	app.post(path, [ cookieParser(), SessionClient, bodyParser.json(), bodyParser.urlencoded()], function(req, res){
+	console.log('API:', path.toLowerCase());
+	app.post(path.toLowerCase(), [ cookieParser(), SessionClient, bodyParser.json(), bodyParser.urlencoded()], function(req, res){
 		console.log('App api:', path);
 		if(req.XHRRequested) {
 			res.error = function(data, title, message){ res.send({ onError: true, exTitle: title || "", onMessage: message || "", getItems: data || {} }) }
@@ -98,8 +113,8 @@ app.api = function(path, callback){
 }
 
 app.html = function(path, render_name){
-	console.log('HTML:', path);
-	app.post(path, [ cookieParser(), HTMLClient, SessionClient, bodyParser.json(), bodyParser.urlencoded() ], function(req, res){
+	console.log('HTML:', path.toLowerCase());
+	app.post(path.toLowerCase(), [ cookieParser(), HTMLClient, SessionClient, bodyParser.json(), bodyParser.urlencoded() ], function(req, res){
 		if(req.XHRRequested) {
 			res.render(render_name);
 		} else {

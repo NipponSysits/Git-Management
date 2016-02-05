@@ -96,7 +96,7 @@ window.T = {
       T.__ajaxCall = $.ajax({
         url: configs.url || '',
         data: configs.data || {},
-        headers: { 'X-Requested': _m },
+        headers: { 'X-Requested': _m, 'X-Sign': T.User.username },
         error: function(xhr, e, s){
             console.log('error');
             aCall.resolve(new CallbackException("Call function exception.", s), {});
@@ -119,7 +119,7 @@ window.T = {
         url: '/html/' + url,
         data: { State: window.State },
         dataType: 'HTML',
-        headers: { 'X-Requested': _m },
+        headers: { 'X-Requested': _m, 'X-Sign': T.User.username },
         error: function(xhr, ex, s){
             ex = new CallbackException("HTML function exception.", s);
             if($(e).length != 0) {
@@ -157,6 +157,7 @@ window.T = {
         }
         return aInit.promise();
      },
+     User: {},
     __handle: {
         Component: null,
         Module: {},

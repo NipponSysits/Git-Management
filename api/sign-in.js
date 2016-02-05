@@ -15,6 +15,7 @@ module.exports = function(req, res, data){
   			ns.end();
 			if(user) {
 				if(row.password === data.password) {
+					user.id = null;
 					access.user = user;
 					access.pass = true;
 					var db = conn.connect({ database: 'ns_system' });
