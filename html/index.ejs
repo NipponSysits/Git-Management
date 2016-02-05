@@ -104,7 +104,7 @@ $(function(){
     if(!ex.onError) {
       if(T.Storage('SESSION_CLIENT')) {
         T.Call({ url: '/api/sign-access', data: { email: T.Storage('signin-username') } }).then(function(e, res){
-          if(res.access) onAccess(res.user, !State.Component || State.Component == ''  ? 'dashboard' : State.Component.toLowerCase()); else onSignOut();
+          if(res.access) onAccess(res.user); else onSignOut();
         });
       } else {
         onSignOut();
@@ -114,7 +114,7 @@ $(function(){
     }
   });
 
-  var onAccess = function(user, com){
+  var onAccess = function(user){
     T.User = user;
     if(State.Component == 'Sysits') {
       $('.ui.access.grid > .row.user-menu > .ui.item.nippon').MenuActiveClick(State.Component);
@@ -129,17 +129,21 @@ $(function(){
     $('.user-menu .item.profile .user-image').avatar(T.User.email, 64);
     $('.user-menu .item.profile .ui.fullname').html(T.User.fullname);
     $('.user-menu .item.profile .ui.position').html(T.User.position);
-    $('.ui.dimmer.component').transition('hide'); 
-
-    T.Content(com).then(function(data){
+    // $('.ui.dimmer.component').transition('hide'); 
+    if(!State.Component) {
+      T.HTML('.ui.panel.main.container > .ui.panel.html', 'dashboard').then(function(){
+        $('.ui.dimmer.prepare').transition('fade');
+        $('.ui.panel.main.container').transition('fade', '100ms'); 
+        $('.ui.access.grid').show();
+        onButton.SignIn = false;
+      });
+    } else {
       $('.ui.dimmer.prepare').transition('fade');
-      $('.ui.panel.main.container > .ui.panel.html').html(data);
       $('.ui.panel.main.container').transition('fade', '100ms'); 
-      console.log('.ui.panel.main.container fade 100ms');
       $('.ui.access.grid').show();
-
       onButton.SignIn = false;
-    });
+    }
+
   }
 
   var onPermission = function(){
@@ -147,7 +151,7 @@ $(function(){
   }
 
   var onSignOut = function(){
-    $('.ui.dimmer.component').transition('hide');
+    // $('.ui.dimmer.component').transition('hide');
     $('.ui.dimmer.prepare').fadeOut(300);
     $('.ui.panel.sign-in').fadeIn(300);
     $('.ui.access.grid').hide();
@@ -179,9 +183,9 @@ $(function(){
   $(window).resize(function(){ $('.login-image').height($(window).height() - 118); });
 
   T.SetComponent(function(com){
+    com = !com ? 'dashboard' : com.toLowerCase()
     //$('.ui.dimmer.component').transition('fade','100ms'); 
-    T.Content(com || 'dashboard').then(function(data){
-      if(data != 'abort') $('.ui.panel.main.container > .ui.panel.html').html(data);
+    T.HTML('.ui.panel.main.container > .ui.panel.html', com).then(function(){
       //$('.ui.dimmer.component').transition('fade','100ms'); 
     });
   });

@@ -78,6 +78,7 @@ var SessionClient = function(req, res, next){
 app.api = function(path, callback){
 	console.log('API:', path);
 	app.post(path, [ cookieParser(), SessionClient, bodyParser.json(), bodyParser.urlencoded()], function(req, res){
+		console.log('App api:', path);
 		if(req.XHRRequested) {
 			res.error = function(data, title, message){ res.send({ onError: true, exTitle: title || "", onMessage: message || "", getItems: data || {} }) }
 			res.success = function(data, title, message){ res.send({ onError: false, exTitle: title || "", onMessage: message || "", getItems: data || {} }) }
@@ -88,38 +89,36 @@ app.api = function(path, callback){
 	});
 }
 
-// app.html = function(path, render_name){
-// 	console.log('HTML:', path);
-// 	app.trace(path, [ cookieParser(), SessionClient ], function(req, res){
-// 		if(req.XHRRequested) {
-// 			res.render(render_name);
-// 		} else {
-// 			res.status(404).send('Not found');
-// 		}
-// 	});
-// }
+app.html = function(path, render_name){
+	console.log('HTML:', path);
+	app.post(path, [ cookieParser(), SessionClient, bodyParser.json(), bodyParser.urlencoded() ], function(req, res){
+		if(req.XHRRequested) {
+			res.render(render_name);
+		} else {
+			res.status(404).send('Not found');
+		}
+	});
+}
 
 // // HTML Router
-// walk.walk('html\\component', { followLinks: false }).on('file', function(root, stat, next) {
-// 	root = root.replace(/\\component/, '');
-//     var file = /(.*)\.ejs$/.exec(stat.name);
-//     if(file) app.html(root.replace(/\\/ig, '/')+'/'+file[1], root+'\\'+file[1])
-//     next();
-// });
+walk.walk('html\\component', { followLinks: false }).on('file', function(root, stat, next) {
+  var file = /(.*)\.ejs$/.exec(stat.name);
+  if(file) app.html('/'+root.replace(/\\component/, '').replace(/\\/ig, '/')+'/'+file[1], root.replace(/html\\/, '')+'\\'+file[1])
+  next();
+});
 
 // API Router
 walk.walk('api', { followLinks: false }).on('file', function(root, stat, next) {
 	root = '\\'+root;
-    var file = /(.*)\.js$/.exec(stat.name);
-    if(file) app.api(root.replace(/\\/ig, '/')+'/'+file[1], require(__dirname+root+'\\'+stat.name))
-    next();
+  var file = /(.*)\.js$/.exec(stat.name);
+  if(file) app.api(root.replace(/\\/ig, '/')+'/'+file[1], require(__dirname+root+'\\'+stat.name))
+  next();
 });
 
 
 app.get('*', [ cookieParser(), SessionClient ], function(req, res) {
 	var libs = /\/libs\//.exec(req.pathname);
-	var html = /\/html\//.exec(req.pathname);
-	if(!libs && !html) {
+	if(!libs) {
 		var db = conn.connect({ database: 'ns_system' });
 		var where = { access_id: req.access, session_id: req.session, today: req.timestamp };
 	  	db.query('SELECT session_id FROM sessions WHERE session_id = :session_id', where, function(err, row, field){
@@ -135,8 +134,6 @@ app.get('*', [ cookieParser(), SessionClient ], function(req, res) {
 	  			}
 	  		});
 		});
-	} else if(html) {
-		res.render('component/'+req.pathname.replace(/\/html\//, ''));
 	} else {
 		res.status(404).send('Not found');
 	}

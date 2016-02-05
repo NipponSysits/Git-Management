@@ -111,21 +111,35 @@ window.T = {
       });
       return aCall.promise();
     },
-    Content: function(configs){
-      configs = (typeof configs == 'string' ? { url: configs } : configs) || {};
-      var aContent = $.Deferred();
+    HTML: function(e, url){
+      console.log('HTML', e, url);
+      var aHtml = $.Deferred();
       var _t = Date.now(), _m = md5(_t);
-      T.Abort(T.__ajaxContent);
-      T.__ajaxContent = $.ajax({
-        url: '/html/'+(configs.url || ''),
-        data: configs.data || {},
-        type: 'get',
-        dataType: 'html',
+      $.ajax({
+        url: '/html/' + url,
+        data: { State: window.State },
+        dataType: 'HTML',
         headers: { 'X-Requested': _m },
-        error: function(xhr, e, s){ aContent.resolve(s); },
-        success: function(data){ aContent.resolve(data); }
+        error: function(xhr, ex, s){
+            ex = new CallbackException("HTML function exception.", s);
+            if($(e).length != 0) {
+                $(e).html("HTML function exception.");
+                aHtml.resolve(ex);
+            } else {
+                aHtml.reject(ex);
+            }
+        },
+        success: function(html){ 
+            var ex = new CallbackException({ onError: false, exTitle: "", getItems: null });
+            if($(e).length != 0) {
+                $(e).html(html);
+                aHtml.resolve(ex);
+            } else {
+                aHtml.reject(ex);
+            }
+        }
       });
-      return aContent.promise();
+      return aHtml.promise();
     },
     Init: function(session){
         var aInit = $.Deferred();
@@ -147,8 +161,7 @@ window.T = {
         Component: null,
         Module: {},
     },
-    __ajaxCall: undefined,
-    __ajaxContent: undefined
+    __ajaxCall: undefined
 }
 
 
