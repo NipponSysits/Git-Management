@@ -21,6 +21,11 @@ var encryptor = require('simple-encryptor')(PrimaryKey.key);
 
 var SQLError = function(err){ err = err || {}; return { name: err.name, message: (err != null ? '('+err.statusCode+') '+err.code+' - '+err.message : "")};  }
 
+var HTMLClient = function(req, res, next){
+	req.isHtml = true;
+	next();
+}
+
 var SessionClient = function(req, res, next){
 	var onTimestamp = Date.now();
 	var Hour24 = 86400000; // milisecond
@@ -33,7 +38,6 @@ var SessionClient = function(req, res, next){
 	req.XHRRequested = req.xhr && requested;
 	req.pathname = req._parsedUrl.pathname;
 	req.access = req.cookies.ACCESS || '';
-	req.isHtml = false;
 
 	if(req.xhr && requested) { // LEVEL 1 
 		req.XHRRequested = false;
@@ -48,12 +52,16 @@ var SessionClient = function(req, res, next){
 		  			var sqlSession = 'DELETE FROM sessions ' +
 		  				'WHERE created_at <= :yesterday OR created_at >= :tomorrow OR (expire_at < :today AND expire_at > 0)';
 		  			q.all([
-			  			db.insert('requested', { access_id: req.access, request_id: req.headers['x-requested'], created_at: req.timestamp }),
 			  			db.update('sessions', { expire_at: req.expire }, { access_id: req.access, session_id: req.session, email: null }),
 			  			db.query('DELETE FROM requested WHERE created_at <= :yesterday OR created_at >= :tomorrow ', whereTime),  // LEVEL 4
 			  			db.query(sqlSession, whereTime)
 		  			]).then(function(){
-		  				db.end();
+		  				if(!req.isHtml) {
+			  				var data = { access_id: req.access, request_id: req.headers['x-requested'], created_at: req.timestamp };
+				  			db.insert('requested', data, function(){ db.end(); });
+		  				} else {
+		  					db.end();
+		  				}
 		  				req.XHRRequested = true;
 		  				next();
 		  			}).catch(function(ex){
@@ -91,7 +99,7 @@ app.api = function(path, callback){
 
 app.html = function(path, render_name){
 	console.log('HTML:', path);
-	app.post(path, [ cookieParser(), SessionClient, bodyParser.json(), bodyParser.urlencoded() ], function(req, res){
+	app.post(path, [ cookieParser(), HTMLClient, SessionClient, bodyParser.json(), bodyParser.urlencoded() ], function(req, res){
 		if(req.XHRRequested) {
 			res.render(render_name);
 		} else {
@@ -116,9 +124,8 @@ walk.walk('api', { followLinks: false }).on('file', function(root, stat, next) {
 });
 
 
-app.get('*', [ cookieParser(), SessionClient ], function(req, res) {
-	var libs = /\/libs\//.exec(req.pathname);
-	if(!libs) {
+app.get('*', [ cookieParser(), HTMLClient, SessionClient ], function(req, res) {
+	if(req.isHtml) {
 		var db = conn.connect({ database: 'ns_system' });
 		var where = { access_id: req.access, session_id: req.session, today: req.timestamp };
 	  	db.query('SELECT session_id FROM sessions WHERE session_id = :session_id', where, function(err, row, field){
