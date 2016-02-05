@@ -131,7 +131,7 @@ $(function(){
     $('.user-menu .item.profile .ui.position').html(T.User.position);
     // $('.ui.dimmer.component').transition('hide'); 
     if(!State.Component) {
-      T.HTML('.ui.panel.main.container > .ui.panel.html', 'dashboard').then(function(){
+      T.HTML('.ui.panel.main.container > .ui.panel.html', 'menu-panel').then(function(){
         $('.ui.dimmer.prepare').transition('fade');
         $('.ui.panel.main.container').transition('fade', '100ms'); 
         $('.ui.access.grid').show();
@@ -183,7 +183,7 @@ $(function(){
   $(window).resize(function(){ $('.login-image').height($(window).height() - 118); });
 
   T.SetComponent(function(com){
-    com = !com ? 'dashboard' : com.toLowerCase()
+    com = !com ? 'menu-panel' : com.toLowerCase()
     //$('.ui.dimmer.component').transition('fade','100ms'); 
     T.HTML('.ui.panel.main.container > .ui.panel.html', com).then(function(){
       //$('.ui.dimmer.component').transition('fade','100ms'); 
@@ -256,7 +256,7 @@ $(function(){
             $('.ui.sign-in.form').form('get field','password').val('');
             $('.ui.dimmer.prepare').transition('fade');
             $('.ui.panel.sign-in').fadeOut(300, function(){
-              onAccess(res.user, 'dashboard');
+              onAccess(res.user, 'menu-panel');
               eventSignInSuccess();
             });
           } else {
