@@ -51,10 +51,9 @@ window.T = {
         return T.Storage(window.State.StorageName);
     },
     StateCompile: function(event){
-        var main = T.Storage('component-default') || '';
-        var found = T.__handle.Component(window.State.Component);
-        if(!found){
-            window.State.Component = main;
+        var found = T.__handle.Component;
+        if(found){
+            window.State.Component = window.State.Component || T.Storage('component-default');
             T.__handle.Component(window.State.Component);
         }
         
@@ -145,7 +144,7 @@ window.T = {
         return aInit.promise();
      },
     __handle: {
-        Component: function(name){ },
+        Component: null,
         Module: {},
     },
     __ajaxCall: undefined,

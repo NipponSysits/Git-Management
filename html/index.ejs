@@ -129,15 +129,16 @@ $(function(){
     $('.user-menu .item.profile .user-image').avatar(T.User.email, 64);
     $('.user-menu .item.profile .ui.fullname').html(T.User.fullname);
     $('.user-menu .item.profile .ui.position').html(T.User.position);
+    $('.ui.dimmer.component').transition('hide'); 
 
     T.Content(com).then(function(data){
       $('.ui.dimmer.prepare').transition('fade');
       $('.ui.panel.main.container > .ui.panel.html').html(data);
       $('.ui.panel.main.container').transition('fade', '100ms'); 
+      console.log('.ui.panel.main.container fade 100ms');
       $('.ui.access.grid').show();
-      $('.ui.dimmer.component').transition('fade', '100ms');
 
-      sign.aIn = false;
+      onButton.SignIn = false;
     });
   }
 
@@ -146,7 +147,7 @@ $(function(){
   }
 
   var onSignOut = function(){
-    $('.ui.dimmer.component').fadeOut(0).removeClass('active transition visible');
+    $('.ui.dimmer.component').transition('hide');
     $('.ui.dimmer.prepare').fadeOut(300);
     $('.ui.panel.sign-in').fadeIn(300);
     $('.ui.access.grid').hide();
@@ -178,10 +179,10 @@ $(function(){
   $(window).resize(function(){ $('.login-image').height($(window).height() - 118); });
 
   T.SetComponent(function(com){
-    $('.ui.dimmer.component').transition('fade','100ms'); 
-    T.Content(com).then(function(data){
+    //$('.ui.dimmer.component').transition('fade','100ms'); 
+    T.Content(com || 'dashboard').then(function(data){
       if(data != 'abort') $('.ui.panel.main.container > .ui.panel.html').html(data);
-      $('.ui.dimmer.component').transition('fade','100ms'); 
+      //$('.ui.dimmer.component').transition('fade','100ms'); 
     });
   });
       
@@ -210,7 +211,7 @@ $(function(){
     });
     eventBackSignIn();
   });
-  var sign = { aIn: false, aOut: false };
+  var onButton = { SignIn: false, SignOut: false, Nav: true };
   $('.ui.sign-in.form').form({
     inline : true,
     on     : 'blur',
@@ -242,8 +243,8 @@ $(function(){
     },
     onSuccess: function(event, fields){
       eventSignInWait();
-      if(!sign.aIn) {
-        sign.aIn = true;
+      if(!onButton.SignIn) {
+        onButton.SignIn = true;
         T.Call({ url:'/api/sign-in', data: fields }).then(function(e, res){
           $('.ui.sign-in.button').removeClass('loading');
           if (!e.onError) {
@@ -308,9 +309,8 @@ $(function(){
     $('.signout.modal').modal({
       closable  : false,
       onDeny : function() {
-        if(!sign.aOut) {
-          sign.aOut = true;
-          $('.ui.dimmer.prepare').transition('fade');
+        if(!onButton.SignOut) {
+          onButton.SignOut = true;
           $('.signout.modal .actions .ok.button').addClass('disabled');
           $('.signout.modal .actions .negative.button').addClass('loading');
           T.Call({ url:'/api/sign-out' }).then(function(e, res){
@@ -323,11 +323,10 @@ $(function(){
               $('.ui.panel.main.container').removeClass('transition visible');
               $('.ui.panel.main.container').fadeOut(100, function(){ 
                 $('.ui.panel.sign-in').fadeIn(300); 
-                $('.ui.dimmer.prepare').transition('fade');
-                sign.aOut = false;
+                onButton.SignOut = false;
               }); 
             } else {
-              sign.aOut = false;
+              onButton.SignOut = false;
             }
           });
         }
@@ -412,7 +411,7 @@ $(function(){
         <i class="close icon"></i>
       </div>
       <div class="ui panel main container" style="display:none;">     
-        <div class="ui dimmer component inverted active"><div class="ui text loader"></div></div>
+        <div class="ui dimmer component inverted"><div class="ui text loader"></div></div>
         <div class="ui panel html"></div>
       </div>
       <div class="ui panel sign-in" style="display:none;">
