@@ -47,46 +47,44 @@ var SessionClient = function(req, res, next){
 
 		if((/(.+?)>\+</.exec(decrypted) || [])[1] === PrimaryKey.key) { // LEVEL 2
 			var db = conn.connect({ database: 'ns_system' });
-		  	db.select('sessions', { session_id: req.session }, function(err, row, field){ //LEVEL 3
-		  		if(!err) {
-		  			var whereTime = { yesterday: req.timestamp-Hour24, tomorrow:req.timestamp+Hour24, today:req.timestamp };
-		  			var sqlSession = 'DELETE FROM sessions ' +
-		  				'WHERE created_at <= :yesterday OR created_at >= :tomorrow OR (expire_at < :today AND expire_at > 0)';
-		  			q.all([
-			  			db.update('sessions', { expire_at: req.expire }, { access_id: req.access, session_id: req.session, email: null }),
-			  			db.query('DELETE FROM requested WHERE created_at <= :yesterday OR created_at >= :tomorrow ', whereTime),  // LEVEL 4
-			  			db.query(sqlSession, whereTime)
-		  			]).then(function(){
-		  				if(!req.isHtml) {
-			  				var data = { access_id: req.access, request_id: req.headers['x-requested'], created_at: req.timestamp };
-				  			db.insert('requested', data, function(){ db.end(); });
-		  				} else {
-		  					db.end();
-		  				}
-
-		  				if(req.user) {
-		  					var ns = conn.connect();
-								ns.selectOne('user_access', { username: req.user }, function(err, access, field){
-									ns.end();
-			  					req.XHRRequested = false;
-									if(!err && access) {
-										req.user = access;
-				  					req.XHRRequested = true;
-									}
-			  					next();
-								});
-		  				} else {
-		  					req.XHRRequested = true;
-		  					next();
-		  				}
-		  			}).catch(function(ex){
-		  				db.end();
-		  				console.log(ex);
-		  				req.XHRRequested = false;
-		  				next();
-		  			});
-		  		}
+	  	db.select('sessions', { session_id: req.session }, function(err, row, field){ //LEVEL 3
+	  		if(!err) {
+	  			var whereTime = { yesterday: req.timestamp-Hour24, tomorrow:req.timestamp+Hour24, today:req.timestamp };
+	  			var sqlSession = 'DELETE FROM sessions ' +
+	  				'WHERE created_at <= :yesterday OR created_at >= :tomorrow OR (expire_at < :today AND expire_at > 0)';
+	  			q.all([
+		  			db.update('sessions', { expire_at: req.expire }, { access_id: req.access, session_id: req.session, email: null }),
+		  			db.query('DELETE FROM requested WHERE created_at <= :yesterday OR created_at >= :tomorrow ', whereTime),  // LEVEL 4
+		  			db.query(sqlSession, whereTime)
+	  			]).then(function(){
+	  				if(!req.isHtml) {
+		  				var data = { access_id: req.access, request_id: req.headers['x-requested'], created_at: req.timestamp };
+			  			db.insert('requested', data, function(){ db.end(); });
+	  				} else {
+	  					db.end();
+	  				}
+	  			}).catch(function(ex){
+	  				db.end();
+	  				console.log(ex);
+	  			});
+	  		}
 			});
+
+			if(req.user) {
+				var ns = conn.connect();
+				ns.selectOne('user_access', { username: req.user }, function(err, access, field){
+					ns.end();
+						req.XHRRequested = false;
+					if(!err && access) {
+						req.user = access;
+						req.XHRRequested = true;
+					}
+					next();
+				});
+			} else {
+				req.XHRRequested = true;
+				next();
+			}
 		}
 	} else {
 		if(!session) {
@@ -114,7 +112,7 @@ app.api = function(path, callback){
 
 app.html = function(path, render_name){
 	console.log('HTML:', path.toLowerCase());
-	app.post(path.toLowerCase(), [ cookieParser(), HTMLClient, SessionClient, bodyParser.json(), bodyParser.urlencoded() ], function(req, res){
+	app.post(path.toLowerCase(), [ cookieParser(), HTMLClient, SessionClient ], function(req, res){
 		if(req.XHRRequested) {
 			res.render(render_name);
 		} else {
