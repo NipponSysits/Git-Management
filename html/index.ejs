@@ -51,16 +51,16 @@ $(function(){
         case 'Sysits':
             text = 'Nippon Sysits';
             item = [
-              { text: 'Dashboard', state: function(){ T.SetState('Sysits'); }, active: true },
-              { text: 'TimeCard', state: function(){ T.SetState('Sysits', 'Time-Card'); } },
-              { text: 'Stats', state: function(){ T.SetState('Sysits', 'Time-Stats'); }, },
-              { text: 'Daily Report', state: function(){ T.SetState('Sysits', 'Report'); }, }
+              { text: 'Dashboard', state: function(){ T.SetModule(); }, active: true },
+              { text: 'TimeCard', state: function(){ T.SetModule('Time-Card'); } },
+              { text: 'Stats', state: function(){ T.SetModule('Time-Stats'); }, },
+              { text: 'Daily Report', state: function(){ T.SetModule('Report'); }, }
             ]
           break;
         case 'Setting':
             text = 'Setting Systems';
             item = [
-              { text: 'Systems', state: function(){ T.SetState('Setting'); }, active: true }
+              { text: 'Systems', state: function(){ T.SetModule(); }, active: true }
             ]
           break;
         default:
@@ -80,9 +80,9 @@ $(function(){
       MenuSelected('.ui.access.grid .dropdown.profile');
       T.SetState(com, mod);
       SetPanelMenu('Profile Account', [
-        { text: T.User.username, state: function(){ T.SetState('User', T.User.username); }, active: true },
-        { text: 'Account Setting', state: function(){ T.SetState('User', 'Account-Setting'); } },
-        { text: 'Notifications', state: function(){ T.SetState('User', 'Notify'); }, }
+        { text: T.User.username, state: function(){ T.SetModule(T.User.username); }, active: true },
+        { text: 'Account Setting', state: function(){ T.SetModule('Account-Setting'); } },
+        { text: 'Notifications', state: function(){ T.SetModule('Notify'); }, }
       ]);
     }
   }
