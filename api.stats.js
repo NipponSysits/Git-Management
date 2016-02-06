@@ -47,14 +47,15 @@ var User = getQuota(date);
 
 var Age = getPeriod(date);
 // 246
-console.log('User', getPeriod(date), ' Quota', User);
-console.log('Sick', QuotaSick(User), 'Vacation', QuotaVacation(User));
+// console.log('User', getPeriod(date), ' Quota', User);
+// console.log('Sick', QuotaSick(User), 'Vacation', QuotaVacation(User));
 
-console.log({ age: Age.Y+' Year '+Age.M+' Month '+Age.D+' Day', sick: QuotaSick(User), vacation:QuotaVacation(User) });
+// console.log({ age: Age.Y+' Year '+Age.M+' Month '+Age.D+' Day', sick: QuotaSick(User), vacation:QuotaVacation(User) });
 
-// if(quota.Y<1) {
-// 	51*60*DAY/365
-// } else {
-// 	51*60
-// }
+
+var year = moment().year();
+
+var DayOfYear = moment(year+'-12-31').dayOfYear();
+var DayOfWeek = moment(year+'-01-01').weekday();
+console.log(DayOfWeek, DayOfYear);
 
