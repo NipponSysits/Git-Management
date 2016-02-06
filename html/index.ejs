@@ -30,6 +30,12 @@
 <script type="text/javascript">
 $(function(){
 
+  var MenuSelected = function(e){
+    $('.ui.access.grid > .row.user-menu > .ui.item').removeClass('selected');
+    $('.ui.access.grid .dropdown.profile .item.profile').removeClass('selected');
+    $(e).addClass('selected');
+  }
+
   $.fn.avatar = function(email, size){
     size = size || 256;
     var url = 'http://www.gravatar.com/avatar/'+md5(email || none)+'?d=mm&s='+size;
@@ -40,6 +46,32 @@ $(function(){
     if (!$(this).hasClass('selected')) {
       MenuSelected(this);
       T.SetState(com, mod);
+      var text, item;
+      switch(com){
+        case 'Sysits':
+            text = 'Nippon Sysits';
+            item = [
+              { text: 'Dashboard', state: function(){ T.SetState('Sysits'); }, active: true },
+              { text: 'TimeCard', state: function(){ T.SetState('Sysits', 'Time-Card'); } },
+              { text: 'Stats', state: function(){ T.SetState('Sysits', 'Time-Stats'); }, },
+              { text: 'Daily Report', state: function(){ T.SetState('Sysits', 'Report'); }, }
+            ]
+          break;
+        case 'Setting':
+            text = 'Setting Systems';
+            item = [
+              { text: 'Systems', state: function(){ T.SetState('Setting'); }, active: true }
+            ]
+          break;
+        default:
+          text = 'Management';
+          item = [
+            { text: 'Dashboard', state: function(){ T.SetState(); }, active: true },
+            { text: 'Repositories', state: function(){ T.SetState('Repository'); }, }
+          ]
+          break;
+      }
+      SetPanelMenu(text, item);
     }
   }
 
@@ -47,7 +79,40 @@ $(function(){
     if (!$('.ui.access.grid .dropdown.profile').hasClass('selected')) {
       MenuSelected('.ui.access.grid .dropdown.profile');
       T.SetState(com, mod);
+      SetPanelMenu('Profile Account', [
+        { text: T.User.username, state: function(){ T.SetState('User', T.User.username); }, active: true },
+        { text: 'Account Setting', state: function(){ T.SetState('User', 'Account-Setting'); } },
+        { text: 'Notifications', state: function(){ T.SetState('User', 'Notify'); }, }
+      ]);
     }
+  }
+
+  $.fn.Menu = function(item){
+    if (!$(this).hasClass('active')) {
+      $('.ui.navigator.menu .item.active').removeClass('active');
+      $(this).addClass('active');
+      item.state();
+      // T.HTML('.ui.panel.main.container > .ui.panel.html .ui.main-component', com).then(function(){
+      //   console.log('change');
+      //   // $('.ui.dimmer.prepare').transition('fade');
+      //   // $('.ui.panel.main.container').transition('fade', '100ms'); 
+      //   // $('.ui.access.grid').show();
+      //   // onButton.SignIn = false;
+      // });
+    }
+  }
+
+  var SetPanelMenu = function(h3, menu){
+    $('.column.navigator.text > h3').html(h3);
+    $('.ui.navigator.menu').empty();
+
+    menu.map(function(item){
+      $('<a>', { 
+        'class':'item'+(item.active?' active':''),
+        'onClick': "$(this).Menu($(this).data('item'))",
+        'html':item.text
+      }).data('item', item).appendTo('.ui.navigator.menu');
+    });
   }
 
 
@@ -131,7 +196,7 @@ $(function(){
     $('.user-menu .item.profile .ui.position').html(T.User.position);
     // $('.ui.dimmer.component').transition('hide'); 
     if(!State.Component) {
-      T.HTML('.ui.panel.main.container > .ui.panel.html', 'menu-panel').then(function(){
+      T.HTML('.ui.panel.main.container > .ui.panel.html .ui.main-component', 'dashboard').then(function(){
         $('.ui.dimmer.prepare').transition('fade');
         $('.ui.panel.main.container').transition('fade', '100ms'); 
         $('.ui.access.grid').show();
@@ -183,9 +248,9 @@ $(function(){
   $(window).resize(function(){ $('.login-image').height($(window).height() - 118); });
 
   T.SetComponent(function(com){
-    com = !com ? 'menu-panel' : com.toLowerCase()
+    com = !com ? 'dashboard' : com.toLowerCase()
     //$('.ui.dimmer.component').transition('fade','100ms'); 
-    T.HTML('.ui.panel.main.container > .ui.panel.html', com).then(function(){
+    T.HTML('.ui.panel.main.container > .ui.panel.html .ui.main-component', com).then(function(){
       //$('.ui.dimmer.component').transition('fade','100ms'); 
     });
   });
@@ -256,19 +321,19 @@ $(function(){
             $('.ui.sign-in.form').form('get field','password').val('');
             $('.ui.dimmer.prepare').transition('fade');
             $('.ui.panel.sign-in').fadeOut(300, function(){
-              onAccess(res.user, 'menu-panel');
+              onAccess(res.user, 'dashboard');
               eventSignInSuccess();
             });
           } else {
             eventSignInSuccess();
             $('.ui.access.grid').hide();
             if(!res.name) {
-              console.log('username fail');
+              //console.log('username fail');
               $('.fields.username').addClass('error');
               $('.ui.sign-in.form').form('get field','email').focus();
             }
             if(!res.pass) {
-              console.log('password fail');
+              //console.log('password fail');
               $('.fields.password').addClass('error');
               $('.ui.sign-in.form').form('get field','password').val('').focus().blur().focus();
             }
@@ -297,17 +362,21 @@ $(function(){
   });
 
 
-  var MenuSelected = function(e){
-    $('.ui.access.grid > .row.user-menu > .ui.item').removeClass('selected');
-    $('.ui.access.grid .dropdown.profile .item.profile').removeClass('selected');
-    $(e).addClass('selected');
-  }
+  $('.ui.access.grid > .row.user-menu > .ui.item.home').click(function(){ 
+    $(this).MenuActiveClick();
+  });
+  $('.ui.access.grid > .row.user-menu > .ui.item.nippon').click(function(){ 
+    $(this).MenuActiveClick('Sysits'); 
 
+  });
+  $('.ui.access.grid > .row.user-menu > .ui.item.setting').click(function(){ 
+    $(this).MenuActiveClick('Setting'); 
 
-  $('.ui.access.grid > .row.user-menu > .ui.item.home').click(function(){ $(this).MenuActiveClick(); });
-  $('.ui.access.grid > .row.user-menu > .ui.item.nippon').click(function(){ $(this).MenuActiveClick('Sysits'); });
-  $('.ui.access.grid > .row.user-menu > .ui.item.setting').click(function(){ $(this).MenuActiveClick('Setting'); });
-  $('.ui.access.grid .dropdown.profile .item.profile').click(function(){ $(this).MenuDropdownctiveClick('User', 'dvgamer'); });
+  });  
+  $('.ui.access.grid .dropdown.profile .item.profile').click(function(){ 
+    $(this).MenuDropdownctiveClick('User', 'dvgamer'); 
+
+  });
 
   $('.ui.access.grid .dropdown.profile .item.signout').click(function(){
     $('.signout.modal').modal({
@@ -375,7 +444,7 @@ $(function(){
         </div>
         <div class="ui access grid" style="display:none;display:flex;margin-left:auto!important;">
           <div class="computer tablet only row user-menu">
-            <a class="ui item home selected">
+            <a class="ui item home">
               <i class="git square icon big"></i>
             </a>
             <a class="ui item nippon">
@@ -416,7 +485,9 @@ $(function(){
       </div>
       <div class="ui panel main container" style="display:none;">     
         <div class="ui dimmer component inverted"><div class="ui text loader"></div></div>
-        <div class="ui panel html"></div>
+        <div class="ui panel html">
+          <%- include component/menu-panel %>
+        </div>
       </div>
       <div class="ui panel sign-in" style="display:none;">
         <div class="ui equal width stackable grid " style="margin:0px;">

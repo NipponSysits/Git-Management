@@ -57,7 +57,7 @@ window.T = {
             T.__handle.Component(window.State.Component);
         }
         
-        console.log('StateCompile::', 'StateName:', T.StateName(), '- GetItems:', T.GetItems(), window.State);
+        //console.log('StateCompile::', 'StateName:', T.StateName(), '- GetItems:', T.GetItems(), window.State);
         if(!event) window.history.pushState(T.GetItems(), T.StateName(), T.StateURL());
         if(!found) window.history.replaceState(T.GetItems(), T.StateName(), T.StateURL());
 
@@ -112,7 +112,6 @@ window.T = {
       return aCall.promise();
     },
     HTML: function(e, url){
-      console.log('HTML', e, url);
       var aHtml = $.Deferred();
       var _t = Date.now(), _m = md5(_t);
       $.ajax({
