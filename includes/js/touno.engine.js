@@ -114,6 +114,7 @@ window.T = {
     HTML: function(e, url){
       var aHtml = $.Deferred();
       var _t = Date.now(), _m = md5(_t);
+      __html = url;
       $.ajax({
         url: '/html/' + url,
         data: { State: window.State },
@@ -130,7 +131,7 @@ window.T = {
         },
         success: function(html){ 
             var ex = new CallbackException({ onError: false, exTitle: "", getItems: null });
-            if($(e).length != 0) {
+            if($(e).length != 0 && __html == url) {
                 $(e).html(html);
                 aHtml.resolve(ex);
             } else {
@@ -163,7 +164,7 @@ window.T = {
     },
     __ajaxCall: undefined
 }
-
+var __html = {};
 
 
 $.extend(window, {

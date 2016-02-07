@@ -75,12 +75,12 @@ $(function(){
     }
   }
 
-  $.fn.MenuDropdownctiveClick = function(com, mod){
+  $.fn.MenuDropdownctiveClick = function(com){
     if (!$('.ui.access.grid .dropdown.profile').hasClass('selected')) {
       MenuSelected('.ui.access.grid .dropdown.profile');
-      T.SetState(com, mod);
+      T.SetState(com);
       SetPanelMenu('Profile Account', [
-        { text: T.User.username, state: function(){ T.SetModule(T.User.username); }, active: true },
+        { text: T.User.username, state: function(){ T.SetModule(); }, active: true },
         { text: 'Account Setting', state: function(){ T.SetModule('Account-Setting'); } },
         { text: 'Notifications', state: function(){ T.SetModule('Notify'); }, }
       ]);
@@ -186,7 +186,7 @@ $(function(){
     } else if(State.Component == 'Setting') {
       $('.ui.access.grid > .row.user-menu > .ui.item.setting').MenuActiveClick(State.Component);
     } else if(State.Component == 'User') {
-      $('.ui.access.grid .dropdown.profile .item.profile').MenuDropdownctiveClick(State.Component, State.Module);
+      $('.ui.access.grid .dropdown.profile .item.profile').MenuDropdownctiveClick(State.Component);
     } else {
       $('.ui.access.grid > .row.user-menu > .ui.item.home').MenuActiveClick();
     }
@@ -196,12 +196,12 @@ $(function(){
     $('.user-menu .item.profile .ui.position').html(T.User.position);
     // $('.ui.dimmer.component').transition('hide'); 
     if(!State.Component) {
-      T.HTML('.ui.panel.main.container > .ui.panel.html .ui.main-component', 'dashboard').then(function(){
-        $('.ui.dimmer.prepare').transition('fade');
-        $('.ui.panel.main.container').transition('fade', '100ms'); 
-        $('.ui.access.grid').show();
-        onButton.SignIn = false;
-      });
+      // T.HTML('.ui.panel.main.container > .ui.panel.html .ui.main-component', 'dashboard').then(function(){
+      $('.ui.dimmer.prepare').transition('fade');
+      $('.ui.panel.main.container').transition('fade', '100ms'); 
+      $('.ui.access.grid').show();
+      onButton.SignIn = false;
+      // });
     } else {
       $('.ui.dimmer.prepare').transition('fade');
       $('.ui.panel.main.container').transition('fade', '100ms'); 
@@ -248,7 +248,8 @@ $(function(){
   $(window).resize(function(){ $('.login-image').height($(window).height() - 118); });
 
   T.SetComponent(function(com){
-    com = !com ? 'dashboard' : com.toLowerCase()
+    com = !State.Component ? 'dashboard' : (State.Module || State.Component).toLowerCase()
+    if(State.Module) com = State.Component.toLowerCase()+'/'+com;
     //$('.ui.dimmer.component').transition('fade','100ms'); 
     T.HTML('.ui.panel.main.container > .ui.panel.html .ui.main-component', com).then(function(){
       //$('.ui.dimmer.component').transition('fade','100ms'); 
@@ -483,8 +484,7 @@ $(function(){
         <span class="title"></span>
         <i class="close icon"></i>
       </div>
-      <div class="ui panel main container" style="display:none;">     
-        <div class="ui dimmer component inverted"><div class="ui text loader"></div></div>
+      <div class="ui panel main container" style="display:none;">
         <div class="ui panel html">
           <%- include component/menu-panel %>
         </div>

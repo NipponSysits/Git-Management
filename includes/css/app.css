@@ -87,10 +87,6 @@ i.icon.nippon {
     border:none;
     background-color: #171d2c;
 }
-.ui.dimmer.component > .ui.loader {
-    top: 200px !important;
-}
-
 /*.ui.access.grid .ui.item.dropdown > .menu > .item.signout > i, .ui.access.grid .ui.item.dropdown > .menu > .item.signout {
     color:#db2828 !important;
     font-weight: bold !important;
@@ -160,7 +156,6 @@ div.ui.floating.label{
     margin: 0px;
 }
 .ui.grid.main-component > .row > .column.module {
-
     width: 100%;
 }
 .ui.grid.main-component .column.module {
@@ -177,6 +172,10 @@ div.ui.floating.label{
 
 .ui.grid.main-component > .column.module {
 
+}
+.ui.dimmer.component {
+    top: 103px !important;
+    height: calc(100% - 103px);
 }
 
 @media only screen and (max-width: 767px){

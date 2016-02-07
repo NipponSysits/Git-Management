@@ -112,7 +112,7 @@ app.api = function(path, callback){
 
 app.html = function(path, render_name){
 	console.log('HTML:', path.toLowerCase());
-	app.post(path.toLowerCase(), [ cookieParser(), HTMLClient, SessionClient ], function(req, res){
+	app.post(path.toLowerCase(), [ cookieParser(), HTMLClient, SessionClient, bodyParser.urlencoded() ], function(req, res){
 		if(req.XHRRequested) {
 			res.render(render_name);
 		} else {
