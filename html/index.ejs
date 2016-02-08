@@ -75,10 +75,10 @@ $(function(){
     }
   }
 
-  $.fn.MenuDropdownctiveClick = function(com){
+  $.fn.MenuDropdownctiveClick = function(com, mod){
     if (!$('.ui.access.grid .dropdown.profile').hasClass('selected')) {
       MenuSelected('.ui.access.grid .dropdown.profile');
-      T.SetState(com);
+      T.SetState(com, mod);
       SetPanelMenu('Profile Account', [
         { text: T.User.username, state: function(){ T.SetModule(); }, active: true },
         { text: 'Account Setting', state: function(){ T.SetModule('Account-Setting'); } },
@@ -182,13 +182,13 @@ $(function(){
   var onAccess = function(user){
     T.User = user;
     if(State.Component == 'Sysits') {
-      $('.ui.access.grid > .row.user-menu > .ui.item.nippon').MenuActiveClick(State.Component);
+      $('.ui.access.grid > .row.user-menu > .ui.item.nippon').MenuActiveClick(State.Component, State.Module);
     } else if(State.Component == 'Setting') {
-      $('.ui.access.grid > .row.user-menu > .ui.item.setting').MenuActiveClick(State.Component);
+      $('.ui.access.grid > .row.user-menu > .ui.item.setting').MenuActiveClick(State.Component, State.Module);
     } else if(State.Component == 'User') {
-      $('.ui.access.grid .dropdown.profile .item.profile').MenuDropdownctiveClick(State.Component);
+      $('.ui.access.grid .dropdown.profile .item.profile').MenuDropdownctiveClick(State.Component, State.Module);
     } else {
-      $('.ui.access.grid > .row.user-menu > .ui.item.home').MenuActiveClick();
+      $('.ui.access.grid > .row.user-menu > .ui.item.home').MenuActiveClick(State.Component, State.Module);
     }
 
     $('.user-menu .item.profile .user-image').avatar(T.User.email, 64);
@@ -248,6 +248,7 @@ $(function(){
   $(window).resize(function(){ $('.login-image').height($(window).height() - 118); });
 
   T.SetComponent(function(com){
+    console.log('SetComponent', com);
     com = !State.Component ? 'dashboard' : (State.Module || State.Component).toLowerCase()
     if(State.Module) com = State.Component.toLowerCase()+'/'+com;
     //$('.ui.dimmer.component').transition('fade','100ms'); 
@@ -375,7 +376,7 @@ $(function(){
 
   });  
   $('.ui.access.grid .dropdown.profile .item.profile').click(function(){ 
-    $(this).MenuDropdownctiveClick('User', 'dvgamer'); 
+    $(this).MenuDropdownctiveClick('User'); 
 
   });
 

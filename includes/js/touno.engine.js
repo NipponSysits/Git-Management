@@ -31,6 +31,7 @@ window.T = {
         window.State.Module = module || null;
         window.State.StorageName = item_name || null;
         T.StateCompile();
+        console.log('SetState', component, module, item_name);
         return this;
     },
     SetComponent : function(func) {
@@ -39,27 +40,30 @@ window.T = {
     SetModule: function (module) { // Event in Click menu in app.
         window.State.Module = module || null;
         T.StateCompile();
+        console.log('SetModule', window.State.Component);
         return this;
     },
     SetItems: function (name, value) {
         if(value) T.Storage(name, value);
         window.State.StorageName = item_name || null;
         T.StateCompile();
+        console.log('SetItems', window.State.Component);
         return this;
     },
     GetItems: function () {
         return T.Storage(window.State.StorageName);
     },
     StateCompile: function(event){
+        console.log('StateCompile', event, window.State.Component);
         var found = T.__handle.Component;
         if(found){
-            window.State.Component = window.State.Component || T.Storage('component-default');
+            window.State.Component = window.State.Component;
             T.__handle.Component(window.State.Component);
         }
         
         //console.log('StateCompile::', 'StateName:', T.StateName(), '- GetItems:', T.GetItems(), window.State);
         if(!event) window.history.pushState(T.GetItems(), T.StateName(), T.StateURL());
-        if(!found) window.history.replaceState(T.GetItems(), T.StateName(), T.StateURL());
+        //if(!found) window.history.replaceState(T.GetItems(), T.StateName(), T.StateURL());
 
         // if(window.State.Module || window.State.StorageName) {
         //     (function(){
