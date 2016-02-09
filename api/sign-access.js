@@ -11,7 +11,8 @@ module.exports = function(req, res, data){
   		var ns = conn.connect();
 			ns.selectOne('user_access', { email: data.email }, function(err, user, field){
 				ns.end();
-					user.id = null;
+				user = user || {};
+				user.id = null;
 				res.success({ access: emailRow ? true : false, user: user });
 			});
 		});

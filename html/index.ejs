@@ -248,7 +248,7 @@ $(function(){
   $(window).resize(function(){ $('.login-image').height($(window).height() - 118); });
 
   T.SetComponent(function(com){
-    console.log('SetComponent', com);
+    // console.log('SetComponent', com);
     com = !State.Component ? 'dashboard' : (State.Module || State.Component).toLowerCase()
     if(State.Module) com = State.Component.toLowerCase()+'/'+com;
     //$('.ui.dimmer.component').transition('fade','100ms'); 
