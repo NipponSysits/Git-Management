@@ -30,6 +30,7 @@ window.T = {
         window.State.Component = component || null;
         window.State.Module = module || null;
         window.State.StorageName = item_name || null;
+        T.Re = true;
         T.StateCompile();
         // console.log('SetState', component, module, item_name);
         return this;
@@ -38,9 +39,9 @@ window.T = {
         if(typeof func == 'function') T.__handle.Component = func;
     },
     SetModule: function (module) { // Event in Click menu in app.
+        if(module == undefined) T.Re = true;
         window.State.Module = module || null;
         T.StateCompile();
-        // console.log('SetModule', window.State.Component);
         return this;
     },
     SetItems: function (name, value) {
@@ -53,12 +54,13 @@ window.T = {
     GetItems: function () {
         return T.Storage(window.State.StorageName);
     },
+    Re: undefined,
     StateCompile: function(event){
         // console.log('StateCompile', event, window.State.Component);
         var found = T.__handle.Component;
-        if(found){
-            window.State.Component = window.State.Component;
+        if(T.Re){
             T.__handle.Component(window.State.Component);
+            T.Re = false;
         }
         
         //console.log('StateCompile::', 'StateName:', T.StateName(), '- GetItems:', T.GetItems(), window.State);
@@ -88,9 +90,6 @@ window.T = {
         if(A != undefined) {
             if(A.readyState != 4 && A.readyState != undefined) A.abort();
         }
-    },
-    Thread: function(configs) {
-
     },
     Call: function(configs){
       configs = (typeof configs == 'string' ? { url: configs } : configs) || {};

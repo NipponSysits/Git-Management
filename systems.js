@@ -1,5 +1,5 @@
 var http = require('http'), engine = require('ejs-mate'), express = require('express'), app = express();
-var q = require('q'), mysql = require('mysql'), walk = require('walk');
+var q = require('q'), mysql = require('mysql'), walk = require('walk'), fs = require('fs');
 var bodyParser = require('body-parser'), cookieParser = require('cookie-parser')
 var methods = require('methods');
 
@@ -9,7 +9,7 @@ var conn = require('./libs/db');
 app.engine('ejs', engine);
 app.set('view engine', 'ejs');
 app.set('views', __dirname+'/html');
-app.set('view options', { layout:false, root: __dirname + '/html' } );
+app.set('view options', { layout: false, root: __dirname + '/html' } );
 app.use("/libs", express.static(__dirname+'/includes'));
 
 var user = {};
@@ -59,7 +59,7 @@ var SessionClient = function(req, res, next){
 	  			]).then(function(){
 	  				if(!req.isHtml) {
 		  				var data = { access_id: req.access, request_id: req.headers['x-requested'], created_at: req.timestamp };
-			  			db.insert('requested', data, function(){ db.end(); });
+			  			db.insert('requested', data); //, function(){ db.end(); }
 	  				} else {
 	  					db.end();
 	  				}
@@ -112,9 +112,18 @@ app.api = function(path, callback){
 
 app.html = function(path, render_name){
 	console.log('HTML:', path.toLowerCase());
-	app.post(path.toLowerCase(), [ cookieParser(), HTMLClient, SessionClient, bodyParser.urlencoded() ], function(req, res){
+	app.use(path.toLowerCase(), [ cookieParser(), HTMLClient, SessionClient, bodyParser.urlencoded() ], function(req, res){
 		if(req.XHRRequested) {
-			res.render(render_name);
+			var req_data = path.toLowerCase().replace('/html', './html/component')+'.js';
+			fs.exists(req_data, function(exists) {
+				if(exists) {
+					var func = require(req_data);
+					func(render_name, req, res, req.body.State);
+				} else {
+					res.render(render_name, {});
+				}
+			});
+
 		} else {
 			res.status(404).send('Not found');
 		}

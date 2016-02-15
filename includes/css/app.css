@@ -9,9 +9,6 @@ body {
 
 div.main { min-height: 100%; position: relative; z-index: 0; }
 div.header {  }
-div.content { 
-    padding-bottom: 35px;
-}
 div.footer { 
     color: #5c5c5c; 
     font-size: 11px; 
@@ -168,11 +165,41 @@ div.ui.floating.label{
     color: #FFFFFF;
 }
 .ui.grid.main-component {
-}
-
-.ui.grid.main-component > .column.module {
 
 }
+
+.ui.repository.grid {
+    margin:0px 0px 0px 0px;
+}
+.ui.repository.grid > .wide.column {
+    padding:0px;
+    padding-bottom: 35px;
+}
+.ui.repository.grid .ui.vertical.menu {
+    width: 100%;
+    border-radius: 0px;
+    border:none;
+    background-color: transparent;
+}
+
+.ui.repository.grid .ui.vertical.menu .item {
+    border-radius: 0px;
+    color: #FFF;
+    font-weight: bold;
+}
+
+.ui.repository.grid .ui.vertical.menu > .item.active {
+    background-color: #27608d;
+}
+.ui.repository.grid .ui.vertical.menu > .item > .label {
+    background-color: #27608d;
+    color: #FFF;
+}
+.ui.repository.grid .ui.vertical.menu > .item.active > .label {
+    background-color: #cedde6;
+    color: #27608d;
+}
+
 .ui.dimmer.component {
     top: 103px !important;
     height: calc(100% - 103px);
