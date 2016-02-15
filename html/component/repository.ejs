@@ -1,24 +1,19 @@
+<div class="row">
   <div class="column module">
-    <h5>Repositories</h5>
     <div class="content">
-      sadsd
+      <div class="ui repository grid">
+        <div class="four wide column" style="background-color:#161c2b">
+          <div class="ui vertical menu">
+            <% ITEM.forEach(function(row) { %>
+              <a class="item" data-row="<%= row.collection_id %>">
+                <%= row.name %>
+                <div class="ui label"><%= row.total %></div>
+              </a>
+            <% }); %>
+          </div>
+        </div>
+        <div class="twelve wide column">ten</div>
+      </div>
     </div>
   </div>
-  <div class="column module">
-    <h5>Account</h5>
-    <div class="content">
-      sadsd
-    </div>
-  </div>
-  <div class="column module">
-    <h5>Stats</h5>
-    <div class="content">
-      sadsd
-    </div>
-  </div>
-  <div class="column module">
-    <h5>Stats</h5>
-    <div class="content">
-      sadsd
-    </div>
-  </div>
+</div>  
