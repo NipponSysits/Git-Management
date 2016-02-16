@@ -169,6 +169,24 @@ window.T = {
 }
 var __html = {};
 
+$.fn.MenuRegister = function(configs){
+    var mDefault = {
+        state: '/',
+        callback: function(){ },
+        Item: [
+            { state: '/', text: 'Dashboard' }
+        ]
+    }
+    $.extend(mDefault, configs);
+
+    $(this).click(function(){ 
+        $(this).MenuActiveClick('Sysits'); 
+    });
+
+    T.HTML(this, url).then(function(ex){
+
+    });
+}
 
 $.extend(window, {
     CallbackException : function(m1, m2) {

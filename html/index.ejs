@@ -91,8 +91,7 @@ $(function(){
     if (!$(this).hasClass('active')) {
       $('.ui.navigator.menu .item.active').removeClass('active');
       $(this).addClass('active');
-      item.state();
-      // T.HTML('.ui.panel.main.container > .ui.panel.html .ui.main-component', com).then(function(){
+      item.state();      // T.HTML('.ui.panel.main.container > .ui.panel.html .ui.main-component', com).then(function(){
       //   console.log('change');
       //   // $('.ui.dimmer.prepare').transition('fade');
       //   // $('.ui.panel.main.container').transition('fade', '100ms'); 
@@ -187,6 +186,8 @@ $(function(){
       $('.ui.access.grid > .row.user-menu > .ui.item.setting').MenuActiveClick(State.Component, State.Module);
     } else if(State.Component == 'User') {
       $('.ui.access.grid .dropdown.profile .item.profile').MenuDropdownctiveClick(State.Component, State.Module);
+    } else if(State.Component == 'Repository') {
+      $('.ui.access.grid > .row.user-menu > .ui.item.home').MenuActiveClick(State.Component, State.Module);
     } else {
       $('.ui.access.grid > .row.user-menu > .ui.item.home').MenuActiveClick(State.Component, State.Module);
     }
