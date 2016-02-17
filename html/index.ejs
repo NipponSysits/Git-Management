@@ -28,13 +28,24 @@
 <script language="javascript" src="/libs/js/app.js"></script>
 
 <script type="text/javascript">
-$(function(){
+var main = '.ui.panel.main.container>.ui.panel.html .ui.main-component';
 
-  var MenuSelected = function(e){
-    $('.ui.access.grid > .row.user-menu > .ui.item').removeClass('selected');
-    $('.ui.access.grid .dropdown.profile .item.profile').removeClass('selected');
-    $(e).addClass('selected');
-  }
+$('.row.user-menu>.ui.item.home').MenuRegister('/', main, function(){
+  
+});
+$('.row.user-menu>.ui.item.nippon').MenuRegister('/Sysits', main, function(){
+
+});
+$('.row.user-menu>.ui.item.setting').MenuRegister('/Setting', main, function(){
+
+});
+
+$(function(){
+  // var MenuSelected = function(e){
+  //   $('.ui.access.grid > .row.user-menu > .ui.item').removeClass('selected');
+  //   $('.ui.access.grid .dropdown.profile .item.profile').removeClass('selected');
+  //   $(e).addClass('selected');
+  // }
 
   $.fn.avatar = function(email, size){
     size = size || 256;
@@ -42,77 +53,77 @@ $(function(){
     return $(this).css('background-image',"url('"+url+"')");
   }
 
-  $.fn.MenuActiveClick = function(com, mod){
-    if (!$(this).hasClass('selected')) {
-      MenuSelected(this);
-      T.SetState(com, mod);
-      var text, item;
-      switch(com){
-        case 'Sysits':
-            text = 'Nippon Sysits';
-            item = [
-              { text: 'Dashboard', state: function(){ T.SetModule(); }, active: true },
-              { text: 'TimeCard', state: function(){ T.SetModule('Time-Card'); } },
-              { text: 'Stats', state: function(){ T.SetModule('Time-Stats'); }, },
-              { text: 'Daily Report', state: function(){ T.SetModule('Report'); }, }
-            ]
-          break;
-        case 'Setting':
-            text = 'Setting Systems';
-            item = [
-              { text: 'Systems', state: function(){ T.SetModule(); }, active: true }
-            ]
-          break;
-        default:
-          text = 'Management';
-          item = [
-            { text: 'Dashboard', state: function(){ T.SetState(); }, active: true },
-            { text: 'Repositories', state: function(){ T.SetState('Repository'); }, }
-          ]
-          break;
-      }
-      SetPanelMenu(text, item);
-    }
-  }
+  // $.fn.MenuActiveClick = function(com, mod){
+  //   if (!$(this).hasClass('selected')) {
+  //     MenuSelected(this);
+  //     T.SetState(com, mod);
+  //     var text, item;
+  //     switch(com){
+  //       case 'Sysits':
+  //           text = 'Nippon Sysits';
+  //           item = [
+  //             { text: 'Dashboard', state: function(){ T.SetModule(); }, active: true },
+  //             { text: 'TimeCard', state: function(){ T.SetModule('Time-Card'); } },
+  //             { text: 'Stats', state: function(){ T.SetModule('Time-Stats'); }, },
+  //             { text: 'Daily Report', state: function(){ T.SetModule('Report'); }, }
+  //           ]
+  //         break;
+  //       case 'Setting':
+  //           text = 'Setting Systems';
+  //           item = [
+  //             { text: 'Systems', state: function(){ T.SetModule(); }, active: true }
+  //           ]
+  //         break;
+  //       default:
+  //         text = 'Management';
+  //         item = [
+  //           { text: 'Dashboard', state: function(){ T.SetState(); }, active: true },
+  //           { text: 'Repositories', state: function(){ T.SetState('Repository'); }, }
+  //         ]
+  //         break;
+  //     }
+  //     SetPanelMenu(text, item);
+  //   }
+  // }
 
-  $.fn.MenuDropdownctiveClick = function(com, mod){
-    if (!$('.ui.access.grid .dropdown.profile').hasClass('selected')) {
-      MenuSelected('.ui.access.grid .dropdown.profile');
-      T.SetState(com, mod);
-      SetPanelMenu('Profile Account', [
-        { text: T.User.username, state: function(){ T.SetModule(); }, active: true },
-        { text: 'Account Setting', state: function(){ T.SetModule('Account-Setting'); } },
-        { text: 'Notifications', state: function(){ T.SetModule('Notify'); }, }
-      ]);
-    }
-  }
+  // $.fn.MenuDropdownctiveClick = function(com, mod){
+  //   if (!$('.ui.access.grid .dropdown.profile').hasClass('selected')) {
+  //     MenuSelected('.ui.access.grid .dropdown.profile');
+  //     T.SetState(com, mod);
+  //     SetPanelMenu('Profile Account', [
+  //       { text: T.User.username, state: function(){ T.SetModule(); }, active: true },
+  //       { text: 'Account Setting', state: function(){ T.SetModule('Account-Setting'); } },
+  //       { text: 'Notifications', state: function(){ T.SetModule('Notify'); }, }
+  //     ]);
+  //   }
+  // }
 
-  $.fn.Menu = function(item){
-    if (!$(this).hasClass('active')) {
-      $('.ui.navigator.menu .item.active').removeClass('active');
-      $(this).addClass('active');
-      item.state();      // T.HTML('.ui.panel.main.container > .ui.panel.html .ui.main-component', com).then(function(){
-      //   console.log('change');
-      //   // $('.ui.dimmer.prepare').transition('fade');
-      //   // $('.ui.panel.main.container').transition('fade', '100ms'); 
-      //   // $('.ui.access.grid').show();
-      //   // onButton.SignIn = false;
-      // });
-    }
-  }
+  // $.fn.Menu = function(item){
+  //   if (!$(this).hasClass('active')) {
+  //     $('.ui.navigator.menu .item.active').removeClass('active');
+  //     $(this).addClass('active');
+  //     item.state();      // T.HTML('.ui.panel.main.container > .ui.panel.html .ui.main-component', com).then(function(){
+  //     //   console.log('change');
+  //     //   // $('.ui.dimmer.prepare').transition('fade');
+  //     //   // $('.ui.panel.main.container').transition('fade', '100ms'); 
+  //     //   // $('.ui.access.grid').show();
+  //     //   // onButton.SignIn = false;
+  //     // });
+  //   }
+  // }
 
-  var SetPanelMenu = function(h3, menu){
-    $('.column.navigator.text > h3').html(h3);
-    $('.ui.navigator.menu').empty();
+  // var SetPanelMenu = function(h3, menu){
+  //   $('.column.navigator.text > h3').html(h3);
+  //   $('.ui.navigator.menu').empty();
 
-    menu.map(function(item){
-      $('<a>', { 
-        'class':'item'+(item.active?' active':''),
-        'onClick': "$(this).Menu($(this).data('item'))",
-        'html':item.text
-      }).data('item', item).appendTo('.ui.navigator.menu');
-    });
-  }
+  //   menu.map(function(item){
+  //     $('<a>', { 
+  //       'class':'item'+(item.active?' active':''),
+  //       'onClick': "$(this).Menu($(this).data('item'))",
+  //       'html':item.text
+  //     }).data('item', item).appendTo('.ui.navigator.menu');
+  //   });
+  // }
 
 
   var exModal = function(ex) {
@@ -180,17 +191,18 @@ $(function(){
 
   var onAccess = function(user){
     T.User = user;
-    if(State.Component == 'Sysits') {
-      $('.ui.access.grid > .row.user-menu > .ui.item.nippon').MenuActiveClick(State.Component, State.Module);
-    } else if(State.Component == 'Setting') {
-      $('.ui.access.grid > .row.user-menu > .ui.item.setting').MenuActiveClick(State.Component, State.Module);
-    } else if(State.Component == 'User') {
-      $('.ui.access.grid .dropdown.profile .item.profile').MenuDropdownctiveClick(State.Component, State.Module);
-    } else if(State.Component == 'Repository') {
-      $('.ui.access.grid > .row.user-menu > .ui.item.home').MenuActiveClick(State.Component, State.Module);
-    } else {
-      $('.ui.access.grid > .row.user-menu > .ui.item.home').MenuActiveClick(State.Component, State.Module);
-    }
+    // if(State.Component == 'Sysits') {
+    //   $('.ui.access.grid > .row.user-menu > .ui.item.nippon').MenuActiveClick(State.Component, State.Module);
+    // } else if(State.Component == 'Setting') {
+    //   $('.ui.access.grid > .row.user-menu > .ui.item.setting').MenuActiveClick(State.Component, State.Module);
+    // } else if(State.Component == 'User') {
+    //   $('.ui.access.grid .dropdown.profile .item.profile').MenuDropdownctiveClick(State.Component, State.Module);
+    // } else if(State.Component == 'Repository') {
+    //   $('.ui.access.grid > .row.user-menu > .ui.item.home').MenuActiveClick(State.Component, State.Module);
+    //   $('.ui.access.grid > .row.user-menu > .ui.item.home').MenuActiveClick(State.Component, State.Module);
+    // } else {
+    //   $('.ui.access.grid > .row.user-menu > .ui.item.home').MenuActiveClick(State.Component, State.Module);
+    // }
 
     $('.user-menu .item.profile .user-image').avatar(T.User.email, 64);
     $('.user-menu .item.profile .ui.fullname').html(T.User.fullname);
@@ -365,21 +377,21 @@ $(function(){
   });
 
 
-  $('.ui.access.grid > .row.user-menu > .ui.item.home').click(function(){ 
-    $(this).MenuActiveClick();
-  });
-  $('.ui.access.grid > .row.user-menu > .ui.item.nippon').click(function(){ 
-    $(this).MenuActiveClick('Sysits'); 
+  // $('.ui.access.grid > .row.user-menu > .ui.item.home').click(function(){ 
+  //   $(this).MenuActiveClick();
+  // });
+  // $('.ui.access.grid > .row.user-menu > .ui.item.nippon').click(function(){ 
+  //   $(this).MenuActiveClick('Sysits'); 
 
-  });
-  $('.ui.access.grid > .row.user-menu > .ui.item.setting').click(function(){ 
-    $(this).MenuActiveClick('Setting'); 
+  // });
+  // $('.ui.access.grid > .row.user-menu > .ui.item.setting').click(function(){ 
+  //   $(this).MenuActiveClick('Setting'); 
 
-  });  
-  $('.ui.access.grid .dropdown.profile .item.profile').click(function(){ 
-    $(this).MenuDropdownctiveClick('User'); 
+  // });  
+  // $('.ui.access.grid .dropdown.profile .item.profile').click(function(){ 
+  //   $(this).MenuDropdownctiveClick('User'); 
 
-  });
+  // });
 
   $('.ui.access.grid .dropdown.profile .item.signout').click(function(){
     $('.signout.modal').modal({
@@ -390,7 +402,7 @@ $(function(){
           $('.signout.modal .actions .ok.button').addClass('disabled');
           $('.signout.modal .actions .negative.button').addClass('loading');
           T.Call({ url:'/api/sign-out' }).then(function(e, res){
-            T.SetState();
+            T.NextState();
             $('.signout.modal .actions .ok.button').removeClass('disabled');
             $('.signout.modal .actions .negative.button').removeClass('loading');
             if(!e.onError) {

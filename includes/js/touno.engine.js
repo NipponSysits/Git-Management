@@ -26,14 +26,16 @@ window.T = {
     StateName : function(){
         return  State.Component+(State.Module?'-'+State.Module:'')+(State.StorageName?'-'+State.StorageName:'');
     },
-    SetState: function (component, module, item_name) {
-        window.State.Component = component || null;
-        window.State.Module = module || null;
-        window.State.StorageName = item_name || null;
-        T.Re = true;
+    NextState: function (routers) {
+        window.State = __.Pop(routers || '/');
+        window.history.pushState({}, routers, routers);
         T.StateCompile();
-        // console.log('SetState', component, module, item_name);
-        return this;
+    },
+    SetState: function (routers) {
+        // var s = __.Pop();
+        // window.history.pushState(s, routers, routers);
+        // // console.log('SetState', component, module, item_name);
+        // return this;
     },
     SetComponent : function(func) {
         if(typeof func == 'function') T.__handle.Component = func;
@@ -55,36 +57,30 @@ window.T = {
         return T.Storage(window.State.StorageName);
     },
     Re: undefined,
-    StateCompile: function(event){
-        // console.log('StateCompile', event, window.State.Component);
-        var found = T.__handle.Component;
-        if(T.Re){
-            T.__handle.Component(window.State.Component);
-            T.Re = false;
+    StateCompile: function(init){
+        console.log('StateCompile', init, window.State.Component);
+
+        for (var i in __.menu) {
+            if(init) {
+                $(__.menu[i].btn).attr('t-data', i);
+                $(__.menu[i].btn).click(function(){
+                    var i = $(this).attr('t-data');
+                    T.NextState(__.menu[i].state);
+                });
+                console.log(__.menu[i]);
+            }
         }
+
+
+        // var found = T.__handle.Component;
+        // if(T.Re){
+        //     T.__handle.Component(window.State.Component);
+        //     T.Re = false;
+        // }
         
         //console.log('StateCompile::', 'StateName:', T.StateName(), '- GetItems:', T.GetItems(), window.State);
-        if(!event) window.history.pushState(T.GetItems(), T.StateName(), T.StateURL());
+        // if(!event) window.history.pushState(T.GetItems(), T.StateName(), T.StateURL());
         //if(!found) window.history.replaceState(T.GetItems(), T.StateName(), T.StateURL());
-
-        // if(window.State.Module || window.State.StorageName) {
-        //     (function(){
-        //         var defer = $.Deferred();
-        //         // T.Abort(T.__handle);
-        //         // $.ajax({ 
-        //         //     url: window.origin + '/component/home/index.php',
-        //         //     error: function(){
-        //         //         defer.reject();
-        //         //     },
-        //         //     success: function(data){
-        //                  defer.resolve();
-        //         //     }
-        //         // });
-        //         return defer.promise();
-        //     })().then(function(){
-        //         loader.off();
-        //     });
-        // }
     }, 
     Abort: function(A){
         if(A != undefined) {
@@ -159,7 +155,7 @@ window.T = {
             aInit.resolve({ init: true });
         }
         return aInit.promise();
-     },
+    },
      User: {},
     __handle: {
         Component: null,
@@ -167,25 +163,25 @@ window.T = {
     },
     __ajaxCall: undefined
 }
-var __html = {};
 
-$.fn.MenuRegister = function(configs){
-    var mDefault = {
-        state: '/',
-        callback: function(){ },
-        Item: [
-            { state: '/', text: 'Dashboard' }
-        ]
-    }
-    $.extend(mDefault, configs);
+window.__ = {
+    menu: [],
+    Pop: function(routes) { // Event in Refesh page F5 key or Open NewTab. 
+        var State = { Component: null, Module: null, StorageName: null, StorageItems: null }
+        var getState = new RegExp(document.domain + '.*?\/([^\/]*)\/*([^\/]*)\/*([^\/]*)\/*([^\/]*)\/*', 'ig');
+        if(routes) routes = document.domain + routes;
+        getState = getState.exec(routes || location.href);
+        State.Component = getState[1] || null;
+        State.Module = getState[2] || null;
+        State.StorageName = getState[3] || null;
+        return State;
+    },
 
-    $(this).click(function(){ 
-        $(this).MenuActiveClick('Sysits'); 
-    });
+};
 
-    T.HTML(this, url).then(function(ex){
-
-    });
+$.fn.MenuRegister = function(url, html, cb){
+    __.menu.push({ btn: this.selector, state: url, child: html, callback: cb });
+    $(this.selector).click(function(){ T.NextState(url); });
 }
 
 $.extend(window, {
@@ -257,13 +253,3 @@ $.extend(String.prototype, {
         return (m.hasOwnProperty(this)) ? m[this] : false;
     }
 });
-
-var _HandleState = function () { // Event in Refesh page F5 key or Open NewTab. 
-    var State = { Component: null, Module: null, StorageName: null, StorageItems: null }
-    var getState = new RegExp(document.domain + '.*?\/([^\/]*)\/*([^\/]*)\/*([^\/]*)\/*([^\/]*)\/*', 'ig');
-    getState = getState.exec(location.href);
-    State.Component = getState[1] || null;
-    State.Module = getState[2] || null;
-    State.StorageName = getState[3] || null;
-    return State;
-};

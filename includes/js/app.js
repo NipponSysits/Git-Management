@@ -1,8 +1,6 @@
-window.State = _HandleState();
+window.State = __.Pop();
 window.onpopstate = function(event) {
-    window.State = _HandleState();
-    T.StateCompile(event);
+    window.State = __.Pop();
+    T.StateCompile(false);
 };
-$(function(){
-    T.StateCompile();
-});
+$(function(){ T.StateCompile(true); });
