@@ -23,6 +23,7 @@ window.T = {
     StateURL: function(){
         return URI.expand("/{Component}"+(State.Module?'/':'')+"{Module}"+(State.StorageName?'/':'')+"{StorageName}/", window.State).toString();
     },
+    URL: function(){ return location.pathname; },
     StateName : function(){
         return  State.Component+(State.Module?'-'+State.Module:'')+(State.StorageName?'-'+State.StorageName:'');
     },
@@ -61,13 +62,22 @@ window.T = {
         console.log('StateCompile', init, window.State.Component);
 
         for (var i in __.menu) {
+            var menu = __.menu[i];
+            if(menu.state == T.URL()) {
+                $(menu.btn).addClass('selected');
+            }
+
             if(init) {
-                $(__.menu[i].btn).attr('t-data', i);
-                $(__.menu[i].btn).click(function(){
-                    var i = $(this).attr('t-data');
-                    T.NextState(__.menu[i].state);
+                $(menu.btn).attr('t-data', i);
+                $(menu.btn).click(function(){
+                    var i = $(this).attr('t-data'), item = __.menu[i], e = __.menu[i].cb;
+                    if(item.state != T.URL()) {
+                        console.log('NextState', item);
+                        T.NextState(item.state);
+                        $(e.unselected).removeClass('selected');
+                        $(e.selected || this).addClass('selected');
+                    }
                 });
-                console.log(__.menu[i]);
             }
         }
 
@@ -169,7 +179,9 @@ window.__ = {
     Pop: function(routes) { // Event in Refesh page F5 key or Open NewTab. 
         var State = { Component: null, Module: null, StorageName: null, StorageItems: null }
         var getState = new RegExp(document.domain + '.*?\/([^\/]*)\/*([^\/]*)\/*([^\/]*)\/*([^\/]*)\/*', 'ig');
-        if(routes) routes = document.domain + routes;
+        if(routes) {
+            routes = document.domain + routes;
+        }
         getState = getState.exec(routes || location.href);
         State.Component = getState[1] || null;
         State.Module = getState[2] || null;
@@ -180,8 +192,7 @@ window.__ = {
 };
 
 $.fn.MenuRegister = function(url, html, cb){
-    __.menu.push({ btn: this.selector, state: url, child: html, callback: cb });
-    $(this.selector).click(function(){ T.NextState(url); });
+    __.menu.push({ btn: this.selector, state: url, child: html, cb: cb || {} });
 }
 
 $.extend(window, {

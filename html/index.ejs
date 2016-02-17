@@ -28,16 +28,37 @@
 <script language="javascript" src="/libs/js/app.js"></script>
 
 <script type="text/javascript">
-var main = '.ui.panel.main.container>.ui.panel.html .ui.main-component';
+var main_group = {
+  unselected: '.row.user-menu>.ui.item',
+  selected: '.ui.item.profile',
+  callback: function(){
 
-$('.row.user-menu>.ui.item.home').MenuRegister('/', main, function(){
-  
+  }
+}
+$('.ui.item.home').MenuRegister('/', '.ui.main-component', {
+  unselected: '.row.user-menu>.ui.item',
+  callback: function(){
+
+  }
 });
-$('.row.user-menu>.ui.item.nippon').MenuRegister('/Sysits', main, function(){
+$('.ui.item.nippon').MenuRegister('/Sysits', '.ui.main-component', {
+  unselected: '.row.user-menu>.ui.item',
+  callback: function(){
 
+  }
 });
-$('.row.user-menu>.ui.item.setting').MenuRegister('/Setting', main, function(){
+$('.ui.item.setting').MenuRegister('/Setting', '.ui.main-component', {
+  unselected: '.row.user-menu>.ui.item',
+  callback: function(){
 
+  }
+});
+$('.ui.item.profile .item.profile').MenuRegister('/User', '.ui.main-component', {
+  unselected: '.row.user-menu>.ui.item',
+  selected: '.ui.item.profile',
+  callback: function(){
+
+  }
 });
 
 $(function(){

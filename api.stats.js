@@ -59,3 +59,4 @@ var DayOfYear = moment(year+'-12-31').dayOfYear();
 var DayOfWeek = moment(year+'-01-01').weekday();
 console.log(DayOfWeek, DayOfYear);
 
+
