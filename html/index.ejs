@@ -31,32 +31,33 @@
 var main_group = {
   unselected: '.row.user-menu>.ui.item',
   selected: '.ui.item.profile',
-  callback: function(){
+  onClick: function(){
 
   }
 }
 $('.ui.item.home').MenuRegister('/', '.ui.main-component', {
   unselected: '.row.user-menu>.ui.item',
-  callback: function(){
+  onClick: function(){
 
   }
 });
 $('.ui.item.nippon').MenuRegister('/Sysits', '.ui.main-component', {
   unselected: '.row.user-menu>.ui.item',
-  callback: function(){
+  onClick: function(){
 
   }
 });
 $('.ui.item.setting').MenuRegister('/Setting', '.ui.main-component', {
   unselected: '.row.user-menu>.ui.item',
-  callback: function(){
+  onClick: function(){
 
   }
 });
+
 $('.ui.item.profile .item.profile').MenuRegister('/User', '.ui.main-component', {
   unselected: '.row.user-menu>.ui.item',
   selected: '.ui.item.profile',
-  callback: function(){
+  onClick: function(){
 
   }
 });

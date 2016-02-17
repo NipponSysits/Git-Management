@@ -58,13 +58,20 @@ window.T = {
         return T.Storage(window.State.StorageName);
     },
     Re: undefined,
+    Selected: function(e, me){
+        $(e.unselected).removeClass('selected');
+        $(e.selected || me).addClass('selected');
+        (e.onClick || function(){ })();
+    },
     StateCompile: function(init){
-        console.log('StateCompile', init, window.State.Component);
-
+        // console.log('StateCompile', init, window.State.Component);
         for (var i in __.menu) {
             var menu = __.menu[i];
-            if(menu.state == T.URL()) {
+            var routes = new RegExp('^'+menu.state.replace('/','\\/'));
+
+            if(routes.exec(T.URL())) {
                 $(menu.btn).addClass('selected');
+                T.Selected(menu.cb, menu.btn);
             }
 
             if(init) {
@@ -72,10 +79,9 @@ window.T = {
                 $(menu.btn).click(function(){
                     var i = $(this).attr('t-data'), item = __.menu[i], e = __.menu[i].cb;
                     if(item.state != T.URL()) {
-                        console.log('NextState', item);
+                        // console.log('NextState', item);
                         T.NextState(item.state);
-                        $(e.unselected).removeClass('selected');
-                        $(e.selected || this).addClass('selected');
+                        T.Selected(e, this);
                     }
                 });
             }
