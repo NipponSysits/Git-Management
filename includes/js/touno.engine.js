@@ -65,6 +65,7 @@ window.T = {
     },
     StateCompile: function(init){
         // console.log('StateCompile', init, window.State.Component);
+        var cState = null;
         for (var i in __.menu) {
             var menu = __.menu[i];
             var routes = new RegExp('^'+menu.state.replace('/','\\/'));
@@ -72,6 +73,7 @@ window.T = {
             if(routes.exec(T.URL())) {
                 $(menu.btn).addClass('selected');
                 T.Selected(menu.cb, menu.btn);
+                cState = menu;
             }
 
             if(init) {
@@ -87,6 +89,11 @@ window.T = {
             }
         }
 
+        if(cState && !init) {
+            var url = cState.state.replace('/','').toLowerCase() || 'dashboard';
+            console.log(cState.child, url);
+            T.HTML(cState.child, url);
+        }
 
         // var found = T.__handle.Component;
         // if(T.Re){
@@ -132,7 +139,7 @@ window.T = {
       __html = url;
       $.ajax({
         url: '/html/' + url,
-        data: { State: window.State },
+        // data: { State: window.State },
         dataType: 'HTML',
         headers: { 'X-Requested': _m, 'X-Sign': T.User.username },
         error: function(xhr, ex, s){

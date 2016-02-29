@@ -115,6 +115,7 @@ app.html = function(path, render_name){
 	app.use(path.toLowerCase(), [ cookieParser(), HTMLClient, SessionClient, bodyParser.urlencoded() ], function(req, res){
 		if(req.XHRRequested) {
 			var req_data = path.toLowerCase().replace('/html', './html/component')+'.js';
+			console.log('req_data', req_data);
 			fs.exists(req_data, function(exists) {
 				if(exists) {
 					var func = require(req_data);
