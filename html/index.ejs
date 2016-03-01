@@ -94,6 +94,26 @@ $('a.item[data-name="home-repository"]').MenuRegister('/Repository', '.ui.main-c
   unselected: 'a.item[data-name]'
 });
 
+$('a.item[data-name="sysits-dashboard"]').MenuRegister('/Sysits', '.ui.main-component', {
+  unselected: 'a.item[data-name]'
+});
+
+$('a.item[data-name="sysits-timecard"]').MenuRegister('/Sysits/Time-Card', '.ui.main-component', {
+  unselected: 'a.item[data-name]'
+});
+
+$('a.item[data-name="sysits-stats"]').MenuRegister('/Sysits/Stats', '.ui.main-component', {
+  unselected: 'a.item[data-name]'
+});
+
+$('a.item[data-name="sysits-daily"]').MenuRegister('/Sysits/Daily', '.ui.main-component', {
+  unselected: 'a.item[data-name]'
+});
+
+$('a.item[data-name="setting-system"]').MenuRegister('/Setting', '.ui.main-component', {
+  unselected: 'a.item[data-name]'
+});
+
 $(function(){
     [
       { name: 'home-dashboard', text: 'Dashboard', state: '/' },
