@@ -26,6 +26,8 @@ var HTMLClient = function(req, res, next){
 	next();
 }
 
+var db = conn.connect();
+
 var SessionClient = function(req, res, next){
 	var onTimestamp = Date.now();
 	var Hour24 = 86400000; // milisecond
@@ -46,7 +48,6 @@ var SessionClient = function(req, res, next){
 		var decrypted = encryptor.decrypt(session);
 
 		if((/(.+?)>\+</.exec(decrypted) || [])[1] === PrimaryKey.key) { // LEVEL 2
-			var db = conn.connect({ database: 'ns_system' });
 	  	db.select('sessions', { session_id: req.session }, function(err, row, field){ //LEVEL 3
 	  		if(!err) {
 	  			var whereTime = { yesterday: req.timestamp-Hour24, tomorrow:req.timestamp+Hour24, today:req.timestamp };
@@ -61,19 +62,18 @@ var SessionClient = function(req, res, next){
 		  				var data = { access_id: req.access, request_id: req.headers['x-requested'], created_at: req.timestamp };
 			  			db.insert('requested', data); //, function(){ db.end(); }
 	  				} else {
-	  					db.end();
+	  					// db.end();
 	  				}
 	  			}).catch(function(ex){
-	  				db.end();
+	  				// db.end();
 	  				console.log(ex);
 	  			});
 	  		}
 			});
 
 			if(req.user) {
-				var ns = conn.connect();
-				ns.selectOne('user_access', { username: req.user }, function(err, access, field){
-					ns.end();
+				db.selectOne('user_access', { username: req.user }, function(err, access, field){
+					// db.end();
 						req.XHRRequested = false;
 					if(!err && access) {
 						req.user = access;
@@ -115,7 +115,6 @@ app.html = function(path, render_name){
 	app.use(path.toLowerCase(), [ cookieParser(), HTMLClient, SessionClient, bodyParser.urlencoded() ], function(req, res){
 		if(req.XHRRequested) {
 			var req_data = path.toLowerCase().replace('/html', './html/component')+'.js';
-			console.log('req_data', req_data);
 			fs.exists(req_data, function(exists) {
 				if(exists) {
 					var func = require(req_data);
@@ -149,12 +148,11 @@ walk.walk('api', { followLinks: false }).on('file', function(root, stat, next) {
 
 app.get('*', [ cookieParser(), HTMLClient, SessionClient ], function(req, res) {
 	if(req.isHtml) {
-		var db = conn.connect({ database: 'ns_system' });
 		var where = { access_id: req.access, session_id: req.session, today: req.timestamp };
 	  	db.query('SELECT session_id FROM sessions WHERE session_id = :session_id', where, function(err, row, field){
 	  		if((row || []).length == 0) {
 	  			var data = { access_id: 'UNKNOW', session_id: req.session, email: null, expire_at: 0, created_at: req.timestamp };
-	  			db.insert('sessions', data, function(){ db.end(); });
+	  			db.insert('sessions', data, function(){ }); // db.end(); 
 	  		}
 	  		res.render('index', { 
 	  			_LANG: language,  _HOST: config.ip+':'+config.port, _SESSION : { 

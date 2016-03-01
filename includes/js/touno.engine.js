@@ -62,7 +62,7 @@ window.T = {
         $(e.unselected).removeClass('selected');
         $(e.selected || me).addClass('selected');
         (e.onClick || function(){ })();
-        console.log(e, me);
+        // console.log(e, me);
     },
     StateCompile: function(init){
         // console.log('StateCompile', init, window.State.Component);

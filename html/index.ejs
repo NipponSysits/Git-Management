@@ -135,7 +135,7 @@ $(function(){
 
   $.fn.avatar = function(email, size){
     size = size || 256;
-    var url = 'http://www.gravatar.com/avatar/'+md5(email || none)+'?d=mm&s='+size;
+    var url = 'http://www.gravatar.com/avatar/'+md5(email || 'none')+'?d=mm&s='+size;
     return $(this).css('background-image',"url('"+url+"')");
   }
 
@@ -266,7 +266,7 @@ $(function(){
 
   var onAccess = function(user){
     T.User = user;
-
+    
     $('.user-menu .item.profile .user-image').avatar(T.User.email, 64);
     $('.user-menu .item.profile .ui.fullname').html(T.User.fullname);
     $('.user-menu .item.profile .ui.position').html(T.User.position);
