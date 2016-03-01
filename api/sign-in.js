@@ -18,7 +18,7 @@ module.exports = function(req, res, data){
 					user.id = null;
 					access.user = user;
 					access.pass = true;
-					var db = conn.connect({ database: 'ns_system' });
+					var db = conn.connect();
 						db.update('sessions', { email: data.email, expire_at: req.expire }, { session_id: req.session, access_id: req.access }, function(){ 
 		  				db.end(); 
 		  			});
