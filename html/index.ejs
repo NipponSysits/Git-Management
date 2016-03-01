@@ -28,22 +28,48 @@
 <script language="javascript" src="/libs/js/app.js"></script>
 
 <script type="text/javascript">
+var SetPanelMenu = function(h3, menu){
+  $('.column.navigator.text > h3').html(h3);
+  $('a.item[data-name]').hide();
+  menu.map(function(item){
+    $('a.item[data-name="'+item+'"]').show();
+  });
+}
+
+
 $('.ui.item.home').MenuRegister('/', '.ui.main-component', {
   unselected: '.row.user-menu>.ui.item',
   onClick: function(){
+
+    $('.column.navigator.text > h3').html('Management');
+    $('a.item[data-name]').hide();
+
+    ['home-dashboard', 'home-repository'].map(function(item){
+      $('a.item[data-name="'+item+'"]').show();
+    });
 
   }
 });
 $('.ui.item.nippon').MenuRegister('/Sysits', '.ui.main-component', {
   unselected: '.row.user-menu>.ui.item',
   onClick: function(){
+    $('.column.navigator.text > h3').html('Nippon Sysits');
+    $('a.item[data-name]').hide();
 
+    ['sysits-dashboard', 'sysits-timecard', 'sysits-stats', 'sysits-daily'].map(function(item){
+      $('a.item[data-name="'+item+'"]').show();
+    });
   }
 });
 $('.ui.item.setting').MenuRegister('/Setting', '.ui.main-component', {
   unselected: '.row.user-menu>.ui.item',
   onClick: function(){
+    $('.column.navigator.text > h3').html('Setting Systems');
+    $('a.item[data-name]').hide();
 
+    ['setting-system'].map(function(item){
+      $('a.item[data-name="'+item+'"]').show();
+    });
   }
 });
 
@@ -51,16 +77,41 @@ $('.ui.item.profile .item.profile').MenuRegister('/User', '.ui.main-component', 
   unselected: '.row.user-menu>.ui.item',
   selected: '.ui.item.profile',
   onClick: function(){
+    $('.column.navigator.text > h3').html('Setting Systems');
+    $('a.item[data-name]').hide();
 
+    ['setting-system'].map(function(item){
+      $('a.item[data-name="'+item+'"]').show();
+    });
   }
 });
 
+$('a.item[data-name="home-dashboard"]').MenuRegister('/', '.ui.main-component', {
+  unselected: 'a.item[data-name]'
+});
+
+$('a.item[data-name="home-repository"]').MenuRegister('/Repository', '.ui.main-component', {
+  unselected: 'a.item[data-name]'
+});
+
 $(function(){
-  // var MenuSelected = function(e){
-  //   $('.ui.access.grid > .row.user-menu > .ui.item').removeClass('selected');
-  //   $('.ui.access.grid .dropdown.profile .item.profile').removeClass('selected');
-  //   $(e).addClass('selected');
-  // }
+    [
+      { name: 'home-dashboard', text: 'Dashboard', state: '/' },
+      { name: 'home-repository', text: 'Repositories', state: '/Repository' },
+      { name: 'sysits-dashboard', text: 'Dashboard', state: '/Sysits' },
+      { name: 'sysits-timecard', text: 'TimeCard', state: '/Sysits/Time-Card' },
+      { name: 'sysits-stats', text: 'Stats', state: '/Sysits/Time-Stats' },
+      { name: 'sysits-daily', text: 'Daily Report', state: '/Sysits/Report' },
+      { name: 'setting-system', text: 'Systems', state: '/Setting' }
+    ].map(function(item){
+      $('<a>', { 
+        'class':'item'+(item.active?' active':''),
+        'data-name': item.name,
+        'style': 'display: none',
+        'html':item.text
+      }).appendTo('.ui.navigator.menu');
+    });
+
 
   $.fn.avatar = function(email, size){
     size = size || 256;
@@ -127,18 +178,6 @@ $(function(){
   //   }
   // }
 
-  // var SetPanelMenu = function(h3, menu){
-  //   $('.column.navigator.text > h3').html(h3);
-  //   $('.ui.navigator.menu').empty();
-
-  //   menu.map(function(item){
-  //     $('<a>', { 
-  //       'class':'item'+(item.active?' active':''),
-  //       'onClick': "$(this).Menu($(this).data('item'))",
-  //       'html':item.text
-  //     }).data('item', item).appendTo('.ui.navigator.menu');
-  //   });
-  // }
 
 
   var exModal = function(ex) {
@@ -193,6 +232,7 @@ $(function(){
     var ex = new CallbackException(f);
     if(!ex.onError) {
       if(T.Storage('SESSION_CLIENT')) {
+        T.StateCompile(true);
         T.Call({ url: '/api/sign-access', data: { email: T.Storage('signin-username') } }).then(function(e, res){
           if(res.access) onAccess(res.user); else onSignOut();
         });
@@ -206,18 +246,6 @@ $(function(){
 
   var onAccess = function(user){
     T.User = user;
-    // if(State.Component == 'Sysits') {
-    //   $('.ui.access.grid > .row.user-menu > .ui.item.nippon').MenuActiveClick(State.Component, State.Module);
-    // } else if(State.Component == 'Setting') {
-    //   $('.ui.access.grid > .row.user-menu > .ui.item.setting').MenuActiveClick(State.Component, State.Module);
-    // } else if(State.Component == 'User') {
-    //   $('.ui.access.grid .dropdown.profile .item.profile').MenuDropdownctiveClick(State.Component, State.Module);
-    // } else if(State.Component == 'Repository') {
-    //   $('.ui.access.grid > .row.user-menu > .ui.item.home').MenuActiveClick(State.Component, State.Module);
-    //   $('.ui.access.grid > .row.user-menu > .ui.item.home').MenuActiveClick(State.Component, State.Module);
-    // } else {
-    //   $('.ui.access.grid > .row.user-menu > .ui.item.home').MenuActiveClick(State.Component, State.Module);
-    // }
 
     $('.user-menu .item.profile .user-image').avatar(T.User.email, 64);
     $('.user-menu .item.profile .ui.fullname').html(T.User.fullname);

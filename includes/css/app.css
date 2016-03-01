@@ -62,7 +62,7 @@ div.ui.menu.navigator a.item, div.ui.menu.navigator a.item:hover {
     padding: 0px 30px !important;
     color: #FFF;
 }
-div.ui.menu.navigator a.item.active {
+div.ui.menu.navigator a.item.selected {
     background-color: #2b71a5;
     border-radius: 0px;
     box-shadow: none;
@@ -188,14 +188,14 @@ div.ui.floating.label{
     font-weight: bold;
 }
 
-.ui.repository.grid .ui.vertical.menu > .item.active {
+.ui.repository.grid .ui.vertical.menu > .item.selected {
     background-color: #27608d;
 }
 .ui.repository.grid .ui.vertical.menu > .item > .label {
     background-color: #27608d;
     color: #FFF;
 }
-.ui.repository.grid .ui.vertical.menu > .item.active > .label {
+.ui.repository.grid .ui.vertical.menu > .item.selected > .label {
     background-color: #cedde6;
     color: #27608d;
 }

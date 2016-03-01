@@ -62,6 +62,7 @@ window.T = {
         $(e.unselected).removeClass('selected');
         $(e.selected || me).addClass('selected');
         (e.onClick || function(){ })();
+        console.log(e, me);
     },
     StateCompile: function(init){
         // console.log('StateCompile', init, window.State.Component);
@@ -73,10 +74,10 @@ window.T = {
             if(routes.exec(T.URL())) {
                 $(menu.btn).addClass('selected');
                 T.Selected(menu.cb, menu.btn);
-                cState = menu;
+                __.c = menu;
             }
 
-            if(init) {
+            if($(menu.btn).length > 0) {
                 $(menu.btn).attr('t-data', i);
                 $(menu.btn).click(function(){
                     var i = $(this).attr('t-data'), item = __.menu[i], e = __.menu[i].cb;
@@ -89,11 +90,7 @@ window.T = {
             }
         }
 
-        if(cState && !init) {
-            var url = cState.state.replace('/','').toLowerCase() || 'dashboard';
-            console.log(cState.child, url);
-            T.HTML(cState.child, url);
-        }
+        T.HTML(__.c.child, __.c.state.replace('/','').toLowerCase() || 'dashboard');
 
         // var found = T.__handle.Component;
         // if(T.Re){
@@ -177,9 +174,10 @@ window.T = {
         } else {
             aInit.resolve({ init: true });
         }
+        
         return aInit.promise();
     },
-     User: {},
+    User: {},
     __handle: {
         Component: null,
         Module: {},
@@ -188,6 +186,7 @@ window.T = {
 }
 
 window.__ = {
+    c: {},
     menu: [],
     Pop: function(routes) { // Event in Refesh page F5 key or Open NewTab. 
         var State = { Component: null, Module: null, StorageName: null, StorageItems: null }
