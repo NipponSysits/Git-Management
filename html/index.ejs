@@ -38,6 +38,7 @@ var SetPanelMenu = function(h3, menu){
 
 
 $('.ui.item.home').MenuRegister('/', '.ui.main-component', {
+  level: 7,
   unselected: '.row.user-menu>.ui.item',
   onClick: function(){
 
@@ -51,6 +52,7 @@ $('.ui.item.home').MenuRegister('/', '.ui.main-component', {
   }
 });
 $('.ui.item.nippon').MenuRegister('/Sysits', '.ui.main-component', {
+  level: 1,
   unselected: '.row.user-menu>.ui.item',
   onClick: function(){
     $('.column.navigator.text > h3').html('Nippon Sysits');
@@ -62,6 +64,7 @@ $('.ui.item.nippon').MenuRegister('/Sysits', '.ui.main-component', {
   }
 });
 $('.ui.item.setting').MenuRegister('/Setting', '.ui.main-component', {
+  level: 1,
   unselected: '.row.user-menu>.ui.item',
   onClick: function(){
     $('.column.navigator.text > h3').html('Setting Systems');
@@ -74,6 +77,7 @@ $('.ui.item.setting').MenuRegister('/Setting', '.ui.main-component', {
 });
 
 $('.ui.item.profile .item.profile').MenuRegister('/User', '.ui.main-component', {
+  level: 7,
   unselected: '.row.user-menu>.ui.item',
   selected: '.ui.item.profile',
   onClick: function(){
@@ -90,7 +94,7 @@ $('a.item[data-name="home-dashboard"]').MenuRegister('/', '.ui.main-component', 
   unselected: 'a.item[data-name]'
 });
 
-$('a.item[data-name="home-repository"]').MenuRegister('/Repository', '.ui.main-component', {
+$('a.item[data-name="home-repository"]').MenuRegister('/Repository/:username', '.ui.main-component', {
   unselected: 'a.item[data-name]'
 });
 
@@ -252,9 +256,9 @@ $(function(){
     var ex = new CallbackException(f);
     if(!ex.onError) {
       if(T.Storage('SESSION_CLIENT')) {
-        T.StateCompile(true);
         T.Call({ url: '/api/sign-access', data: { email: T.Storage('signin-username') } }).then(function(e, res){
           if(res.access) onAccess(res.user); else onSignOut();
+          T.StateCompile(true);
         });
       } else {
         onSignOut();
@@ -266,7 +270,7 @@ $(function(){
 
   var onAccess = function(user){
     T.User = user;
-    
+
     $('.user-menu .item.profile .user-image').avatar(T.User.email, 64);
     $('.user-menu .item.profile .ui.fullname').html(T.User.fullname);
     $('.user-menu .item.profile .ui.position').html(T.User.position);

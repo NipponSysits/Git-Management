@@ -68,6 +68,8 @@ window.T = {
         // console.log('StateCompile', init, window.State.Component);
         var cState = null;
         for (var i in __.menu) {
+            __.menu[i].state = __.menu[i].state.replace(':username', T.User.username);
+
             var menu = __.menu[i];
             var routes = new RegExp('^'+menu.state.replace('/','\\/'));
 
