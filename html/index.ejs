@@ -258,7 +258,6 @@ $(function(){
       if(T.Storage('SESSION_CLIENT')) {
         T.Call({ url: '/api/sign-access', data: { email: T.Storage('signin-username') } }).then(function(e, res){
           if(res.access) onAccess(res.user); else onSignOut();
-          T.StateCompile(true);
         });
       } else {
         onSignOut();
@@ -270,6 +269,7 @@ $(function(){
 
   var onAccess = function(user){
     T.User = user;
+    T.StateCompile(true);
 
     $('.user-menu .item.profile .user-image').avatar(T.User.email, 64);
     $('.user-menu .item.profile .ui.fullname').html(T.User.fullname);
