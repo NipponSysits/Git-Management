@@ -1,9 +1,9 @@
 module.exports = {
 	dev: {
-		ip: '127.0.0.1',
+		ip: '0.0.0.0',
 		port: 8210,
 		mongo_db: {
-			domain: 'dev.ns.co.th',
+			domain: 'pgm.ns.co.th',
 			dbname: 'ns_develop',
 			access: {
 				username: 'pgm',
@@ -12,18 +12,18 @@ module.exports = {
 			port: 20317
 		},
 		mysql_db: {
-			host: 'dev.ns.co.th',
+			host: 'pgm.ns.co.th',
 			database: 'ns_develop',
-			user: 'pgm',
-			password: 'pgm1234',
-			port: 20400
+			user: 'root',
+			password: '123456',
+			port: 33061
 		}
 	},
 	serv: {
-		ip: '10.0.1.21',
+		ip: '0.0.0.0',
 		port: 8210,
 		mongo_db: {
-			domain: 'dev.ns.co.th',
+			domain: '10.0.1.21',
 			dbname: 'ns_develop',
 			access: {
 				username: 'pgm',
@@ -32,11 +32,11 @@ module.exports = {
 			port: 20317
 		},
 		mysql_db: {
-			host: 'dev.ns.co.th',
+			host: '10.0.1.21',
 			database: 'ns_develop',
-			user: 'pgm',
-			password: 'pgm1234',
-			port: 20400
+			user: 'root',
+			password: '123456',
+			port: 33061
 		}
 	}
 }
