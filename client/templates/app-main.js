@@ -6,7 +6,6 @@ if (Meteor.isClient) {
 
 	Template.app.helpers({
 			signTemplate: function() {
-				console.log(UI);
 			  return "signIn"
 			},
 	    signData: function() {

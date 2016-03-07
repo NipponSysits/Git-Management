@@ -1,4 +1,16 @@
 if (Meteor.isClient) {
+
+  Template.signIn.events({
+    "change .ui.remember-id input": function (event) {
+    	T.Storage('signin-remember-id', event.target.checked ? 'check': 'uncheck');
+    }
+  });
+ 	Template.signIn.helpers({
+    rememberId: function () {
+      return '';
+    }
+  });
+
 	Template.signIn.onRendered(function() {
 	  var eventBackSignIn = function() {
 	    $('.ui.button.sign-in').css({ 'border-radius': 0 });
@@ -10,12 +22,9 @@ if (Meteor.isClient) {
 		$('.user-menu .item.profile .user-image').avatar('none', 64);
 		$('.user-menu > .item.profile').dropdown();
 
+
 	  $('.ui.remember-id').checkbox(T.Storage('signin-remember-id') || 'uncheck');
-	  $('.ui.remember-id').checkbox({
-	    onChange: function(){
-	      T.Storage('signin-remember-id', ($(this).prop('checked') ? 'check': 'uncheck'));
-	    }
-	  });
+
 	  if(T.Storage('signin-remember-id') == 'check' && T.Storage('signin-username')) {
 	    $('.ui.sign-id').hide()
 	    $('.ui.sign-image').show();
@@ -25,5 +34,7 @@ if (Meteor.isClient) {
 	    eventBackSignIn();
 	  }
 	});
+
+
 }
 
