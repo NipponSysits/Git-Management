@@ -1,0 +1,108 @@
+<template name="app">
+  <div class="main">
+    <div class="header">
+      <div class="ui prepare dimmer active">
+        <div class="ui large text loader">Loading</div>
+      </div>
+
+      <div class="ui attached menu top">
+        <div class="header">
+          <div style="background-image: url('/images/pgm.management.png'); background-position: 0px 0px; background-repeat: no-repeat; background-size: cover; width:200px; height: 39px; margin: 8px 10px;">
+            <div class="ui small signout modal">
+              <div class="header">
+                PGM-Management
+              </div>
+              <div class="content">
+                <p>Are you sure you want to sign-out your account</p>
+              </div>
+              <div class="actions">
+                <div class="ui ok button">
+                  Cancel
+                </div>
+                <div class="ui negative right labeled icon button">
+                  Signout
+                  <i class="checkmark icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ui access grid" style="display:none;display:flex;margin-left:auto!important;">
+          <div class="computer tablet only row user-menu">
+            <a class="ui item home">
+              <i class="git square icon big"></i>
+            </a>
+            <a class="ui item nippon">
+              <i class="nippon icon big"></i>
+            </a>
+            <a class="ui item setting">
+              <i class="setting icon big"></i>
+            </a>
+            <div class="ui dropdown icon item profile">
+              <a class="ui item user">
+                <i class="user-image icon big"></i>
+              </a>
+              <div class="content">
+                <div class="ui fullname sub header">Unknow</div>
+                <div class="ui position">(None)</div>
+              </div>
+              <div class="menu">
+                <div class="item profile">
+                  <i class="user icon"></i>
+                  Profiles
+                </div>
+                <div class="divider"></div>
+                <div class="item signout">
+                  <i class="sign out icon"></i>
+                  Sign out
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ui content">
+      <div class="ui notify nag" style="position: absolute;top: 55px;backround-color:rgba(184, 11, 11, 0.79);">
+        <span class="title"></span>
+        <i class="close icon"></i>
+      </div>
+      <div class="ui panel main container" style="display:none;">
+        <div class="ui panel html">
+          include component/menu-panel
+        </div>
+      </div>
+      <div class="ui panel sign-in" style="display:none;">
+        {{> UI.dynamic template=signIn data=myDataContext}}
+      </div>
+    </div>
+    <div class="ui sign-in message ui error message hidden" style="position:absolute; top:0px;">
+      <i class="close icon"></i>
+      <div class="header">There was some errors with your submission</div>
+      <ul class="list"></ul>
+    </div>
+
+    <div class="ui basic modal feature-exception">
+      <div class="header"></div>
+      <div class="image content">
+        <div class="image">
+          <i class="bug icon"></i>
+        </div>
+        <div class="description">
+          <p></p>
+        </div>
+      </div>
+      <div class="actions">
+        <div class="ui inverted buttons">
+          <div class="ui red basic inverted button refresh-exception">
+            <i class="refresh icon"></i>
+            Reload
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <i class="icon copyright"></i>Touno-K.com Copyright. Designed by <strong>Mr.Kananek Thongkam</strong>
+    </div>
+  </div>
+</template>
