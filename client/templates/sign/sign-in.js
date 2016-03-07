@@ -1,5 +1,5 @@
 if (Meteor.isClient) {
-	Template.app.onRendered(function() {
+	Template.signIn.onRendered(function() {
 	  var eventBackSignIn = function() {
 	    $('.ui.button.sign-in').css({ 'border-radius': 0 });
 	    $('.ui.button.sign-back, .or.sign-or').hide();

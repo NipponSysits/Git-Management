@@ -2,8 +2,19 @@ if (Meteor.isClient) {
 	Meteor.startup(function () {
 
 
-
 	});
+
+	Template.app.helpers({
+			signTemplate: function() {
+				console.log(UI);
+			  return "signIn"
+			},
+	    signData: function() {
+        var data = UI._templateInstance().data || {};
+        return data;
+	    }
+	});
+
 
 	Template.app.onRendered(function() {
 		var onSignOut = function(){
