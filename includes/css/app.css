@@ -204,6 +204,20 @@ div.ui.floating.label{
     top: 103px !important;
     height: calc(100% - 103px);
 }
+.ui.list.repository .content > .header {
+    font-size: 1.2em !important;
+}
+
+.ui.list.repository .content > .description {
+    font-size: 0.88em !important;
+    line-height: 1.6em !important;
+}
+.ui.list.repository > .item:hover {
+    cursor: pointer;
+    background-color: #ececec; 
+}
+
+
 
 @media only screen and (max-width: 767px){
     .ui.grid.main-component > .column.module {

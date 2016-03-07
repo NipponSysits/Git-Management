@@ -32,11 +32,13 @@ window.T = {
         window.history.pushState({}, routers, routers);
         T.StateCompile();
     },
+    PushState: function (routers) {
+        window.State = __.Pop(routers || '/');
+        window.history.pushState({}, routers, routers);
+    },
     SetState: function (routers) {
-        // var s = __.Pop();
-        // window.history.pushState(s, routers, routers);
-        // // console.log('SetState', component, module, item_name);
-        // return this;
+        window.State = __.Pop(routers || '/');
+        window.history.replaceState({}, routers, routers);
     },
     SetComponent : function(func) {
         if(typeof func == 'function') T.__handle.Component = func;
@@ -132,13 +134,13 @@ window.T = {
       });
       return aCall.promise();
     },
-    HTML: function(e, url){
+    HTML: function(e, url, data){
       var aHtml = $.Deferred();
       var _t = Date.now(), _m = md5(_t);
       __html = url;
       $.ajax({
         url: '/html/' + url,
-        // data: { State: window.State },
+        data: data || {},
         dataType: 'HTML',
         headers: { 'X-Requested': _m, 'X-Sign': T.User.username },
         error: function(xhr, ex, s){
@@ -201,6 +203,13 @@ window.__ = {
         State.Module = getState[2] || null;
         State.StorageName = getState[3] || null;
         return State;
+    },
+    Raw: function(routes) { // Event in Refesh page F5 key or Open NewTab. 
+        var getState = new RegExp(document.domain + '.*?\/([^\/]*)\/*([^\/]*)\/*([^\/]*)\/*([^\/]*)\/*', 'ig');
+        if(routes) {
+            routes = document.domain + routes;
+        }
+        return getState.exec(routes || location.href);
     },
 
 };

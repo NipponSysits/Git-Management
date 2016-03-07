@@ -1,3 +1,29 @@
+<script type="text/javascript">
+  $(function(){
+    var collec = __.Raw()[2];
+
+    $('.ui.repository a.item').each(function(i, e){
+      // Permission Administrator
+      if($(e).attr('data-name') != "0" && $(e).attr('data-name') != T.User.username && T.User.level > 0) {
+        $(e).hide();
+      }
+
+      if($(e).attr('data-name') == (collec || T.User.username)) {
+        $(e).addClass('selected');
+        T.SetState('/Repository/'+$(e).attr('data-name'));
+        T.HTML('.ui.repository>div.list', 'repositpry/list', { collection_id: $(e).attr('data-row'), user_id: $(e).attr('data-user') });
+      }
+
+
+      $(e).click(function(){
+        $('.ui.repository a.item').removeClass('selected');
+        $(this).addClass('selected');
+        T.PushState('/Repository/'+$(e).attr('data-name'));
+        T.HTML('.ui.repository>div.list', 'repositpry/list', { collection_id: $(e).attr('data-row'), user_id: $(e).attr('data-user') });
+      });
+    });
+  });
+</script>
 <div class="row">
   <div class="column module">
     <div class="content">
@@ -5,14 +31,14 @@
         <div class="four wide column" style="background-color:#161c2b">
           <div class="ui vertical menu">
             <% ITEM.forEach(function(row) { %>
-              <a class="item" data-row="<%= row.collection_id %>">
+              <a class="item" data-name="<%= row.name %>" data-row="<%= row.collection_id %>" data-user="<%= row.user_id %>">
                 <%= row.name %>
                 <div class="ui label"><%= row.total %></div>
               </a>
             <% }); %>
           </div>
         </div>
-        <div class="twelve wide column">ten</div>
+        <div class="twelve wide column list"></div>
       </div>
     </div>
   </div>

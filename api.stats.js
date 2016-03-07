@@ -44,8 +44,8 @@ var QuotaVacation = function(q){
 
 var date = '2013-04-29';
 var User = getQuota(date);
-
 var Age = getPeriod(date);
+
 // 246
 // console.log('User', getPeriod(date), ' Quota', User);
 // console.log('Sick', QuotaSick(User), 'Vacation', QuotaVacation(User));
