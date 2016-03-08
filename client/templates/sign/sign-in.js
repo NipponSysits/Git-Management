@@ -6,12 +6,6 @@ Meteor.methods({
   }
 });
 
-Template.registerHelper('EN', {
-	a: 'a.en'
-});
-Template.registerHelper('TH', {
-	a: 'a.th'
-});
 if (Meteor.isClient) {
 
   Template.signIn.events({
