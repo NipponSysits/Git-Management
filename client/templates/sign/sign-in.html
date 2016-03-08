@@ -1,48 +1,40 @@
 <template name="signIn">
-  <div class="ui equal width stackable grid " style="margin:0px;">
-  <div class="column login-image" style="background-image: url('/images/login.jpg'); background-position: 0px 0px; background-repeat: no-repeat; background-size: cover; background-position: left center;"></div>
-  <!-- <canvas id="login-image" class="column login-image"></canvas> -->
-  <div class="ui column centered grid">
-    <div class="column" style="max-width: 350px; padding-top:80px;">
-      <h2>Sign In</h2>
-      <form class="ui large form sign-in">
-          <div class="ui column" style="max-height:170px;">
-            <div class="ui sign-image centered grid" style="position:relative; display:none;">
-              <div class="column" style="max-width: 156px; text-align:center;">
-                <div class="ui circular image sign-avartar"  style="background-size:cover;width:128px;height:128px;"></div>
-                <h3 class="ui sign-email" style="margin-top: 5px;"></h3>
-              </div>
-            </div>
-            <div class="ui sign-id" style="position:relative;">
-              <h4>Sign-In ID</h4>
-              <div class="username field">
-                <div class="ui fluid left icon input">
-                  <i class="user icon"></i>
-                  <input type="text" id="email" name="email" placeholder="E-mail address">
-                </div>
-              </div>
-              <div class="remember field">
-                <div class="ui checkbox remember-id">
-                  <input type="checkbox" id="remember-id" name="remember-id">
-                  <label>Remember My Sign-In ID</label>
-                </div>
-              </div>
-            </div>
+  <h2>Sign In</h2>
+  <form class="ui large form sign-in">
+    <div class="ui column" style="max-height:170px;">
+      <div class="ui sign-image centered grid" style="position:relative; display:none;">
+        <div class="column" style="max-width: 156px; text-align:center;">
+          <div class="ui circular image sign-avartar"  style="background-size:cover;width:128px;height:128px;"></div>
+          <h3 class="ui sign-email" style="margin-top: 5px;"></h3>
+        </div>
+      </div>
+      <div class="ui sign-id" style="position:relative;">
+        <h4>Sign-In ID</h4>
+        <div class="username field">
+          <div class="ui fluid left icon input">
+            <i class="user icon"></i>
+            <input type="text" id="email" name="email" placeholder="E-mail address">
           </div>
-          <h4>Password</h4>
-          <div class="password field">
-            <div class="ui fluid left icon input">
-              <i class="lock icon"></i>
-              <input type="password" id="password" name="password" placeholder="Password">
-            </div>
+        </div>
+        <div class="remember field">
+          <div class="ui checkbox remember-id">
+            <input type="checkbox" id="remember-id" name="remember-id">
+            <label>Remember My Sign-In ID</label>
           </div>
-          <div class="ui buttons column" style="width:100%">
-            <div class="ui sign-back button large" style="max-width:83px;">Back</div>
-            <div class="or sign-or"></div>
-            <div class="ui positive sign-in large submit button">Login</div>
-          </div>
-      </form>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
+    <h4>Password</h4>
+    <div class="password field">
+      <div class="ui fluid left icon input">
+        <i class="lock icon"></i>
+        <input type="password" id="password" name="password" placeholder="Password">
+      </div>
+    </div>
+    <div class="ui buttons column" style="width:100%">
+      <div class="ui sign-back button large" style="max-width:83px;">Back</div>
+      <div class="or sign-or"></div>
+      <div class="ui positive sign-in large submit button">Login</div>
+    </div>
+  </form>
 </template>

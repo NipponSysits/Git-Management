@@ -73,7 +73,15 @@
         </div>
       </div>
       <div class="ui panel sign-in" style="display:none;">
-        {{> UI.dynamic template=signTemplate data=signData}}
+        <div class="ui equal width stackable grid " style="margin:0px;">
+          <div class="column login-image" style="background-image: url('/images/login.jpg'); background-position: 0px 0px; background-repeat: no-repeat; background-size: cover; background-position: left center;"></div>
+          <!-- <canvas id="login-image" class="column login-image"></canvas> -->
+          <div class="ui column centered grid">
+            <div class="column" style="max-width: 350px; padding-top:80px;">
+              {{> UI.dynamic template=signTemplate data=signData}}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="ui sign-in message ui error message hidden" style="position:absolute; top:0px;">
