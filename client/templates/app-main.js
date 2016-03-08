@@ -20,7 +20,7 @@ Template.registerHelper('TXT', function(keyname){
 });
 
 Meteor.startup(function () {
-
+	$(window).resize(function(){ $('.login-image').height($(window).height() - 118); });
 });
 
 
