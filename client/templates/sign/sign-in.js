@@ -1,3 +1,12 @@
+Meteor.methods({
+  signReset: function (text) {
+	  $('.login-image').height($(window).height() - 118); 
+	  $(window).resize(function(){ $('.login-image').height($(window).height() - 118); });
+		$('.user-menu .item.profile .user-image').avatar('none', 64);
+  }
+});
+
+
 if (Meteor.isClient) {
 
   Template.signIn.events({
@@ -16,13 +25,9 @@ if (Meteor.isClient) {
 	    $('.ui.button.sign-in').css({ 'border-radius': 0 });
 	    $('.ui.button.sign-back, .or.sign-or').hide();
 	  }
-
-	  $('.login-image').height($(window).height() - 118); 
-	  $(window).resize(function(){ $('.login-image').height($(window).height() - 118); });
-		$('.user-menu .item.profile .user-image').avatar('none', 64);
+	  
+	  Meteor.call("signReset");
 		$('.user-menu > .item.profile').dropdown();
-
-
 	  $('.ui.remember-id').checkbox(T.Storage('signin-remember-id') || 'uncheck');
 
 	  if(T.Storage('signin-remember-id') == 'check' && T.Storage('signin-username')) {
