@@ -6,7 +6,12 @@ Meteor.methods({
   }
 });
 
-
+Template.registerHelper('EN', {
+	a: 'a.en'
+});
+Template.registerHelper('TH', {
+	a: 'a.th'
+});
 if (Meteor.isClient) {
 
   Template.signIn.events({
@@ -25,7 +30,7 @@ if (Meteor.isClient) {
 	    $('.ui.button.sign-in').css({ 'border-radius': 0 });
 	    $('.ui.button.sign-back, .or.sign-or').hide();
 	  }
-	  
+
 	  Meteor.call("signReset");
 		$('.user-menu > .item.profile').dropdown();
 	  $('.ui.remember-id').checkbox(T.Storage('signin-remember-id') || 'uncheck');
