@@ -69,7 +69,7 @@
       </div>
       <div class="ui panel main container" style="display:none;">
         <div class="ui panel html">
-          include component/menu-panel
+          {{> yield}}
         </div>
       </div>
       <div class="ui panel sign-in" style="display:none;">
@@ -78,7 +78,7 @@
           <!-- <canvas id="login-image" class="column login-image"></canvas> -->
           <div class="ui column centered grid">
             <div class="column" style="max-width: 350px; padding-top:80px;">
-              {{> UI.dynamic template=signTemplate data=signData}}
+              {{> yield "sign"}}
             </div>
           </div>
         </div>

@@ -1,11 +1,21 @@
+// var liveDb = new LiveMysql(Meteor.settings.mysql);
+
+// Meteor.publish('allPlayers', function(){
+//   return liveDb.select(
+//     `SELECT * FROM players ORDER BY score DESC`,
+//     [ { table: 'players' } ]
+//   );
+// });
+
 if (Meteor.isClient) {
 	Meteor.startup(function () {
-
 
 	});
 
 	Template.app.helpers({
 			signTemplate: function() {
+        var data = UI._templateInstance().data || {};
+        console.log(UI._templateInstance());
 			  return "signIn"
 			},
 	    signData: function() {
