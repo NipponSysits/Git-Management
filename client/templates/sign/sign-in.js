@@ -4,7 +4,9 @@ Template.signIn.events({
   	T.Storage('signin-remember-id', event.target.checked ? 'check': 'uncheck');
   },
   'click #sign-trouble': function(event){
-  	Router.go('forgot');
+  	// $('.form.sign-in').transition('fade right', function(){
+  		Router.go('forgot');
+  	// });
   },
   'click .sign-in.button': function(){
   	console.log('click .sign-in.button');

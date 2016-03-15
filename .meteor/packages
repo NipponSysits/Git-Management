@@ -19,8 +19,8 @@ ecmascript              # Enable ECMAScript2015+ syntax in app code
 autopublish             # Publish all data to the clients (for prototyping)
 insecure                # Allow all DB writes from clients (for prototyping)
 semantic:ui
+semantic:ui-css
 flemay:less-autoprefixer
 iron:router
 fourseven:scss
-semantic:ui-css
 numtel:mysql

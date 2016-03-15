@@ -1,11 +1,7 @@
-// var liveDb = new LiveMysql(Meteor.settings.mysql);
 
-// Meteor.publish('allPlayers', function(){
-//   return liveDb.select(
-//     `SELECT * FROM players ORDER BY score DESC`,
-//     [ { table: 'players' } ]
-//   );
-// });
+ 
+
+
 Meteor.methods({
   lang: function (lang, variable) {
   	if(typeof variable != 'object') throw 'language params is not object';
@@ -19,10 +15,29 @@ Template.registerHelper('TXT', function(keyname){
 	return '';
 });
 
-Meteor.startup(function () {
-	$(window).resize(function(){ $('.login-image').height($(window).height() - 118); });
-});
+if(Meteor.isServer){
+	Meteor.startup(function () {
+	 
+		var mysqlStringConnection = 	"mysql://root:123567@pgm.ns.co.th:33061/ns_develop?debug=false&charset=utf8";
+		var db = Mysql.connect(mysqlStringConnection);
+		//"posts" -> a table name inside your database. 
+		Posts = db.meteorCollection("users", "postsCollection");
 
+		Meteor.publish("allPosts", function(){
+			console.log(Posts.find());
+			return Posts.find();
+		});
+	});
+}
+if (Meteor.isClient) {
+	Posts = new Mongo.Collection("postsCollection");
+
+	console.log(Posts, Meteor.subscribe('allPosts'));
+	Meteor.startup(function () {
+		$(window).resize(function(){ $('.login-image').height($(window).height() - 118); });
+
+	});
+}
 
 Template.app.onRendered(function() {
 	var onSignOut = function(){
