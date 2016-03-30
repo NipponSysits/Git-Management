@@ -1,1 +1,0 @@
-meteor --port 8220 --settings settings.json
