@@ -1,0 +1,25 @@
+{
+  "name": "PGM-Management",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "jquery.cookie": "^1.4.1",
+    "md5": "^2.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://dvgamer@github.com/NipponSysits/PGM-Management.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NipponSysits/PGM-Management/issues"
+  },
+  "homepage": "https://github.com/NipponSysits/PGM-Management#readme"
+}
