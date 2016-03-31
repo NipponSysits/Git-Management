@@ -1,1 +1,0 @@
-winscp app:app1234@pgm.ns.co.th /command "put Git-Management.tar.gz /app/"
