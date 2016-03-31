@@ -31,7 +31,7 @@ Template.signIn.onRendered(function() {
   }
 
   $(window).resize();
-  $('.user-menu .item.profile .user-image').avatar('none', 64);
+  avatar('.user-menu .item.profile .user-image', 'none', 64);
 	$('.user-menu > .item.profile').dropdown();
   $('.ui.remember-id').checkbox(T.Storage('signin-remember-id') || 'uncheck');
 

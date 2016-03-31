@@ -1,11 +1,11 @@
-  $.fn.avatar = function(email, size){
-    size = size || 256;
-    var url = 'http://www.gravatar.com/avatar/'+md5(email || 'none')+'?d=mm&s='+size;
-    return $(this).css('background-image',"url('"+url+"')");
-  }
-
+var md5   = require('md5');
 
 $.extend(window, {
+  avatar: function(e, email, size){
+    size = size || 256;
+    var url = 'http://www.gravatar.com/avatar/'+md5(email || 'none')+'?d=mm&s='+size;
+    return $(e).css('background-image',"url('"+url+"')");
+  },
   CallbackException : function(m1, m2) {
     m1 = m1 || {};
     this.onError = m1.onError || false;
@@ -109,11 +109,11 @@ window.T = {
       headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-Session-Client': T.Storage('SESSION_CLIENT') || session }
     });
 
-    if(!$.cookie('ACCESS')) {
-      $.getScript( "http://l2.io/ip.js?var=myip", function() { $.cookie('ACCESS', md5(myip)); aInit.resolve({ init: true}); });
-    } else {
+    // if(!$.cookie('ACCESS')) {
+    //   $.getScript( "http://l2.io/ip.js?var=myip", function() { $.cookie('ACCESS', md5(myip)); aInit.resolve({ init: true}); });
+    // } else {
       aInit.resolve({ init: true });
-    }
+    // }
     
     return aInit.promise();
   }
