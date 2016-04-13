@@ -6,10 +6,10 @@
 
 	},
 	"mysql": {
-		"host": "localhost",
+		"host": "dev.ns.co.th",
 		"user": "root",
-		"port": 3306,
+		"port": 20410,
 		"password": "123456",
-		"database":"ns_dev"
+		"database":"js_debugger"
 	}
 }
