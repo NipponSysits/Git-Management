@@ -6,7 +6,7 @@ SET BUNDLE=builds_%ON_DATE%_version-%version%
 SET DOCKER=pgm.ns.co.th
 ECHO %version% > .meteor\deploy\build-versions
 TITLE meteor - versions %version%
-meteor build --directory .meteor/ --mobile-settings settings.json --server-only --architecture=os.linux.x86_64
+meteor build .meteor/ --mobile-settings settings.json --server-only --architecture=os.linux.x86_64
 :: RENAME debuger-Management.tar.gz %BUNDLE%.tar.gz
 :: ECHO 
 :: winscp /command ^
