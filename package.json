@@ -5,7 +5,11 @@
   "main": "index.js",
   "dependencies": {
     "jquery.cookie": "^1.4.1",
-    "md5": "^2.1.0"
+    "md5": "^2.1.0",
+    "mysql": "^2.10.2",
+    "mysql-wrap": "^0.5.3",
+    "q": "^1.4.1",
+    "socket.io-client": "^1.4.5"
   },
   "devDependencies": {},
   "scripts": {
