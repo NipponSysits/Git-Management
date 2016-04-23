@@ -1,0 +1,30 @@
+.sign.trouble {
+	background-color: #ececec;
+}
+.trouble.background {
+	background-color: #f7f7f7;
+  width: 420px;
+  padding: 15px;
+}
+.trouble > ul {
+	padding: 0px;
+}
+.trouble > ul > li {
+	background: #ececec;
+	list-style: none outside none;
+	padding: 10px 20px;
+	margin: 5px 0 0 0;
+	cursor: pointer;
+}
+.trouble-menu > .title {
+	color: #4d4d4d;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+}
+.trouble-menu > .subtitle {
+  color: #B8B8B8;
+  font-weight: normal !important;
+  margin-top: 3px;
+  cursor: pointer;
+}

@@ -5,10 +5,13 @@
 	"private": {
 
 	},
+	"domain": "127.0.0.1",
+	"git": 8100,
+	"api": 8200,
 	"mysql": {
-		"host": "mysql",
+		"host": "pgm.ns.co.th",
 		"user": "root",
-		"port": 3306,
+		"port": 3300,
 		"password": "pgm!1234",
 		"database":"js_debugger"
 	}
