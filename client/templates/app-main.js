@@ -1,38 +1,25 @@
+// Template.registerHelper('TXT', function(keyname){
+// 	keyname = keyname || '';
+// 	return '';
+// });
 
- 
+// if(Meteor.isServer){
+// 	Meteor.startup(function () {
+// 		// var mysqlStringConnection = 	"mysql://root:123567@pgm.ns.co.th:33061/ns_develop?debug=false&charset=utf8";
+// 		// var db = Mysql.connect(mysqlStringConnection);
+// 		//"posts" -> a table name inside your database. 
+// 		Posts = db.meteorCollection("users", "postsCollection");
 
-
-Meteor.methods({
-  lang: function (lang, variable) {
-  	if(typeof variable != 'object') throw 'language params is not object';
-
-  }
-});
-
-
-Template.registerHelper('TXT', function(keyname){
-	keyname = keyname || '';
-	return '';
-});
-
-if(Meteor.isServer){
-	Meteor.startup(function () {
-	 
-		var mysqlStringConnection = 	"mysql://root:123567@pgm.ns.co.th:33061/ns_develop?debug=false&charset=utf8";
-		var db = Mysql.connect(mysqlStringConnection);
-		//"posts" -> a table name inside your database. 
-		Posts = db.meteorCollection("users", "postsCollection");
-
-		Meteor.publish("allPosts", function(){
-			console.log(Posts.find());
-			return Posts.find();
-		});
-	});
-}
+// 		Meteor.publish("allPosts", function(){
+// 			console.log(Posts.find());
+// 			return Posts.find();
+// 		});
+// 	});
+// }
 if (Meteor.isClient) {
-	Posts = new Mongo.Collection("postsCollection");
+// 	Posts = new Mongo.Collection("postsCollection");
 
-	console.log(Posts, Meteor.subscribe('allPosts'));
+// 	console.log(Posts, Meteor.subscribe('allPosts'));
 	Meteor.startup(function () {
 		$(window).resize(function(){ $('.login-image').height($(window).height() - 118); });
 
@@ -53,10 +40,16 @@ Template.app.onRendered(function() {
   }
 
   $.when(
+    (function(){
+      Meteor.call("myip", function(error, results) {
+        console.log(error); //results.data should be a JSON object
+        console.log(results); //results.data should be a JSON object
+      });
+    })(),
     T.Init('<%= _SESSION.ID %>'),
     (function(){ // Prepare client feature.
       window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
-      window.origin = '<%= _HOST %>' || window.location.origin;
+      window.origin = 'pgm.ns.co.th' || window.location.origin;
 
       var feature = $.Deferred();
       if (localStorage == undefined) {

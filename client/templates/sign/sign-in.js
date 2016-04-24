@@ -5,7 +5,7 @@ Template.signIn.events({
   },
   'click #sign-trouble': function(event){
   	// $('.form.sign-in').transition('fade right', function(){
-  		Router.go('forgot');
+  		Router.go('trouble');
   	// });
   },
   'click .sign-in.button': function(){
