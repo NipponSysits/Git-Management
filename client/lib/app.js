@@ -1,4 +1,13 @@
-var md5   = require('md5');
+// window.onbeforeunload = function (evt) {
+//   var message = '• Session ?';
+//   if (typeof evt == 'undefined') {
+//     evt = window.event;
+//   }
+//   if (evt) {
+//     evt.returnValue = message;
+//   }
+//   return message;
+// }
 
 $.extend(window, {
   avatar: function(e, email, size){
@@ -99,22 +108,5 @@ window.T = {
 				localStorage.removeItem(key);
 			}
 		} catch (e) { /* Browser not support localStorage function. */ }
-	},
-  Init: function(session){
-    var aInit = $.Deferred();
-
-    if(T.Storage('SESSION_CLIENT') == null) T.Storage('SESSION_CLIENT', session);
-    $.ajaxSetup({
-      dataType: 'JSON', type: 'POST',
-      headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-Session-Client': T.Storage('SESSION_CLIENT') || session }
-    });
-
-    // if(!$.cookie('ACCESS')) {
-    //   $.getScript( "http://l2.io/ip.js?var=myip", function() { $.cookie('ACCESS', md5(myip)); aInit.resolve({ init: true}); });
-    // } else {
-      aInit.resolve({ init: true });
-    // }
-    
-    return aInit.promise();
-  }
+	}
 }
