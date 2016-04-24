@@ -3,7 +3,7 @@ var md5   = require('md5');
 $.extend(window, {
   avatar: function(e, email, size){
     size = size || 256;
-    var url = 'http://www.gravatar.com/avatar/'+md5(email || 'none')+'?d=mm&s='+size;
+    var url = '//www.gravatar.com/avatar/'+md5(email || 'none')+'?d=mm&s='+size;
     return $(e).css('background-image',"url('"+url+"')");
   },
   CallbackException : function(m1, m2) {
