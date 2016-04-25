@@ -24,7 +24,6 @@ ecmascript-runtime@0.2.10
 ejson@1.0.11
 es5-shim@4.5.10
 fastclick@1.0.11
-flemay:less-autoprefixer@1.2.0
 fourseven:scss@3.4.3
 geojson-utils@1.0.8
 hot-code-push@1.0.4
@@ -33,15 +32,9 @@ htmljs@1.0.9
 http@1.1.5
 id-map@1.0.7
 insecure@1.0.7
-iron:controller@1.0.12
-iron:core@1.0.11
-iron:dynamic-template@1.0.12
-iron:layout@1.0.12
-iron:location@1.0.11
-iron:middleware-stack@1.1.0
-iron:router@1.0.12
-iron:url@1.0.11
 jquery@1.11.8
+kadira:blaze-layout@2.3.0
+kadira:flow-router@2.12.1
 launch-screen@1.0.11
 livedata@1.0.18
 logging@1.0.12
@@ -57,7 +50,6 @@ modules-runtime@0.6.3
 mongo@1.1.7
 mongo-id@1.0.4
 npm-mongo@1.4.43
-numtel:mysql@1.0.5
 observe-sequence@1.0.11
 ordered-dict@1.0.7
 promise@0.6.7
@@ -70,7 +62,6 @@ routepolicy@1.0.10
 semantic:ui@2.1.8
 semantic:ui-css@2.1.2
 semantic:ui-data@2.1.8
-session@1.1.5
 spacebars@1.0.11
 spacebars-compiler@1.0.11
 standard-minifier-css@1.0.6
