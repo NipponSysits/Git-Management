@@ -8,14 +8,23 @@ BlazeLayout.setRoot('body');
 
 FlowRouter.route('/', {
   name: 'home',
+  triggersEnter(context, redirect, stop) {
+	  if (true) {
+	    BlazeLayout.render('app_body', { sign: 'sign_in' });
+	    stop();
+	  }
+	},
   action() {
-    BlazeLayout.render('app_body', { sign: 'sign_in' });
+    BlazeLayout.render('app_body', { main: 'dashboard' });
   },
 });
 
 // the App_notFound template is used for unknown routes and missing lists
 FlowRouter.notFound = {
+	subscriptions(){
+
+	},
   action() {
-    BlazeLayout.render('app_body', { main: 'main' });
+    BlazeLayout.render('app_error', { main: 'main' });
   },
 };
