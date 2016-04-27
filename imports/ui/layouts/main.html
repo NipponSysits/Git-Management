@@ -1,4 +1,4 @@
-<template name="app_body">
+<template name="app">
   <div class="main">
     <div class="header">
       <div class="ui prepare dimmer active">
@@ -81,31 +81,7 @@
         </div>
       </div>
     </div>
-    <div class="ui sign-in message ui error message hidden" style="position:absolute; top:0px;">
-      <i class="close icon"></i>
-      <div class="header">There was some errors with your submission</div>
-      <ul class="list"></ul>
-    </div>
-
-    <div class="ui basic modal feature-exception">
-      <div class="header"></div>
-      <div class="image content">
-        <div class="image">
-          <i class="bug icon"></i>
-        </div>
-        <div class="description">
-          <p></p>
-        </div>
-      </div>
-      <div class="actions">
-        <div class="ui inverted buttons">
-          <div class="ui red basic inverted button refresh-exception">
-            <i class="refresh icon"></i>
-            Reload
-          </div>
-        </div>
-      </div>
-    </div>
+    {{> Template.dynamic template=error}}
     <div class="footer">
       <i class="icon copyright"></i>Touno-K.com Copyright. Designed by <strong>Mr.Kananek Thongkam</strong>
     </div>

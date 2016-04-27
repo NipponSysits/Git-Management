@@ -2,6 +2,23 @@ import { Template } from 'meteor/templating';
 
 import './sign-in.html';
 
+let toPanelSignId = function(self){
+  self.$('.ui.button.sign-in').css({ 'border-radius': 0 });
+  self.$('.ui.button.sign-back, .or.sign-or').hide();
+  self.$('.form.sign-in .sign-image').hide();
+  self.$('.form.sign-in .sign-id').show();
+}
+
+let toPanelSignImage = function(self, email){
+  self.$('.ui.button.sign-in').removeAttr('style');
+  self.$('.ui.button.sign-back, .or.sign-or').show();
+  self.$('.form.sign-in .sign-id').hide();
+  self.$('.form.sign-in .sign-image').show();
+  self.$('.ui.sign-in.form').form('get field','email').val(email);
+  self.$('.form.sign-in .sign-avartar').avatar(email, 256);
+  self.$('.form.sign-in .sign-email').html(email);
+}
+
 Template.SignIn.events({
   'change .ui.remember-id input': function(event) {
   	T.Storage('signin-remember-id', event.target.checked ? 'check': 'uncheck');
@@ -17,7 +34,7 @@ Template.SignIn.events({
   	return false;
   },
   'click .sign-back.button': function(){
-  	console.log('.sign-back.button');
+  	toPanelSignId(self);
   }
 });
 
@@ -29,30 +46,12 @@ Template.SignIn.helpers({
 
 Template.SignIn.onRendered(function() {
   var self = this;
-  var eventBackSignIn = function() {
-    $('.ui.button.sign-in').css({ 'border-radius': 0 });
-    $('.ui.button.sign-back, .or.sign-or').hide();
+  T.Storage('signin-username', 'kem@ns.co.th');
+  $('.ui.remember-id').checkbox(T.Storage('signin-remember-id') || 'uncheck');  // 
+
+  if(T.Storage('signin-remember-id') == 'check' && T.Storage('signin-username')) {
+    toPanelSignImage(self, T.Storage('signin-username'));
+  } else {
+    toPanelSignId(self);
   }
-
-  var onSignIn = function(){
-    // $('.ui.dimmer.component').transition('hide');
-    $('.ui.dimmer.prepare').fadeOut(300);
-    $('.ui.panel.sign-in').fadeIn(300);
-    $('.ui.access.grid').show();
-  }
-  onSignIn();
-  $(window).resize();
-  $('.user-menu').hide();
-  // avatar('.user-menu .item.profile .user-image', 'none', 64);
-
-  $('.ui.remember-id').checkbox('uncheck');  // T.Storage('signin-remember-id') || 
-
-  // if(T.Storage('signin-remember-id') == 'check' && T.Storage('signin-username')) {
-  //   $('.ui.sign-id').hide()
-  //   $('.ui.sign-image').show();
-  //   eventRememberSignIn(T.Storage('signin-username'));
-  //   $('.ui.sign-in.form').form('get field','email').val(T.Storage('signin-username'));
-  // } else {
-  //   eventBackSignIn();
-  // }
 });

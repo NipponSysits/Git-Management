@@ -1,3 +1,5 @@
+import '../../ui/layouts/sign';
+
 var signRoutes = FlowRouter.group({
   prefix: '/Account',
   triggersEnter: [function(context, redirect, stop) {
@@ -9,28 +11,18 @@ var signRoutes = FlowRouter.group({
   }]
 });
 
-FlowRouter.route('/SignAccount', {
-  name: 'sign',
-  action() {
-  	BlazeLayout.render('app_body', { sign: 'SignIn' });
-  },
-});
-
 // handling /admin route
 signRoutes.route('/SignIn', {
   name: 'sign',
   action: function() {
-    BlazeLayout.render('app_body', { sign: 'SignIn' });
-  },
-  triggersEnter: [function(context, redirect) {
-    console.log('running /admin trigger');
-  }]
+    BlazeLayout.render('app', { sign: 'SignIn' });
+  }
 });
 
 // handling /admin/posts
 signRoutes.route('/TroubleSigning', {
   name: 'trouble',
   action: function() {
-    BlazeLayout.render('app_body', { sign: 'SignIn' });
+    BlazeLayout.render('app', { sign: 'Troubleshoot' });
   }
 });
