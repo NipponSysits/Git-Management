@@ -10,6 +10,15 @@ $.fn.extend({
 });
 
 window.T = {
+	Call : function(name, param){
+	  let result = new MysqlSubscription("allPlayers", param, function() { 
+	    if(result[0]) {
+	    	// result[0]
+	    } else {
+	    	// undefined
+	    }
+	  });
+	},
 	Timestamp : parseInt((new Date().getTime() / 1000)),
 	Storage: function(key, setValue) {
 		var getValue = null;
