@@ -13,7 +13,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "meteor --port 8220 --settings local.json"
   },
   "repository": {
     "type": "git",
