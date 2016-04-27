@@ -5,18 +5,20 @@ import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 import '../../ui/layouts/main.js';
 import '../../ui/layouts/sign/sign-in.js';
 
+import './routes-sign.js';
+
 BlazeLayout.setRoot('body');
 
 FlowRouter.route('/', {
   name: 'home',
-  triggersEnter(context, redirect, stop) {
-	  if (true) {
-	    BlazeLayout.render('app_body', { sign: 'SignIn' });
-	    stop();
-	  }
-	},
   action() {
-    BlazeLayout.render('app_body', { main: 'dashboard' });
+    BlazeLayout.render('app_body');
+    if (true) {
+      FlowRouter.go('sign');
+    } else {
+      BlazeLayout.render('app_body', { main: 'dashboard' });
+    }
+    
   },
 });
 
