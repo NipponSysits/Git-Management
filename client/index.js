@@ -1,5 +1,10 @@
-var md5 = require('md5');
+import { Meteor } from 'meteor/meteor';
+
 import '../imports/startup/client';
+
+const md5 		= require('md5');
+const Q 			= require('q');
+
 
 $.fn.extend({
   avatar: function(email, size) {
@@ -11,13 +16,16 @@ $.fn.extend({
 
 window.T = {
 	Call : function(name, param){
-	  let result = new MysqlSubscription("allPlayers", param, function() { 
+		let def = Q.defer();
+	  let result = new MysqlSubscription(name, param, function() { 
 	    if(result[0]) {
 	    	// result[0]
+	    	def.resolve(result[0]);
 	    } else {
-	    	// undefined
+	    	def.resolve();
 	    }
 	  });
+    return def.promise;
 	},
 	Timestamp : parseInt((new Date().getTime() / 1000)),
 	Storage: function(key, setValue) {

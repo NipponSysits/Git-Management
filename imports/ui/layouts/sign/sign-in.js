@@ -78,7 +78,6 @@ Template.SignIn.onRendered(function() {
     toPanelSignId();
   }
 
-
   $('.ui.sign-in.form').form({
     inline : true,
     on     : 'blur',
@@ -111,6 +110,15 @@ Template.SignIn.onRendered(function() {
 
       if(!onButton.SignIn) {
         onButton.SignIn = true;
+        
+        let auth = { 
+          username: $('.field.username input').val(), 
+          password: $('.field.password input').val() 
+        }
+
+        T.Call('allPlayers', auth).then(function(data){
+          console.log(data);
+        });
 
 
         if(!onButton.SignImage) {
