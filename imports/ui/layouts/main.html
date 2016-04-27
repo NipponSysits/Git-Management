@@ -6,58 +6,12 @@
       </div>
       <div class="ui attached menu top">
         <div class="header">
-          <div style="background-image: url('/images/pgm.management.png'); background-position: 0px 0px; background-repeat: no-repeat; background-size: cover; width:200px; height: 39px; margin: 8px 10px;">
-            <div class="ui small signout modal">
-              <div class="header">
-                PGM-Management
-              </div>
-              <div class="content">
-                <p>Are you sure you want to sign-out your account</p>
-              </div>
-              <div class="actions">
-                <div class="ui ok button">
-                  Cancel
-                </div>
-                <div class="ui negative right labeled icon button">
-                  Signout
-                  <i class="checkmark icon"></i>
-                </div>
-              </div>
-            </div>
+          <div class="pgm-logo">
+            {{> Template.dynamic template=modal }}
           </div>
         </div>
-        <div class="ui access grid" style="display:none;display:flex;margin-left:auto!important;">
-          <div class="computer tablet only row user-menu">
-            <a class="ui item home">
-              <i class="git square icon big"></i>
-            </a>
-            <a class="ui item nippon">
-              <i class="nippon icon big"></i>
-            </a>
-            <a class="ui item setting">
-              <i class="setting icon big"></i>
-            </a>
-            <div class="ui dropdown icon item profile">
-              <a class="ui item user">
-                <i class="user-image icon big"></i>
-              </a>
-              <div class="content">
-                <div class="ui fullname sub header">Unknow</div>
-                <div class="ui position">(None)</div>
-              </div>
-              <div class="menu">
-                <div class="item profile">
-                  <i class="user icon"></i>
-                  Profiles
-                </div>
-                <div class="divider"></div>
-                <div class="item signout">
-                  <i class="sign out icon"></i>
-                  Sign out
-                </div>
-              </div>
-            </div>
-          </div>
+        <div class="ui access grid" style="display:flex;margin-left:auto!important;">
+          {{> Template.dynamic template=navigator }}
         </div>
       </div>
     </div>
@@ -72,10 +26,10 @@
         </div>
       </div>
       <div class="ui panel sign-in" style="display:none;">
-        <div class="ui equal width stackable grid " style="margin:0px;">
-          <div class="column login-image" style="background-image: url('/images/login.jpg'); background-position: 0px 0px; background-repeat: no-repeat; background-size: cover; background-position: left center;"></div>
+        <div class="ui grid " style="margin:0px;">
+          <div class="ui six wide column login-image" style="background-image: url('/images/login.jpg'); background-position: 0px 0px; background-repeat: no-repeat; background-size: cover; background-position: left center;"></div>
           <!-- <canvas id="login-image" class="column login-image"></canvas> -->
-          <div class="ui column centered grid">
+          <div class="ui ten wide column centered grid">
             {{> Template.dynamic template=sign}}
           </div>
         </div>
