@@ -1,9 +1,7 @@
 import { Meteor } 	from 'meteor/meteor';
 
 const config 		= require('$custom/config');
-const db 				= require('$custom/mysql').connect();
-
-const liveDb 		= new LiveMysql(Meteor.settings.mysql);
+const liveDb 		= new LiveMysql(config.mysql);
 
 Meteor.publish('allPlayers', function(supplierid){
   return liveDb.select(`SELECT * FROM user where username ='dvgamer' LIMIT 1`, [{ 
