@@ -28,6 +28,6 @@ FlowRouter.notFound = {
 
 	},
   action() {
-    BlazeLayout.render('app', { error: 'error' });
+    BlazeLayout.render('app', { board: 'error' });
   },
 };
