@@ -10,6 +10,17 @@ Template.Forgot.onRendered(function() {
   $('.ui.panel.sign-in').fadeIn(300);
 });
 
+Template.Forgot.events({
+  'click .forgot-back.button': function(){
+  	FlowRouter.go('trouble');
+  },
+  'click .forgot-in.button': function(){
+  	$('.forgot-in.button').addClass('loading');
+  	$('.forgot-back.button').addClass('disabled');
+		FlowRouter.go('forgot');
+  }
+});
+
 // Template.register.events({
 //   'click .trouble-menu.forgot': function(event){
 //   	// $('.form.sign-in').transition('fade right', function(){
