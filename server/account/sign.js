@@ -3,8 +3,14 @@ import { Meteor } 	from 'meteor/meteor';
 const config 		= require('$custom/config');
 const liveDb 		= new LiveMysql(config.mysql);
 
-Meteor.publish('allPlayers', function(auth){
-  return liveDb.select(`SELECT * FROM user where username ='dvgamer' LIMIT 1`, [{ 
+Meteor.publish('user-verify', function(auth){
+  return liveDb.select(`SELECT username, password FROM user WHERE username='`+auth.username+`' and status='ON' LIMIT 1`, [{ 
+  	table: 'user' 
+  }]);
+});
+
+Meteor.publish('user-access', function(auth){
+  return liveDb.select(`SELECT * FROM user_access WHERE username='`+auth.username+`'`, [{ 
   	table: 'user' 
   }]);
 });
