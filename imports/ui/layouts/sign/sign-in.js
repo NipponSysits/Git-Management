@@ -57,20 +57,16 @@ Template.SignIn.helpers({
 });
 
 Template.SignIn.onRendered(function() {
+  $(window).resize();
+  $('.ui.dimmer.prepare').fadeOut(300);
+
+  $('.ui.access.grid').show();
+  $('.ui.panel.sign-in').fadeIn(300);
+
   T.Storage('signin-username', 'kem@ns.co.th');
   $('.ui.remember-id').checkbox(T.Storage('signin-remember-id') || 'uncheck');  // 
 
-  $('.user-menu > .item.profile').dropdown();
-  $('.user-menu').hide();
-  $('.ui.dimmer.prepare').fadeOut(300);
 
-  var onSignIn = function(){
-    // $('.ui.dimmer.component').transition('hide');
-    $(window).resize();
-    $('.ui.access.grid').show();
-    $('.ui.panel.sign-in').fadeIn(300);
-  }
-  onSignIn();
 
   if(T.Storage('signin-remember-id') == 'check' && T.Storage('signin-username')) {
     toPanelSignImage(T.Storage('signin-username'));

@@ -1,8 +1,9 @@
-import './main.html';
-
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { Session } from 'meteor/session';
+
+import './main.html';
+
 
 let language = require('/imports/language/en-EN.js');
 
