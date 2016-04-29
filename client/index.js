@@ -1,4 +1,6 @@
 import { Meteor } from 'meteor/meteor';
+import { Session }  from 'meteor/session';
+
 
 import '../imports/startup/client';
 
@@ -32,13 +34,26 @@ window.T = {
 	Call : function(name, param){
 		let def = Q.defer();
 	  let result = new MysqlSubscription(name, param, function() { 
-	    if(result[0]) {
+	    if(result) {
 	    	// result[0]
-	    	def.resolve(result[0]);
+	    	def.resolve(result);
 	    } else {
 	    	def.resolve();
 	    }
 	  });
+    return def.promise;
+	},
+	Init:function(timestamp){
+		let def = Q.defer();
+  	Session.set('ACCESS_TIME', timestamp); 
+    if(!T.Storage('SESSION_CLIENT')) {
+      $.getScript("//l2.io/ip.js?var=myip", function() { 
+      	T.Storage('SESSION_CLIENT', md5(myip).toUpperCase()); 
+      	def.resolve(true); 
+      });
+    } else {
+      def.resolve(true);
+    }
     return def.promise;
 	},
 	Timestamp : parseInt((new Date().getTime() / 1000)),
@@ -49,11 +64,12 @@ window.T = {
 				getValue = window.localStorage.getItem(key);
 				try { getValue = JSON.parse(getValue); } catch (e) { }
 			} else if (typeof setValue === 'object') {
-				getValue = JSON.stringify(setValue);
-			} else {
+				setValue = JSON.stringify(setValue);
 				window.localStorage.setItem(key, setValue.toString());
+			} else {
+				window.localStorage.setItem(key, setValue);
 			}
-		} catch (e) { /* Browser not support localStorage function. */ }
+		} catch (e) { console.log('catch', e);/* Browser not support localStorage function. */ }
 		return getValue;
 	},
 	StorageClear: function(key){
