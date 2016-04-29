@@ -1,7 +1,5 @@
 body {
     padding: 0px;
-    font-family: "Segoe UI", Tahoma !important;
-    font-size: 12px;
     background-color: #ececec;
     overflow: hidden !important;
     overflow-y: visible !important;
@@ -29,7 +27,13 @@ div.pgm-logo {
     margin: 8px 10px;
 }
 
-
+div.login-image {
+    background-image: url('/images/login.jpg'); 
+    background-position: 0px 0px; 
+    background-repeat: no-repeat; 
+    background-size: cover; 
+    background-position: left center;
+}
 
 div.ui.menu.attached.top {
     background-color: #171d2c;
@@ -90,6 +94,10 @@ a.link {
     font-weight:bold;
     font-size:13px;
     cursor:pointer;
+}
+
+h2.ui.header {
+    margin: 1em 0em !important;
 }
 
 .item.profile, .item.user, .item.setting, .item.home, .item.nippon { padding: 5px 3px 0px 3px !important }
@@ -233,22 +241,4 @@ div.ui.floating.label{
 .ui.list.repository > .item:hover {
     cursor: pointer;
     background-color: #ececec; 
-}
-
-
-
-@media only screen and (max-width: 767px){
-    .ui.grid.main-component > .column.module {
-        margin-right: 1px !important;
-        padding: 0px !important;
-    }
-    .ui.grid.main-component > .column.module:first-child{
-        padding-top: 0px !important;
-    }
-    div.login-image{
-        display: none !important;
-    }
-    div.footer{
-        text-align: center;
-    }
 }

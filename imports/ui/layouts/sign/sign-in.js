@@ -1,8 +1,12 @@
 import { Template } from 'meteor/templating';
 import { Session }  from 'meteor/session';
 
+
 import './sign-in.html';
-require('/imports/language')('SignIn');
+
+let md5       = require('md5');
+let moment    = require('moment');
+let translate = require('/imports/language')('SignIn');
 
 let onButton = { SignIn: false, SignImage: false, Nav: true };
 let toPanelSignId = function(fade){
@@ -15,7 +19,7 @@ let toPanelSignId = function(fade){
   }
 }
 
-let toPanelSignImage = function(email, fade){
+let toPanelSignImage = function(fullname, email, fade){
   onButton.SignImage = true;
   $('.ui.button.sign-in').removeAttr('style');
   $('.ui.button.sign-back, .or.sign-or').show();
@@ -25,7 +29,8 @@ let toPanelSignImage = function(email, fade){
   }
   $('.field.username input').val(email);
   $('.form.sign-in .sign-avartar').avatar(email, 256);
-  $('.form.sign-in .sign-email').html(email);
+  $('.form.sign-in .sign-email').html(fullname);
+  T.Storage('signin-username', { fullname: fullname, email: email});
 }
 
 
@@ -59,21 +64,18 @@ Template.SignIn.helpers({
 
 Template.SignIn.onRendered(function() {
   $(window).resize();
-  $('.ui.dimmer.prepare').fadeOut(300);
-
-  $('.ui.access.grid').show();
-  $('.ui.panel.sign-in').fadeIn(300);
-
-  T.Storage('signin-username', 'kem@ns.co.th');
   $('.ui.remember-id').checkbox(T.Storage('signin-remember-id') || 'uncheck');  // 
 
-
-
   if(T.Storage('signin-remember-id') == 'check' && T.Storage('signin-username')) {
-    toPanelSignImage(T.Storage('signin-username'));
+    let user = T.Storage('signin-username');
+    toPanelSignImage(user.fullname, user.email);
   } else {
     toPanelSignId();
   }
+
+  console.log('core!4555', md5('core!4555'));
+  console.log('dvg7po8ai', md5('dvg7po8ai'));
+  console.log('123456', md5('123456'));
 
   $('.ui.sign-in.form').form({
     inline : true,
@@ -82,15 +84,15 @@ Template.SignIn.onRendered(function() {
       email: {
         identifier: 'email',
         rules: [
-          { type: 'empty', prompt: 'Please enter your e-mail again' },
-          { type: 'email', prompt: 'Please enter a valid e-mail' }
+          { type: 'empty', prompt: translate('valid.email.empty') },
+          { type: 'email', prompt: translate('valid.email.invalid') }
         ]
       },
       password: {
         identifier: 'password',
         rules: [
-          { type: 'empty', prompt: 'Please enter your password again' },
-          { type: 'length[6]', prompt: 'Your password must be at least 6 characters' }
+          { type: 'empty', prompt: translate('valid.password.empty') },
+          { type: 'length[6]', prompt: translate('valid.password.length') }
         ]
       }
 
@@ -110,23 +112,46 @@ Template.SignIn.onRendered(function() {
         
         let auth = { 
           username: $('.field.username input').val(), 
-          password: $('.field.password input').val() 
+          password: md5($('.field.password input').val()) 
         }
 
-        T.Call('user-verify', auth).then(function(data){
-          console.log('user-verify');
-        });
-
-
-        if(!onButton.SignImage) {
-          $('.ui.sign-id').transition('remove looping').transition({ 
-            animation: 'fade right', 
-            onComplete: function(){
-              $('.ui.sign-image').transition('fade right');
+        T.Call('user-verify', auth).then(function(user){
+          if(user.length <= 0) {
+            $('.field.username').addClass('error');
+            $('.field.username input').val('').focus().blur().focus();
+            $('.field.password input').val('');
+          } else {
+            if(!onButton.SignImage) {
+              $('.ui.sign-id').transition('remove looping').transition({ 
+                animation: 'fade right', 
+                onComplete: function(){
+                  $('.ui.sign-image').transition('fade right');
+                }
+              });
+              toPanelSignImage(user[0].fullname, auth.username, true);
             }
-          });
-          toPanelSignImage($('.field.username input').val(), true);
-        }
+
+            if(user[0].password != auth.password) {
+              $('.field.password').addClass('error');
+              $('.field.password input').val('').focus().blur().focus();
+            } else {
+              // Successful
+              $('.ui.dimmer.prepare').fadeIn(300);
+              $('.ui.panel.sign-in').fadeOut(300, function(){
+                return T.Init(moment().unix()).then(function(){
+                  $('.ui.panel.main').fadeIn();
+                });
+              });
+            }
+          }   
+          onButton.SignIn = false;
+          $('.button.sign-in').addClass('positive green').removeClass('loading');
+          $('.ui.sign-trouble').show();
+          $('.field.username, .field.remember, .field.password, .button.sign-back').removeClass('disabled');
+
+        }).catch(function(ex){
+          console.log('ex', ex);
+        });
 
 
         // T.Call({ url:'/api/sign-in', data: fields }).then(function(e, res){
@@ -149,9 +174,7 @@ Template.SignIn.onRendered(function() {
         //     }
         //     if(!res.pass) {
         //       //console.log('password fail');
-              onButton.SignIn = false;
-              $('.field.password').addClass('error');
-              $('.field.password input').val('').focus().blur().focus();
+
         //     }
 
         //   }
@@ -166,9 +189,6 @@ Template.SignIn.onRendered(function() {
         //     });
         //     eventRememberSignIn($('.ui.sign-in.form').form('get field','email').val());
         //   }
-            $('.button.sign-in').addClass('positive green').removeClass('loading');
-            $('.ui.sign-trouble').show();
-            $('.field.username, .field.remember, .field.password, .button.sign-back').removeClass('disabled');
 
         // });
       }

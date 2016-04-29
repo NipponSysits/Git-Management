@@ -23,9 +23,8 @@
         </div>
       </div>
       <div class="ui panel sign-in" style="display:none;">
-        <div class="ui grid " style="margin:0px;">
-          <div class="ui seven wide column login-image" style="background-image: url('/images/login.jpg'); background-position: 0px 0px; background-repeat: no-repeat; background-size: cover; background-position: left center;"></div>
-          <!-- <canvas id="login-image" class="column login-image"></canvas> -->
+        <div class="ui stackable grid " style="margin:0px;">
+          <div class="ui computer only seven wide column login-image"></div>
           <div class="ui nine wide column centered grid">
             {{> Template.dynamic template=sign}}
           </div>
@@ -34,7 +33,7 @@
     </div>
     {{> Template.dynamic template=error}}
     <div class="footer">
-      <i class="icon copyright"></i>Touno-K.com Copyright. Designed by <strong>Mr.Kananek Thongkam</strong>
+      <i class="icon copyright"></i>{{translate 'copyright'}} <strong>{{translate 'author'}}</strong>
     </div>
   </div>
 </template>

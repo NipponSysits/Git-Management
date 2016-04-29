@@ -4,10 +4,7 @@ import './register.html';
 
 Template.Register.onRendered(function() {
   $(window).resize();
-  $('.ui.dimmer.prepare').fadeOut(300);
 
-  $('.ui.access.grid').show();
-  $('.ui.panel.sign-in').fadeIn(300);
 });
 
 // Template.register.events({
