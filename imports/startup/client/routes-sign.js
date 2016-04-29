@@ -3,7 +3,6 @@ import '../../ui/layouts/sign';
 var signRoutes = FlowRouter.group({
   prefix: '/Member',
   triggersEnter: [function(context, redirect, stop) {
-    console.log('running group triggers');
     if(false) {
     	FlowRouter.go('home');
     	stop();
