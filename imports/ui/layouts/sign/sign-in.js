@@ -2,6 +2,7 @@ import { Template } from 'meteor/templating';
 import { Session }  from 'meteor/session';
 
 import './sign-in.html';
+require('/imports/language')('SignIn');
 
 let onButton = { SignIn: false, SignImage: false, Nav: true };
 let toPanelSignId = function(fade){
@@ -112,8 +113,8 @@ Template.SignIn.onRendered(function() {
           password: $('.field.password input').val() 
         }
 
-        T.Call('allPlayers', auth).then(function(data){
-          console.log(data);
+        T.Call('user-verify', auth).then(function(data){
+          console.log('user-verify');
         });
 
 
