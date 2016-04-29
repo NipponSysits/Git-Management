@@ -5,6 +5,20 @@ import '../imports/startup/client';
 const md5 		= require('md5');
 const Q 			= require('q');
 
+let SignalConnected = true;
+
+const IdSignal = Meteor.setInterval(function(){
+	let io = Meteor.status();
+	if(SignalConnected != io.connected) {
+		if(io.connected) {
+			// hide preload
+		} else {
+			// show preload
+		}
+		SignalConnected = io.connected;
+	}
+}, 3000);
+
 
 $.fn.extend({
   avatar: function(email, size) {
