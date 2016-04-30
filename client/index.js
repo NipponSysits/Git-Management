@@ -24,8 +24,9 @@ const IdSignal = Meteor.setInterval(function(){
 
 $.fn.extend({
   avatar: function(email, size) {
+
     size = size || 256;
-    var url = '//www.gravatar.com/avatar/'+md5(email || 'none')+'?d=mm&s='+size;
+    var url = '//www.gravatar.com/avatar'+(email ? '/'+md5(email) : '')+'?d=mm&s='+size;
     return $(this).css('background-image',"url('"+url+"')");
   }
 });
@@ -45,15 +46,22 @@ window.T = {
 	},
 	Init:function(timestamp){
 		let def = Q.defer();
-  	Session.set('ACCESS_TIME', timestamp); 
-    if(!T.Storage('SESSION_CLIENT')) {
-      $.getScript("//l2.io/ip.js?var=myip", function() { 
-      	T.Storage('SESSION_CLIENT', md5(myip).toUpperCase()); 
-      	def.resolve(true); 
-      });
-    } else {
-      def.resolve(true);
-    }
+  	if(timestamp != undefined) {
+  		Session.set('ACCESS_TIME', timestamp); 
+	    if(!T.Storage('SESSION_CLIENT')) {
+	      $.getScript("//l2.io/ip.js?var=myip", function() { 
+	      	T.Storage('SESSION_CLIENT', md5(myip).toUpperCase()); 
+	      	def.resolve(true); 
+	      });
+	    } else {
+	      def.resolve(true);
+	    }
+	  } else {
+	  	T.Call('user-access', T.Storage('SESSION_CLIENT')).then(function(req){
+
+	  	});
+	  }
+
     return def.promise;
 	},
 	Timestamp : parseInt((new Date().getTime() / 1000)),

@@ -1,6 +1,6 @@
 module.exports = {
 	'app': {
-		'copyright'		:'Touno-K.com Copyright. Designed by',
+		'copyright'		:'Touno-K.com Copyright. ',
 		'author'			:'Mr.Kananek Thongkam'
 	},
 	'SignIn': {

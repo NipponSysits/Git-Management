@@ -1,13 +1,7 @@
 import '../../ui/layouts/sign';
 
 var signRoutes = FlowRouter.group({
-  prefix: '/Member',
-  triggersEnter: [function(context, redirect, stop) {
-    if(false) {
-    	FlowRouter.go('home');
-    	stop();
-    }
-  }]
+  prefix: '/Member'
 });
 
 signRoutes.route('/SignIn', {
