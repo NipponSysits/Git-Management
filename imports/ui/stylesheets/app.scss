@@ -83,6 +83,13 @@ div.ui.menu.navigator a.item.selected {
     border-radius: 0px;
     box-shadow: none;
 }
+i.icon.repositiory {
+    background-image: url('/icon/repos-icon.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 30px;
+    height: 30px;
+}
 i.icon.nippon {
     background-image: url('/icon/ns-icon.png');
     background-repeat: no-repeat;
@@ -100,7 +107,7 @@ h2.ui.header {
     margin: 1em 0em !important;
 }
 
-.item.profile, .item.user, .item.setting, .item.home, .item.nippon { padding: 5px 3px 0px 3px !important }
+.item.profile, .item.user, .item.setting, .item.repositiory, .item.home, .item.nippon { padding: 5px 3px 0px 3px !important }
 .item.profile div.content { padding: 7px 35px 7px 5px !important; }
 
 .ui.access.grid * { color:#FFFFFF; }
@@ -151,8 +158,8 @@ div.ui.floating.label{
 .ui.access.grid .ui.item { 
     border-bottom: transparent solid 5px;
 }
-.ui.access.grid .ui.item:hover { 
-    background-color: rgb(45, 103, 160);
+.ui.access.grid .ui.item:hover {
+    background-color: #2d67a0;
 }
 .ui.access.grid .ui.item.user:hover { 
     background-color: transparent;

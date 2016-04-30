@@ -1,21 +1,21 @@
-<template name="MenuUser">
+<template name="Navigator">
   <div class="computer tablet only row user-menu">
     <a class="ui item home">
-      <i class="git square icon big"></i>
+      <i class="home icon big"></i>
+    </a>
+    <a class="ui item repositiory">
+      <i class="repositiory icon big"></i>
     </a>
     <a class="ui item nippon">
       <i class="nippon icon big"></i>
     </a>
-    <a class="ui item setting">
-      <i class="setting icon big"></i>
-    </a>
-    <div class="ui dropdown icon item profile">
-      <a class="ui item user">
-        <i class="user-image icon big"></i>
+    <div class="ui dropdown item profile" style="padding-top: 6px !important;">
+      <a class="ui item user" style="width: 50px;">
+        <i class="setting icon big"></i>
       </a>
       <div class="content">
-        <div class="ui fullname sub header">Unknow</div>
-        <div class="ui position">(None)</div>
+        <div class="ui fullname sub header">{{getFullname}}</div>
+        <div class="ui position">({{getPosition}})</div>
       </div>
       <div class="menu">
         <div class="item profile">
@@ -27,6 +27,23 @@
           <i class="sign out icon"></i>
           Sign out
         </div>
+      </div>
+    </div>
+  </div>  
+  <div class="ui small signout modal">
+    <div class="header">
+      PGM-Management
+    </div>
+    <div class="content">
+      <p>Are you sure you want to sign-out your account</p>
+    </div>
+    <div class="actions">
+      <div class="ui ok button">
+        Cancel
+      </div>
+      <div class="ui negative right labeled icon button">
+        Signout
+        <i class="checkmark icon"></i>
       </div>
     </div>
   </div>

@@ -1,5 +1,6 @@
 import { Template } from 'meteor/templating';
 import { Session }  from 'meteor/session';
+import { FlowRouter } from 'meteor/kadira:flow-router';
 
 
 import './sign-in.html';
@@ -111,7 +112,7 @@ Template.SignIn.onRendered(function() {
         onButton.SignIn = true;
         
         let auth = { 
-          username: $('.field.username input').val(), 
+          email: $('.field.username input').val(), 
           password: md5($('.field.password input').val()) 
         }
 
@@ -128,18 +129,22 @@ Template.SignIn.onRendered(function() {
                   $('.ui.sign-image').transition('fade right');
                 }
               });
-              toPanelSignImage(user[0].fullname, auth.username, true);
+              toPanelSignImage(user[0].fullname, auth.email, true);
             }
 
             if(user[0].password != auth.password) {
               $('.field.password').addClass('error');
               $('.field.password input').val('').focus().blur().focus();
             } else {
+              auth.username = user[0].username;
+              auth.fullname = user[0].fullname; 
               // Successful
+              Session.set('ACCOUNT', auth);
               $('.ui.dimmer.prepare').fadeIn(300);
               $('.ui.panel.sign-in').fadeOut(300, function(){
-                return T.Init(moment().unix()).then(function(){
+                return T.Init(T.Timestamp).then(function(user){
                   $('.ui.panel.main').fadeIn();
+                  FlowRouter.go('/'+auth.username);
                 });
               });
             }

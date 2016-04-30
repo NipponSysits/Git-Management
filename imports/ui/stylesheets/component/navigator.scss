@@ -1,0 +1,15 @@
+.item {
+	&.profile {
+		.setting {
+			width: 39px;
+			margin: 0px;
+		}
+		.fullname {
+			font-size: 1.1em
+		}
+		.position {
+			font-size: 0.8em
+		}
+	}
+}
+
