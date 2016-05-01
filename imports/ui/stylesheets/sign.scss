@@ -36,6 +36,19 @@
 	background: #DEF;
 }
 
+div.or.sign-or::before{
+    top:57% !important;
+    line-height: 1.785714em !important;
+}
+div.ui.panel.sign-in div.ui.basic.prompt.label {
+    position: absolute;
+    z-index: 1;
+    right: 0px;
+    margin-top: -70px; 
+}
+
+
+
 .column.step {
 	background-color: #d6d7d8;
 	padding: 3px !important;

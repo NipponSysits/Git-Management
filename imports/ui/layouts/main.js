@@ -13,7 +13,7 @@ Meteor.startup(() => {
   // if (true) {
   //   FlowRouter.go('sign');
   // } else {
-    FlowRouter.go('dashboard', { username: 'dvgamer' });
+    // FlowRouter.go('dashboard', { username: 'dvgamer' });
   // }
 
 
@@ -24,9 +24,6 @@ Template.app.onCreated(function() {
 });
 
 Template.app.onRendered(function() {
-
-  $('.ui.dimmer.prepare').fadeOut(300);
-  $('.ui.panel.main').fadeIn(300);
 
 });
 

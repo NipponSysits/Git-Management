@@ -65,6 +65,9 @@ Template.SignIn.helpers({
 
 Template.SignIn.onRendered(function() {
   $(window).resize();
+  $('.ui.dimmer.prepare').fadeOut(300);
+  $('.ui.panel.sign-in').fadeIn(300);
+  $('.ui.panel.main').hide();
   $('.ui.remember-id').checkbox(T.Storage('signin-remember-id') || 'uncheck');  // 
 
   if(T.Storage('signin-remember-id') == 'check' && T.Storage('signin-username')) {

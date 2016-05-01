@@ -5,7 +5,9 @@ import './forgot.html';
 
 Template.Forgot.onRendered(function() {
   $(window).resize();
-
+  $('.ui.dimmer.prepare').fadeOut(300);
+  $('.ui.panel.sign-in').fadeIn(300);
+  $('.ui.panel.main').hide();
 });
 
 Template.Forgot.events({
