@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "chart.js": "^2.0.2",
     "counterpart": "^0.17.2",
     "jquery.cookie": "^1.4.1",
     "md5": "^2.1.0",

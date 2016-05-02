@@ -122,6 +122,21 @@ h2.ui.header.avatar {
 	}
 }
 
+.row > .column.module {
+    width: 100%;
+}
+.column.module {
+    background-color: #F7F7F7;
+    padding: 0px;
+}
+.column.module > h5 {
+    background-color: #171D2C;
+    padding: 10px;
+    color: #FFFFFF;
+}
+
+
+
 
 // Mobile
 @media only screen and (max-width: 767px) {

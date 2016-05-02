@@ -16,8 +16,8 @@ FlowRouter.route('/', {
   name: 'home',
   triggersEnter:function(context, redirect) {
     var user = Session.get('ACCESS');
-    if(!user) {
-      redirect('dashboard', { username: user || 'dvgamer' });
+    if(user) {
+      redirect('dashboard', { username: user.username });
     } else {
       redirect('sign');
     }

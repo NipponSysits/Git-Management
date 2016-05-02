@@ -4,7 +4,10 @@ const config 		= require('$custom/config');
 const liveDb 		= new LiveMysql(config.mysql);
 
 Meteor.publish('user-verify', function(auth){
-  return liveDb.select(`SELECT username, password, CONCAT(name, ' ',surname) fullname FROM user WHERE email='`+auth.email+`' and status='ON' LIMIT 1`, [{ 
+	let query = `SELECT a.* , u.password FROM user u JOIN user_access a ON a.user_id = u.user_id `;
+	let where = `WHERE u.email='`+auth.email+`' and u.status='ON' LIMIT 1`;
+
+  return liveDb.select(query+where, [{ 
   	table: 'user' 
   }]);
 });
