@@ -139,15 +139,13 @@ Template.SignIn.onRendered(function() {
               $('.field.password').addClass('error');
               $('.field.password input').val('').focus().blur().focus();
             } else {
-              auth.username = user[0].username;
-              auth.fullname = user[0].fullname; 
               // Successful
-              Session.set('ACCOUNT', auth);
               $('.ui.dimmer.prepare').fadeIn(300);
               $('.ui.panel.sign-in').fadeOut(300, function(){
-                return T.Init(T.Timestamp).then(function(user){
+                return T.Init(T.Timestamp).then(function(){
+                  Session.set('ACCESS', user[0]);
                   $('.ui.panel.main').fadeIn();
-                  FlowRouter.go('/'+auth.username);
+                  FlowRouter.go('dashboard', { username: user[0].username });
                 });
               });
             }

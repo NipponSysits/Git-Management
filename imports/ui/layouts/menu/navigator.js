@@ -10,16 +10,20 @@ import './navigator.html';
 
 Template.Navigator.helpers({
 	isLogin: function(){
-		return Session.get('ACCESS') ? true : false;
+    let ac = Session.get('ACCESS');
+		return ac ? true : false;
 	},
-	// isNoLogin: function(){
-	// 	return Session.get('ACCESS') ? true : false;
-	// },
+	isAttended: function(){
+    let ac = Session.get('ACCESS');
+		return ac.attended ? true : false;
+	},
 	getFullname: function(){
-		return (Session.get('ACCESS') || { fullname: 'Unknow' }).fullname;
+    let ac = Session.get('ACCESS') || { fullname: 'Unknow' };
+		return ac.fullname;
 	},
 	getPosition: function(){
-		return (Session.get('ACCESS') || { position: 'None' }).position;
+    let ac = Session.get('ACCESS') || { position: 'None' };
+		return ac.position;
 	}, 
 });
 
