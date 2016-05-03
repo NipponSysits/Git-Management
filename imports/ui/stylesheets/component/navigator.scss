@@ -1,22 +1,23 @@
 .ui.menu {
-	.item {
-		&.profile, &.signin {
-			.setting {
-				width: 39px;
-				margin: 0px;
-			}
-			.fullname {
-				font-size: 1.1em
-			}
-			.position {
-				font-size: 0.8em
-			}
-		}
-		&:before {
-	    width: 0px;
-			background: transparent;
-		}
-	}
+    .item {
+        &.content {
+            padding-top: 4px;
+            .setting {
+    	       width: 39px;
+    	       margin: 0px;
+    		}
+    		.fullname {
+    			font-size: 1.1em
+    		}
+    		.position {
+    			font-size: 0.8em
+    		}
+    	}
+    	&:before {
+        width: 0px;
+    		background: transparent;
+    	}
+    }
 }
 
 div.ui.menu.navigator {
@@ -69,6 +70,17 @@ h2.ui.header {
 .item.profile, .item.user, .item.setting, .item.repository, .item.home, .item.nippon, .item.sign, .item.signin { padding: 5px 3px 0px 3px !important }
 .item.profile div.content, .item.signin div.content { padding: 7px 35px 7px 5px !important; }
 
+.item.profile {
+    background-size: contain;
+    padding-top: 6px !important;
+    margin-left: 8px !important;
+    border-bottom: none !important;
+}
+
+.item.profile.online {
+    border-left: #2A920E solid 3px;
+}
+
 .ui.access.grid * { color:#FFFFFF; }
 
 .ui.access.grid .ui.item.dropdown .menu {
@@ -104,7 +116,7 @@ div.ui.floating.label{
     font-size: 10px;
 }
 .ui.access.grid .ui.item.dropdown > .menu {
-    top: 109%;
+    min-width: 170px;
 }
 .ui.access.grid .ui.item.dropdown > .menu > .item {
     color:#FFFFFF !important;
@@ -117,8 +129,13 @@ div.ui.floating.label{
 .ui.access.grid .ui.item { 
     border-bottom: transparent solid 5px;
 }
-.ui.access.grid .ui.item:hover {
+.ui.access.grid .ui.item:not(.content):hover {
     background-color: #2d67a0;
+}
+.ui.access.grid .ui.item.content {
+    padding: 5px 3px 0px 3px !important;
+    margin-left: 30px;
+    text-align: right;
 }
 .ui.access.grid .ui.item.user:hover { 
     background-color: transparent;

@@ -3,42 +3,43 @@ import { Template } from 'meteor/templating';
 import { Session } from 'meteor/session';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import Chart from 'chart.js';
-
+// import Chart from 'chart.js';
 
 require('/imports/language')('Dashboard');
 
 import './dashboard.html';
 
+let DashboardProfile = null;
+let dashboard = {
+  show: function () {
+    $('.ui.dimmer.prepare').fadeOut(300);  
+    $('.ui.panel.main, .ui.panel.board').show();
+  },
+  hide: function () {
+    $('.ui.dimmer.prepare').fadeOut(300);  
+    $('.ui.panel.main, .ui.panel.board').show();
+  }
+}
+
+
+Template.Dashboard.onCreated(function(){
+  dashboard.hide();
+});
+
+
 Template.Dashboard.onRendered(() => {
-  $('.ui.dimmer.prepare').fadeOut(300);
-  $('.ui.panel.sign-in').hide();
-  $('.ui.panel.main').show();
-  
   $('.user-menu > .item').removeClass('selected');
   $('.user-menu > .item.home').addClass('selected');
 
-  var ctx = $("#myChart");
-
-var data = {
-    labels: ["สาย", "ลาป่วย/มีใบรับรอง", "ลากิจ", "ขาดงาน", "ล่ป่วย/ไม่มีใบรับรอง", "ลาพักร้อน"],
-    datasets: [
-        {
-            label: "",
-            backgroundColor: "rgba(179,181,198,0.2)",
-            borderColor: "rgba(179,181,198,1)",
-            pointBackgroundColor: "rgba(179,181,198,1)",
-            pointBorderColor: "#fff",
-            pointHoverBackgroundColor: "#fff",
-            pointHoverBorderColor: "rgba(179,181,198,1)",
-            data: [65, 59, 90, 0, 56, 80]
-        }
-    ]
-};
-
-var myRadarChart = new Chart(ctx, {
-    type: 'radar',
-    data: data
-});
-
+  let username = FlowRouter.getParam('username');
+  if(DashboardProfile != username) {
+    T.Call('getDashboardProfile', 'dvgamer').then(function(data){
+      setTimeout(function(){
+        dashboard.show();
+        $('.ui.panel.sign-in').hide();
+      }, 3000);
+    });
+  } else {
+    dashboard.show();
+  }
 });

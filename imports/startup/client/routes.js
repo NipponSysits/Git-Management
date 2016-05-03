@@ -32,9 +32,6 @@ FlowRouter.route('/', {
 
 FlowRouter.route('/Repositories', {
   name: 'repository',
-  subscriptions:function() {
-
-  },
   action:function() {
     console.log('route --', FlowRouter.getRouteName(), FlowRouter.getParam());
     BlazeLayout.render('app', { 
@@ -63,7 +60,7 @@ FlowRouter.route('/:username', {
   action:function() {
     let username = FlowRouter.getParam('username');
     if(!username) {
-      Session.get('USER')
+      // Session.get('USER')
     }
 
     console.log('route --', FlowRouter.getRouteName(), FlowRouter.getParam());
@@ -72,6 +69,7 @@ FlowRouter.route('/:username', {
       board: 'UserStatus',
       navigator: 'Navigator'
     });
+
   },
 });
 

@@ -64,6 +64,6 @@ Template.Navigator.events({
 Template.Navigator.onRendered(function() {
 	var self = this;
   $('.user-menu > .item.profile').dropdown();
-
+  $('.user-menu > .item.profile').avatar('kem@ns.co.th', 64);
   // $('.header.avatar .stats.avatar').avatar(null, 96);
 });

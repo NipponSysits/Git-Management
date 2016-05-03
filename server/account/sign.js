@@ -46,3 +46,8 @@ Meteor.publish('user-access', function(auth){
 //     return db.query('select * from user', {});
 //   }
 // });
+
+// Close connections on hot code push
+process.on('SIGTERM', function() { liveDb.end(); process.exit(); });
+// Close connections on exit (ctrl + c)
+process.on('SIGINT', function() { liveDb.end(); process.exit(); });

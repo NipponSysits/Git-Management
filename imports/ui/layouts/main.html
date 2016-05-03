@@ -16,7 +16,9 @@
       </div>
     </div>
     <div class="ui content">
-      {{> Template.dynamic template=board }}
+      <div class="ui panel board" style="display:none;">
+        {{> Template.dynamic template=board }}
+      </div>
       <div class="ui panel main container" style="display:none;">
         <div class="ui panel html">
           {{> Template.dynamic template=main}}
