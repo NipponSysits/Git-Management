@@ -52,17 +52,22 @@ Template.Navigator.events({
 		FlowRouter.go('nippon');
   	// });
   },
+  'click .user-menu .item.notify': function(event){
+    // $('.ui.notification.sidebar').sidebar('toggle');
+  },
   'click .item.profile .menu .item.profile': function(event){
   	$('.user-menu > .item').removeClass('selected');
-  	$('.user-menu > .item.profile').addClass('selected');
+  	$('.user-menu .menu>.item.user').addClass('selected');
   	// $('.form.sign-in').transition('fade right', function(){
-		FlowRouter.go('nippon');
-  	// });
+		FlowRouter.go('profile');
+  	// });">
   },
 });
 
 Template.Navigator.onRendered(function() {
 	var self = this;
+
+  $('.user-menu > .item.notify').dropdown();
   $('.user-menu > .item.profile').dropdown();
   $('.user-menu > .item.profile').avatar('kem@ns.co.th', 64);
   // $('.header.avatar .stats.avatar').avatar(null, 96);
