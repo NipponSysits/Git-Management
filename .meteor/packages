@@ -24,4 +24,7 @@ fourseven:scss
 kadira:flow-router
 kadira:blaze-layout
 session
-numtel:mysql
+accounts-base
+accounts-password
+accounts-google
+nodets:mysql

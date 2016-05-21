@@ -33,12 +33,14 @@ Template.Dashboard.onRendered(() => {
 
   let username = FlowRouter.getParam('username');
   if(DashboardProfile != username) {
-    T.Call('getDashboardProfile', 'dvgamer').then(function(data){
-      setTimeout(function(){
+    // T.Call('getDashboardProfile', 'dvgamer').then(function(data){
+      // if(data.length) {
         dashboard.show();
         $('.ui.panel.sign-in').hide();
-      }, 3000);
-    });
+      // } else {
+
+      // }
+    // });
   } else {
     dashboard.show();
   }

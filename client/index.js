@@ -34,7 +34,8 @@ $.fn.extend({
 window.T = {
 	Call : function(name, param){
 		let def = Q.defer();
-	  let result = new MysqlSubscription(name, param, function() { 
+	  let result = Meteor.subscribe(name, param, function(data) {
+	  	console.log(result, data) ;
 	    if(result) {
 	    	// result[0]
 	    	def.resolve(result);

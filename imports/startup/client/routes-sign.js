@@ -1,7 +1,18 @@
 import '../../ui/layouts/sign';
 
+const SignAccess = function(context, redirect) {
+  if(Meteor.userId()) {
+    if (Session.get('redirect')) {
+      redirect(Session.get('redirect'));
+    } else {
+      redirect('dashboard', { username: Session.get('USER').username });
+    }
+  }
+}
+
 var signRoutes = FlowRouter.group({
   prefix: '/Member',
+  triggersEnter: [SignAccess],
   action: function(){
     
   }

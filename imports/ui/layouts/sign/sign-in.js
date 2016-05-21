@@ -1,3 +1,4 @@
+import { Meteor }   from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { Session }  from 'meteor/session';
 import { FlowRouter } from 'meteor/kadira:flow-router';
@@ -119,44 +120,45 @@ Template.SignIn.onRendered(function() {
           password: md5($('.field.password input').val()) 
         }
 
-        T.Call('user-verify', auth).then(function(user){
-          if(user.length <= 0) {
-            $('.field.username').addClass('error');
-            $('.field.username input').val('').focus().blur().focus();
-            $('.field.password input').val('');
-          } else {
-            if(!onButton.SignImage) {
-              $('.ui.sign-id').transition('remove looping').transition({ 
-                animation: 'fade right', 
-                onComplete: function(){
-                  $('.ui.sign-image').transition('fade right');
-                }
+        var user_access = Meteor.subscribe('user_access', {}, function(err, data){
+          console.log(data);
+        });
+        Meteor.loginWithPassword(auth.email, auth.password, function(err){
+          console.log(auth, err);
+          if(!err) {
+            $('.ui.dimmer.prepare').fadeIn(300);
+            $('.ui.panel.sign-in').fadeOut(300, function(){
+              return T.Init(T.Timestamp).then(function(){
+                Session.set('USER', user[0]);
+                $('.ui.panel.main').fadeIn();
+                FlowRouter.go('dashboard', { username: user[0].username });
               });
-              toPanelSignImage(user[0].fullname, auth.email, true);
-            }
+            });
+          } else {
+            if (err.reason == "User not found") {
+              $('.field.username').addClass('error');
+              $('.field.username input').val('').focus().blur().focus();
+              $('.field.password input').val('');
+            } else if (err.reason == "Password not found") {
+              if(!onButton.SignImage) {
+                $('.ui.sign-id').transition('remove looping').transition({ 
+                  animation: 'fade right', 
+                  onComplete: function(){
+                    $('.ui.sign-image').transition('fade right');
+                  }
+                });
+                toPanelSignImage(user[0].fullname, auth.email, true);
+              }
 
-            if(user[0].password != auth.password) {
               $('.field.password').addClass('error');
               $('.field.password input').val('').focus().blur().focus();
-            } else {
-              // Successful
-              $('.ui.dimmer.prepare').fadeIn(300);
-              $('.ui.panel.sign-in').fadeOut(300, function(){
-                return T.Init(T.Timestamp).then(function(){
-                  Session.set('ACCESS', user[0]);
-                  $('.ui.panel.main').fadeIn();
-                  FlowRouter.go('dashboard', { username: user[0].username });
-                });
-              });
+
             }
-          }   
+          }
           onButton.SignIn = false;
           $('.button.sign-in').addClass('positive green').removeClass('loading');
           $('.ui.sign-trouble').show();
           $('.field.username, .field.remember, .field.password, .button.sign-back').removeClass('disabled');
-
-        }).catch(function(ex){
-          console.log('ex', ex);
         });
 
 

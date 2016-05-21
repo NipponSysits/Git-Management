@@ -10,19 +10,19 @@ import './navigator.html';
 
 Template.Navigator.helpers({
 	isLogin: function(){
-    let ac = Session.get('ACCESS');
+    let ac = Session.get('USER');
 		return ac ? true : false;
 	},
 	isAttended: function(){
-    let ac = Session.get('ACCESS');
+    let ac = Session.get('USER');
 		return ac.attended ? true : false;
 	},
 	getFullname: function(){
-    let ac = Session.get('ACCESS') || { fullname: 'Unknow' };
+    let ac = Session.get('USER') || { fullname: 'Unknow' };
 		return ac.fullname;
 	},
 	getPosition: function(){
-    let ac = Session.get('ACCESS') || { position: 'None' };
+    let ac = Session.get('USER') || { position: 'None' };
 		return ac.position;
 	}, 
 });

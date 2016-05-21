@@ -1,22 +1,31 @@
 import { Meteor } 	from 'meteor/meteor';
 
 const config 		= require('$custom/config');
-const liveDb 		= new LiveMysql(config.mysql);
+// const liveDb 		= new LiveMysql(config.mysql);
+
 
 Meteor.publish('user-verify', function(auth){
+	let self = this;
 	let query = `SELECT a.* , u.password FROM user u JOIN user_access a ON a.user_id = u.user_id `;
 	let where = `WHERE u.email='`+auth.email+`' and u.status='ON' LIMIT 1`;
 
-  return liveDb.select(query+where, [{ 
-  	table: 'user' 
-  }]);
+	// var sda = db.query(query+where, {})
+	// console.log(sda);
+	// .then(function(data){
+  //  	console.log('ready', data);
+	//   self.ready();
+	//   return { data: 'test' }
+  //  })
+
+  return []
 });
 
 Meteor.publish('user-access', function(auth){
-  return liveDb.select(`SELECT * FROM user_access WHERE username='`+auth.email+`'`, [{ 
-  	table: 'user' 
-  }]);
+  // return liveDb.select(`SELECT * FROM user_access WHERE username='`+auth.email+`'`, [{ 
+  // 	table: 'user' 
+  // }]);
 });
+
 
 
 

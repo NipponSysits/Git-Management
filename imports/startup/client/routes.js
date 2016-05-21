@@ -1,6 +1,7 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 import { Session } from 'meteor/session';
+import { Meteor } from 'meteor/meteor';
 
 // Import to load these templates
 import '../../ui/layouts/component';
@@ -12,16 +13,21 @@ import './routes-sign.js';
 
 BlazeLayout.setRoot('body');
 
+const SignAccess = function(context, redirect) {
+  if(!Meteor.userId()) {
+    console.log('SignAccess', T.Storage('SESSION_CLIENT'));
+    // Session.set('redirect', FlowRouter.getRouteName())
+    redirect('sign');
+  }
+}
+const Dashboard = function(context, redirect) {
+  console.log(Meteor.userId(), 'user', Meteor.user());
+  if(Meteor.userId()) redirect('dashboard', { username: 'dvgamer' });
+}
+
 FlowRouter.route('/', {
   name: 'home',
-  triggersEnter:function(context, redirect) {
-    var user = Session.get('ACCESS');
-    if(user) {
-      redirect('dashboard', { username: user.username });
-    } else {
-      redirect('sign');
-    }
-  },
+  triggersEnter: [Dashboard, SignAccess],
   action:function() {
     BlazeLayout.render('app');
   },
@@ -42,13 +48,13 @@ FlowRouter.route('/Repositories', {
 });
 
 
-FlowRouter.route('/Source/:collection/:repository', {
+FlowRouter.route('/:collection/:repository', {
   name: 'source',
+  triggersEnter: [SignAccess],
   action:function() {
-    console.log('route --', FlowRouter.getRouteName(), FlowRouter.getParam());
+    console.log('route --', FlowRouter.getRouteName(), FlowRouter.getParam('collection'), FlowRouter.getParam('repository'));
     BlazeLayout.render('app', { 
       main: 'Dashboard', 
-      board: 'UserStatus',
       navigator: 'Navigator'
     });
   },
