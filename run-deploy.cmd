@@ -18,3 +18,4 @@ git add -A
 git commit -m "versions %version%"
 :: git push origin master:master
 @echo on
+REM meteor build ../bundle --mobile-settings settings.json --architecture=os.linux.x86_64

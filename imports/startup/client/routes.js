@@ -33,7 +33,7 @@ FlowRouter.route('/', {
   },
 });
 
-FlowRouter.route('/Repositories', {
+FlowRouter.route('/Repositories/:collection?', {
   name: 'repository',
   action:function() {
     BlazeLayout.render('app', { 
