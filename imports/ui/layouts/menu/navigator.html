@@ -1,9 +1,12 @@
 <template name="Navigator">
   <div class="computer tablet only row user-menu">
     {{#if isLogin}}
+      {{#if isDebug}}
       <a class="ui item home">
         <i class="home icon big"></i>
       </a>
+      {{/if}}
+
       <a class="ui item repository">
         <i class="repository icon big"></i>
       </a>
@@ -11,7 +14,6 @@
       <a class="ui item nippon">
         <i class="nippon icon big"></i>
       </a>
-      {{/if}}
       <div class="ui icon top left pointing dropdown item notify">
         <a class="ui item notify">
           <i class="alarm outline icon big"></i>
@@ -40,6 +42,7 @@
           <div class="item">Help</div>
         </div>
       </div>
+      {{/if}}
 
       <div class="ui item content">
         <div class="content">
@@ -74,9 +77,9 @@
       </div>
     {{/if}}
   </div>
- <div class="ui small signout modal">
+  <div class="ui small signout modal">
     <div class="header">
-      PGM-Management
+      deBUGerr
     </div>
     <div class="content">
       <p>Are you sure you want to sign-out your account</p>

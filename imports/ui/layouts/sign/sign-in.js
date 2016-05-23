@@ -78,10 +78,6 @@ Template.SignIn.onRendered(function() {
     toPanelSignId();
   }
 
-  console.log('core!4555', md5('core!4555'));
-  console.log('dvg7po8ai', md5('dvg7po8ai'));
-  console.log('123456', md5('123456'));
-
   $('.ui.sign-in.form').form({
     inline : true,
     on     : 'blur',
@@ -120,18 +116,15 @@ Template.SignIn.onRendered(function() {
           password: md5($('.field.password input').val()) 
         }
 
-        var user_access = Meteor.subscribe('user_access', {}, function(err, data){
-          console.log(data);
-        });
         Meteor.loginWithPassword(auth.email, auth.password, function(err){
-          console.log(auth, err);
           if(!err) {
             $('.ui.dimmer.prepare').fadeIn(300);
             $('.ui.panel.sign-in').fadeOut(300, function(){
               return T.Init(T.Timestamp).then(function(){
-                Session.set('USER', user[0]);
                 $('.ui.panel.main').fadeIn();
-                FlowRouter.go('dashboard', { username: user[0].username });
+                //FlowRouter.go('dashboard', { username: Meteor.user().username });
+                FlowRouter.go('repository');
+                
               });
             });
           } else {

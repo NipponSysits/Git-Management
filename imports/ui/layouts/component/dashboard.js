@@ -9,7 +9,6 @@ require('/imports/language')('Dashboard');
 
 import './dashboard.html';
 
-let DashboardProfile = null;
 let dashboard = {
   show: function () {
     $('.ui.dimmer.prepare').fadeOut(300);  
@@ -32,7 +31,8 @@ Template.Dashboard.onRendered(() => {
   $('.user-menu > .item.home').addClass('selected');
 
   let username = FlowRouter.getParam('username');
-  if(DashboardProfile != username) {
+
+
     // T.Call('getDashboardProfile', 'dvgamer').then(function(data){
       // if(data.length) {
         dashboard.show();
@@ -41,7 +41,4 @@ Template.Dashboard.onRendered(() => {
 
       // }
     // });
-  } else {
-    dashboard.show();
-  }
 });

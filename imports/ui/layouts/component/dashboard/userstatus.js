@@ -16,8 +16,16 @@ import './userstatus.html';
 //   }
 // });
 
+Template.UserStatus.helpers({
+  getProfile: function(){
+    let usr = (Meteor.user() || { profile: {} })
+    return usr.profile;
+  }
+});
+
+
 
 Template.UserStatus.onRendered(function() {
-
-  $('.header.avatar .stats.avatar').avatar(null, 96);
+  let usr = (Meteor.user() || { profile: {} }).profile
+  $('.header.avatar .stats.avatar').avatar(usr.email, 96);
 });

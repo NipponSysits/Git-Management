@@ -24,15 +24,11 @@ Meteor.publish('getDashboardProfile', function(username){
   this.ready();
 });
 
-
-Users = db.meteorCollection("user", "usersCollection");
-
-console.log(Users.find().fetch());
-    //End of changes, that's it!
-
+// var criteria = db.criteriaFor("user");
+var Users = db.meteorCollection("user", "mysql.user");
 
 Meteor.publish("user_access", function(){
-    return posts.find();
+    return Users.find();
 });
 
 
@@ -49,9 +45,22 @@ Meteor.startup(function() {
   });
   console.log('users', Meteor.users.find().count());
   if (Meteor.users.find().count() === 0) {
-  	// db.select('user_access', {}).then(function(user_access){
-			// Meteor.Call('AccountCreateUser', user_access[0], function (error, result) { console.log(error, result); } );
-  	// });
+  	Users.find().fetch().forEach(function(user){
+  		Accounts.createUser({ 
+  			username: user.username, 
+  			email: user.email, 
+  			password: user.password,
+  			profile: { 
+  				email: user.email,
+  				userId: user.userId,
+  				fullname: user.name+(user.surname?' '+user.surname:''),
+  				position: user.position,
+  				roleId: user.roleId,
+  				attended: user.attended
+  			}
+  		});
+  	});
+  	console.log('created', Meteor.users.find().count());
   }
 });
 

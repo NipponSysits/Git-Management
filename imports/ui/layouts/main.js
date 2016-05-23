@@ -10,8 +10,6 @@ require('/imports/language')('app');
 
 import './main.html';
 
-
-
 Meteor.startup(() => {
 	$(window).resize(function(){ $('.login-image').height($(window).height() - 118); });
   // if (true) {

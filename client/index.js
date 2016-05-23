@@ -58,9 +58,7 @@ window.T = {
 	      def.resolve(true);
 	    }
 	  } else {
-	  	T.Call('user-access', T.Storage('SESSION_CLIENT')).then(function(req){
-
-	  	});
+	  	def.resolve(true);
 	  }
 
     return def.promise;

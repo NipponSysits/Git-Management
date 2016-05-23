@@ -5,7 +5,8 @@ const SignAccess = function(context, redirect) {
     if (Session.get('redirect')) {
       redirect(Session.get('redirect'));
     } else {
-      redirect('dashboard', { username: Session.get('USER').username });
+      redirect('repository');
+      //redirect('dashboard', { username: Meteor.user().username });
     }
   }
 }

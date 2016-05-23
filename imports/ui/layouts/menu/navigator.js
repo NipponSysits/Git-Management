@@ -9,21 +9,23 @@ import './navigator.html';
 
 
 Template.Navigator.helpers({
-	isLogin: function(){
-    let ac = Session.get('USER');
-		return ac ? true : false;
-	},
+  isDebug: function(){
+    return Meteor.settings.production ? false : true;
+  },
+  isLogin: function(){
+    return Meteor.userId();
+  },
 	isAttended: function(){
-    let ac = Session.get('USER');
-		return ac.attended ? true : false;
+    let usr = (Meteor.user() || { profile: {} }).profile
+	  return usr.attended ? true : false;
 	},
 	getFullname: function(){
-    let ac = Session.get('USER') || { fullname: 'Unknow' };
-		return ac.fullname;
+    let usr = (Meteor.user() || { profile: {} }).profile
+	  return usr.fullname;
 	},
 	getPosition: function(){
-    let ac = Session.get('USER') || { position: 'None' };
-		return ac.position;
+    let usr = (Meteor.user() || { profile: {} }).profile
+	  return usr.position;
 	}, 
 });
 
@@ -35,7 +37,12 @@ Template.Navigator.events({
   	$('.user-menu > .item').removeClass('selected');
   	$('.user-menu > .item.home').addClass('selected');
   	// $('.form.sign-in').transition('fade right', function(){
-		FlowRouter.go('dashboard');
+    if(Meteor.userId()) {
+      console.log('click');
+		  FlowRouter.go('dashboard');
+    } else {
+      FlowRouter.go('sign');
+    }
   	// });
   },
   'click .user-menu .item.repository': function(event){
@@ -64,11 +71,44 @@ Template.Navigator.events({
   },
 });
 
+let onButton = { SignOut: false };
+
 Template.Navigator.onRendered(function() {
 	var self = this;
 
   $('.user-menu > .item.notify').dropdown();
   $('.user-menu > .item.profile').dropdown();
   $('.user-menu > .item.profile').avatar('kem@ns.co.th', 64);
+
+  $('.ui.access.grid .dropdown.profile .item.signout').click(function(){
+    $('.signout.modal').modal({
+      closable  : false,
+      onDeny : function() {
+        if(!onButton.SignOut) {
+          onButton.SignOut = true;
+          $('.signout.modal .actions .ok.button').addClass('disabled');
+          $('.signout.modal .actions .negative.button').addClass('loading');
+          Meteor.logout(function(err){
+            $('.signout.modal .actions .ok.button').removeClass('disabled');
+            $('.signout.modal .actions .negative.button').removeClass('loading');
+            if(!err) {
+              $('.signout.modal').modal('hide');
+              $('.ui.panel.main').fadeOut(0);
+              $('.ui.panel.sign-in').fadeIn(300, function(){
+                onButton.SignOut = false;
+                FlowRouter.go('sign');
+              }); 
+
+            } else {
+              onButton.SignOut = false;
+            }
+          });
+        }
+        return false;
+      }
+    }).modal('show');
+  });
+
+
   // $('.header.avatar .stats.avatar').avatar(null, 96);
 });
