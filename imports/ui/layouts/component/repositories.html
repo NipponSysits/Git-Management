@@ -1,0 +1,17 @@
+<template name="Repositories">
+<div class="ui grid grid-head">
+  <div class="floated right aligned column">
+  	<h3>Repositories</h3>
+  </div>
+</div>
+<div class="ui grid grid-menu">
+	<div class="row column">
+		<li class="item active" id="repositories">Repositories</li>
+		<li class="item" id="contents">Contents</li>
+		<li class="item" id="third-party">Third-Party</li>
+	</div>
+</div>
+<div class="ui component grid grid-repository">
+	{{> Template.dynamic template=repository }}
+</div>
+</template>

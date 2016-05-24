@@ -1,5 +1,6 @@
+import './repositories/collection.js';
 import './dashboard.js';
-import './repository.js';
+import './repositories.js';
 import './nippon.js';
 
 import './dashboard/userstatus.js';

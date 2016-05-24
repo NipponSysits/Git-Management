@@ -38,8 +38,34 @@ FlowRouter.route('/Repositories/:collection?', {
   action:function() {
     BlazeLayout.render('app', { 
       navigator: 'Navigator',
-      main: 'Repository', 
-    });
+      repository: 'Collections',
+      main: 'Repositories', 
+    }); 
+     
+  },
+});
+
+FlowRouter.route('/Contents/:name?', {
+  name: 'content',
+  action:function() {
+    BlazeLayout.render('app', { 
+      navigator: 'Navigator',
+      repository: 'repository',
+      main: 'Repositories', 
+    }); 
+     
+  },
+});
+
+FlowRouter.route('/Third-Party', {
+  name: 'third-party',
+  action:function() {
+    BlazeLayout.render('app', { 
+      navigator: 'Navigator',
+      repository: 'repository',
+      main: 'Repositories', 
+    }); 
+     
   },
 });
 
