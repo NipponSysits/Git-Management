@@ -3,16 +3,25 @@
 		<div class="ui vertical menu">
 		  <a class="item selected">
 		    dvgamer
-		    <div class="ui label">33</div>
+		    <div class="ui label">0</div>
 		  </a>
+		  {{#each collection}}
 		  <a class="item">
-		    Travox
-		    <div class="ui label">14</div>
+		    {{collection_name}}
+		    <div class="ui label">{{list}}</div>
 		  </a>
+		  {{/each}}
 		</div>
 	</div>
 	<div class="thirteen wide column repository">
 		<div class="ui relaxed divided list">
+		  {{#if Template.subscriptionsReady}}
+		    {{#if hasMorePosts}}
+		      <a class="load-more" href="#">Load More</a>
+		    {{/if}}
+		  {{else}}
+		    <div class="loading">loading</div>
+		  {{/if}}
 		  <div class="item">
 		    <i class="large github middle aligned icon"></i>
 		    <div class="content">
