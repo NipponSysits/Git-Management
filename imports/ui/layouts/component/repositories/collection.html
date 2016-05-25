@@ -1,94 +1,30 @@
 <template name="Collections">
 	<div class="three wide column collection">
 		<div class="ui vertical menu">
-		  {{#if isReady}}
-			  {{#each CollectionItems}}
-			  <a class="item">
-			    {{collection_name}}
-			    <div class="ui label">{{list}}</div>
-			  </a>
-			  {{/each}}
-		  {{/if}}
+		  {{#each CollectionItems}}
+		  <a class="item" data-item="{{collection_name}}">
+		    {{collection_name}}
+		    <div class="ui label">{{list}}</div>
+		  </a>
+		  {{/each}}
 		</div>
 	</div>
 	<div class="thirteen wide column repository">
 		<div class="ui relaxed divided list">
+		  {{#each RepositoryItems}}
 		  <div class="item">
 		    <i class="large github middle aligned icon"></i>
 		    <div class="content">
-		      <a class="header">row.name</a>
-		      <div class="description">row.description</div>
+		      <a class="header">{{name}}</a>
+		      <div class="description">{{description}}</div>
 		    </div>
 		  </div>
-		  <div class="item">
-		    <i class="large github middle aligned icon"></i>
-		    <div class="content">
-		      <a class="header">row.name</a>
-		      <div class="description">row.description</div>
-		    </div>
-		  </div>
-		  <div class="item">
-		    <i class="large github middle aligned icon"></i>
-		    <div class="content">
-		      <a class="header">row.name</a>
-		      <div class="description">row.description</div>
-		    </div>
-		  </div>
+		  {{/each}}
 		</div>
 		<h2 class="ui">
 		  <div class="content">row.project_name</div>
 		</h2>
 		<div class="ui relaxed divided list">
-		  <div class="item">
-		    <i class="large github middle aligned icon"></i>
-		    <div class="content">
-		      <a class="header">row.name</a>
-		      <div class="description">row.description</div>
-		    </div>
-		  </div>
-		  <div class="item">
-		    <i class="large github middle aligned icon"></i>
-		    <div class="content">
-		      <a class="header">row.name</a>
-		      <div class="description">row.description</div>
-		    </div>
-		  </div>
-		  <div class="item">
-		    <i class="large github middle aligned icon"></i>
-		    <div class="content">
-		      <a class="header">row.name</a>
-		      <div class="description">row.description</div>
-		    </div>
-		  </div>
 		</div>
-
-
-		<h2 class="ui">
-		  <div class="content">row.project_name2</div>
-		</h2>
-		<div class="ui relaxed divided list">
-		  <div class="item">
-		    <i class="large github middle aligned icon"></i>
-		    <div class="content">
-		      <a class="header">row.name</a>
-		      <div class="description">row.description</div>
-		    </div>
-		  </div>
-		  <div class="item">
-		    <i class="large github middle aligned icon"></i>
-		    <div class="content">
-		      <a class="header">row.name</a>
-		      <div class="description">row.description</div>
-		    </div>
-		  </div>
-		  <div class="item">
-		    <i class="large github middle aligned icon"></i>
-		    <div class="content">
-		      <a class="header">row.name</a>
-		      <div class="description">row.description</div>
-		    </div>
-		  </div>
-		</div>
-
 	</div>
 </template>	

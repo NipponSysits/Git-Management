@@ -38,13 +38,11 @@ Meteor.startup(function () {
 });
 
 process.on("SIGTERM", function() {
-  db.end(function(){
-  	db.destroy();
-  });
+  db.end();
+	db.destroy();
 });
 
 process.on("SIGINT", function() {
-  db.end(function(){
-  	db.destroy();
-  });
+  db.end();
+	db.destroy();
 });

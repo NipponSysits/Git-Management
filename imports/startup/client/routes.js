@@ -46,9 +46,9 @@ FlowRouter.route('/', {
 
 FlowRouter.route('/Repositories/:collection?', {
   name: 'repository',
-  subscriptions: function(params, queryParams) {
-    this.register('collection-list', Meteor.subscribe('collection-list', params.collection));
-  },
+  // subscriptions: function(params, queryParams) {
+  //   this.register('collection-list', Meteor.subscribe('collection-list', params.collection));
+  // },
   triggersEnter: [SignAccess],
   action:function() {
     BlazeLayout.render('app', { 

@@ -133,7 +133,7 @@ Template.SignIn.onRendered(function() {
               $('.field.username').addClass('error');
               $('.field.username input').val('').focus().blur().focus();
               $('.field.password input').val('');
-            } else if (err.reason == "Password not found") {
+            } else if (err.reason == "Incorrect password") {
               if(!onButton.SignImage) {
                 $('.ui.sign-id').transition('remove looping').transition({ 
                   animation: 'fade right', 

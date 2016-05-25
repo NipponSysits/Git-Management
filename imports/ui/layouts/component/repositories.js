@@ -12,7 +12,9 @@ Template.Repositories.events({
 		$('.grid-head>div>h3').html('Repositories');
 		$('.grid-menu .item').removeClass('active');
 		$('.grid-menu .item#repositories').addClass('active');
-		FlowRouter.go('repository');
+ 		
+ 		let self = Session.get('click-collection') || {};
+		FlowRouter.go('repository', { collection: self.collection_name });
 	},
   'click .grid-menu .item#content': function(event){
 		$('.grid-head>div>h3').html('Contents');

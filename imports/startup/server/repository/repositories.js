@@ -3,10 +3,6 @@ import { Meteor } 	from 'meteor/meteor';
 const config 		= require('$custom/config');
 const db 				= Mysql.connect(config.mysql);
 
-var dbRepository 						= db.meteorCollection("repository", "mysql.repository");
-var dbRepositoryCollection 	= db.meteorCollection("repository_collection", "mysql.repository_collection");
-var dbRepositoryContributor = db.meteorCollection("repository_contributor", "mysql.repository_contributor");
-
 var monCollection = new Mongo.Collection("list.repository_collection");
 var monRepository = new Mongo.Collection("list.repository");
 
@@ -16,32 +12,53 @@ Meteor.publish('collection-list', function() {
   if(!self.userId) return [];
 
   let User = Meteor.users.findOne({ _id: self.userId }).profile;
-  let query = "select * from repository_collection where user_id="+User.user_id;
+
+  let query = `
+  SELECT count(r.user_id) list, u.username collection_name, NULL collection_id, r.user_id 
+  FROM repository r
+  LEFT JOIN user u ON u.user_id = r.user_id
+  WHERE r.collection_id is null 
+  ${User.role.level > 1 ? `and r.anonymous = 'YES' or u.user_id = ${User.user_id}` : ``}
+  GROUP BY u.username, r.user_id
+  UNION ALL
+  SELECT count(p.collection_id) list, p.name collection_name, p.collection_id, NULL user_id
+  FROM repository r
+  LEFT JOIN repository_collection p ON r.collection_id = p.collection_id
+  LEFT JOIN repository_contributor c ON c.repository_id = r.repository_id
+  WHERE r.collection_id is not null 
+  ${User.role.level > 1 ? `and c.permission in ('Contributors','Administrators') and c.user_id = ${User.user_id}` : ``}
+  GROUP BY p.name, p.collection_id;
+  `;
+
   db.query(query, function(err, data){
   	if(err) self.error(err);
 		(data || []).forEach(function(item){
-  		self.added('list.repository_collection', item.collection_id, { collection_name: item.name, list: 1});
+      if((item.list > 0 && item.collection_id) || item.user_id) {
+        self.added('list.repository_collection', item.collection_id ? 'c-'+item.collection_id : 'u-'+item.user_id, item);
+      }
 		});
 		self.ready();
   });
 });
 
-Meteor.publish('repository-list', function(user_id, collection_id) {
+Meteor.publish('repository-list', function(collection_id, user_id) {
   // Meteor._sleepForMs(2000);
+
   let self = this;
-  if(self.userId) {
-	  let User = Meteor.users.findOne({ _id: self.userId }).profile;
-	  let query = "select * from repository where user_id="+User.user_id;
-	  db.query(query, function(err, data){
-	  	if(err) self.error(err);
-  		(data || []).forEach(function(item){
-	  		self.added('list.repository', item.collection_id, { collection_name: item.name, list: 1});
-  		});
-			self.ready();
-	  });
-  } else {
-  	self.ready();
-  }
+  if(!self.userId) return [];
+
+  let User = Meteor.users.findOne({ _id: self.userId }).profile;
+  let query = `
+  SELECT * FROM repository WHERE collection_id=${collection_id} or user_id=${user_id}
+  `;
+
+  db.query(query, function(err, data){
+  	if(err) self.error(err);
+		(data || []).forEach(function(item){
+  		self.added('list.repository', item.repository_id, item);
+		});
+		self.ready();
+  });
 });
 
 // const liveDb 		= new LiveMysql(config.mysql);

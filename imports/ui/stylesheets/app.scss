@@ -44,7 +44,6 @@ div.ui.main.container {
     padding-bottom: 60px;
     > .ui.component {
       background-color: #F7F7F7;
-      min-height: 600px;
     }
   }
 }
@@ -57,85 +56,6 @@ div.ui.input {
 }
 
 
-
-.ui {
-  &.grid-head {
-    h3 {
-      color: #2c71a5;
-      font-weight: bold;
-    }
-  }
-  &.grid-menu > .row.column {
-    border: #4a77a1 solid 1px;
-    background-color: #08326c;
-    padding:0px 0px 0px 0px !important;
-    li.item {
-      display: inline;
-      cursor: pointer;
-      color: #FFF;
-      padding: 10px 32px 9px 32px;
-      border-right: #4a77a1 solid 1px;
-      &.active {
-        background-color: #2b71a5;
-      }
-      &:hover {
-        color: #FFF;
-      }
-    }
-  }
-  &.grid-repository {
-    > .collection {
-      background-color: #161c2b;
-      padding-left: 0px !important;
-      padding-right: 0px !important;
-      .vertical.menu {
-        width: 100%;
-        border-radius: 0px;
-        border:none;
-        background-color: transparent;
-        > .item {
-          border-radius: 0px;
-          color: #FFF;
-          font-weight: bold;
-          &.selected {
-            background-color: #27608d;
-            > .label {
-              background-color: #cedde6;
-              color: #27608d;
-            }
-          }
-          > .label {
-            background-color: #27608d;
-            color: #FFF;
-          }
-        }
-
-
-      }
-
-    }
-    > .repository{
-      .ui.list {
-        > .item {
-          padding-left: 12px;
-          &:hover {
-            cursor: pointer;
-            background-color: #ececec; 
-          }
-        }
-        .content {
-          > .header {
-            font-size: 1.2em !important;
-          }
-          > .description {
-            font-size: 0.88em !important;
-            line-height: 1.6em !important;
-          }
-        }
-      }
-    }
-  }
-}
 
 .ui.dimmer.component {
   top: 103px !important;
