@@ -1,6 +1,7 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 import { Session } from 'meteor/session';
+import { Tracker } from 'meteor/tracker'
 import { Meteor } from 'meteor/meteor';
 
 // Import to load these templates
@@ -13,26 +14,34 @@ import './routes-sign.js';
 
 BlazeLayout.setRoot('body');
 
+
+// 
+Tracker.autorun(function () {
+  if(!Meteor.userId()) { redirect('sign'); }
+});
+
+
 const SignAccess = function(context, redirect) {
   if(!Meteor.userId()) {
     redirect('sign');
   }
 }
 const Dashboard = function(context, redirect) {
-  if(Meteor.userId()) {
-    redirect('dashboard', { username: 'dvgamer' });
-  }
+  // if(Meteor.userId()) {
+  //   redirect('dashboard', { username: 'dvgamer' });
+  // }
 }
 
 FlowRouter.route('/', {
   name: 'home',
-  triggersEnter: [Dashboard, SignAccess],
+  triggersEnter: [SignAccess],
   action:function() {
-    BlazeLayout.render('app');
-  },
-  triggersExit:function(){
-
-  },
+    BlazeLayout.render('app', { 
+      main: 'Dashboard', 
+      board: 'UserStatus',
+      navigator: 'Navigator'
+    });
+  }
 });
 
 FlowRouter.route('/Repositories/:collection?', {
@@ -90,7 +99,7 @@ FlowRouter.route('/:collection/:repository', {
 });
 
 
-FlowRouter.route('/:username', {
+FlowRouter.route('/:username?', {
   name: 'dashboard',
   action:function() {
     BlazeLayout.render('app', { 
