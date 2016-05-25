@@ -17,7 +17,7 @@ BlazeLayout.setRoot('body');
 
 // 
 Tracker.autorun(function () {
-  if(!Meteor.userId()) { redirect('sign'); }
+  if(!Meteor.userId()) { FlowRouter.go('sign'); }
 });
 
 
