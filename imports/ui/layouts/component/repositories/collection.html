@@ -1,16 +1,14 @@
 <template name="Collections">
 	<div class="three wide column collection">
 		<div class="ui vertical menu">
-		  <a class="item selected">
-		    dvgamer
-		    <div class="ui label">0</div>
-		  </a>
-		  {{#each Collection}}
-		  <a class="item">
-		    {{collection_name}}
-		    <div class="ui label">{{list}}</div>
-		  </a>
-		  {{/each}}
+		  {{#if isReady}}
+			  {{#each CollectionItems}}
+			  <a class="item">
+			    {{collection_name}}
+			    <div class="ui label">{{list}}</div>
+			  </a>
+			  {{/each}}
+		  {{/if}}
 		</div>
 	</div>
 	<div class="thirteen wide column repository">

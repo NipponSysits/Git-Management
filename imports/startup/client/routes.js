@@ -38,8 +38,9 @@ FlowRouter.route('/', {
 FlowRouter.route('/Repositories/:collection?', {
   name: 'repository',
   subscriptions: function(params, queryParams) {
-    this.register('collection', Meteor.subscribe('collection', 1));
+    this.register('collection-list', Meteor.subscribe('collection-list', params.collection));
   },
+  triggersEnter: [SignAccess],
   action:function() {
     BlazeLayout.render('app', { 
       navigator: 'Navigator',
@@ -52,6 +53,7 @@ FlowRouter.route('/Repositories/:collection?', {
 
 FlowRouter.route('/Contents/:name?', {
   name: 'content',
+  triggersEnter: [SignAccess],
   action:function() {
     BlazeLayout.render('app', { 
       navigator: 'Navigator',
@@ -64,6 +66,7 @@ FlowRouter.route('/Contents/:name?', {
 
 FlowRouter.route('/Fork', {
   name: 'fork',
+  triggersEnter: [SignAccess],
   action:function() {
     BlazeLayout.render('app', { 
       navigator: 'Navigator',

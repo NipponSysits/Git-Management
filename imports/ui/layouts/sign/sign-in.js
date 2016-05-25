@@ -117,6 +117,7 @@ Template.SignIn.onRendered(function() {
         }
 
         Meteor.loginWithPassword(auth.email, auth.password, function(err){
+          console.log('loginWithPassword', err);
           if(!err) {
             $('.ui.dimmer.prepare').fadeIn(300);
             $('.ui.panel.sign-in').fadeOut(300, function(){
