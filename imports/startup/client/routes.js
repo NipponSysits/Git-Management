@@ -19,7 +19,9 @@ const SignAccess = function(context, redirect) {
   }
 }
 const Dashboard = function(context, redirect) {
-  if(Meteor.userId()) redirect('dashboard', { username: 'dvgamer' });
+  if(Meteor.userId()) {
+    redirect('dashboard', { username: 'dvgamer' });
+  }
 }
 
 FlowRouter.route('/', {
@@ -35,6 +37,9 @@ FlowRouter.route('/', {
 
 FlowRouter.route('/Repositories/:collection?', {
   name: 'repository',
+  subscriptions: function(params, queryParams) {
+    this.register('collection', Meteor.subscribe('collection', 1));
+  },
   action:function() {
     BlazeLayout.render('app', { 
       navigator: 'Navigator',
@@ -50,19 +55,19 @@ FlowRouter.route('/Contents/:name?', {
   action:function() {
     BlazeLayout.render('app', { 
       navigator: 'Navigator',
-      repository: 'repository',
+      repository: 'Content',
       main: 'Repositories', 
     }); 
      
   },
 });
 
-FlowRouter.route('/Third-Party', {
-  name: 'third-party',
+FlowRouter.route('/Fork', {
+  name: 'fork',
   action:function() {
     BlazeLayout.render('app', { 
       navigator: 'Navigator',
-      repository: 'repository',
+      repository: 'Fork',
       main: 'Repositories', 
     }); 
      

@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor';
+import { Tracker } from 'meteor/tracker'
 import { Template } from 'meteor/templating';
 import { Session } from 'meteor/session';
 import { FlowRouter } from 'meteor/kadira:flow-router';
@@ -8,24 +9,23 @@ require('/imports/language')('Collections');
 import './collection.html';
 
 Template.Collections.helpers({
-  // the collection cursor
-  collection: function () {
-    return Template.instance().collection();
+  // // the collection cursor
+  Collection: function () {
+    return Repos.find();
   },
-  // are there more collection to show?
-  hasMorePosts: function () {
-    return Template.instance().collection().count() >= Template.instance().limit.get();
-  }
+  // CollectionReady: function() {
+  //   return FlowRouter.subsReady("collection");
+  // }
 });
 
-Repos = new Mongo.Collection("repositories");
+var Repos = new Mongo.Collection("repositories");
 Template.Collections.onCreated(() => {
-	var a = Meteor.subscribe('collection', 1, function(data){
-		console.log('collection', a);
-	});
+	// var a = Meteor.subscribe('collection', 1, function(data){
+	// 	console.log(Reposs.find().fetch());
+	// });
 });
 
 
 Template.Collections.onRendered(() => {
-	console.log(Repos.find().fetch());
+
 });
