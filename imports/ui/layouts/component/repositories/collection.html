@@ -1,14 +1,18 @@
 <template name="Collections">
 	<div class="three wide column collection">
 		<div class="ui vertical menu">
-			<h5 class="ui dividing header">username<a class="anchor" id="states"></a></h5>
+			{{#if CollectionUserCount}}
+				<h5 class="ui dividing header">username<a class="anchor" id="states"></a></h5>
+			{{/if}}
 		  {{#each CollectionUserItems}}
 			  <a class="item" data-item="{{collection_name}}">
 			    {{collection_name}}
 			    <div class="ui label">{{list}}</div>
 			  </a>
 		  {{/each}}
-			<h5 class="ui dividing header">collection<a class="anchor" id="states"></a></h5>
+			{{#if CollectionUserCount}}
+				<h5 class="ui dividing header">collection<a class="anchor" id="states"></a></h5>
+			{{/if}}
 		  {{#each CollectionNameItems}}
 			  <a class="item" data-item="{{collection_name}}">
 			    {{collection_name}}
@@ -36,11 +40,28 @@
 			  </div>
 			  {{/each}}
 			</div>
-			<h2 class="ui">
-			  <div class="content">row.project_name</div>
-			</h2>
-			<div class="ui relaxed divided list">
-			</div>
+		  {{#each PrejectItems}}
+				<h2 class="ui">
+				  <div class="content">{{project_name}}</div>
+				</h2>
+				<div class="ui relaxed divided list">
+			  {{#each RepositoryItems project_id}}
+			  <div class="item">
+			    <i class="large github middle aligned icon"></i>
+						{{#if showDesc description}}
+					    <div class="content">
+					      <a class="header">{{name}}</a>
+					      <div class="description">{{description}}</div>
+					    </div>
+						{{else}}
+					    <div class="content" style="padding-top:3px;">
+					      <a class="header">{{name}}</a>
+					    </div>
+						{{/if}}
+				  </div>
+				  {{/each}}
+				</div>
+		  {{/each}}
 		{{else}}
 	    <div class="ui active centered large inline indeterminate text loader" style="top:180px">Preparing repositories</div>
 		{{/if}}

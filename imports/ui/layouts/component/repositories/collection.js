@@ -20,8 +20,14 @@ Template.Collections.helpers({
   CollectionUserItems: function() {
     return monCollectionUser.find();
   },
+  CollectionUserCount: function() {
+    return monCollectionUser.find().count() > 0;
+  },
   CollectionNameItems: function() {
     return monCollectionName.find();
+  },
+  CollectionNameCount: function() {
+    return monCollectionName.find().count() > 0;
   },
   showDesc: function(desc){
     return desc ? true : false;
@@ -32,17 +38,33 @@ Template.Collections.helpers({
   RepositoryItems: function(project_id) {
     let self = Session.get('click-collection');
 
-    console.log('RepositoryItems', self);
-    console.log('project_id', project_id || null);
     if(self.collection_id) {
-      console.log('self.collection_id', monRepository.find({ collection_id: self.collection_id }).count());
-      return monRepository.find({ collection_id: self.collection_id });
+      return monRepository.find({ collection_id: self.collection_id, project_id: project_id || null });
     } else if(self.user_id) {
-      return monRepository.find({ user_id: self.user_id, collection_id: null });
+      return monRepository.find({ user_id: self.user_id, collection_id: null, project_id: project_id || null });
     } else {
-      return monRepository.find({ user_id: 1, collection_id: null });
+      return monRepository.find({ user_id: 1, collection_id: null, project_id: null });
     }
     
+  },
+  PrejectItems: function() {
+    let self = Session.get('click-collection');
+    let data = [], index = [], unqiue = [];
+    if(self.collection_id) {
+      data = monRepository.find({ collection_id: self.collection_id }).fetch();
+    } else if(self.user_id) {
+      data = monRepository.find({ user_id: self.user_id, collection_id: null }).fetch();
+    } else {
+      data = monRepository.find({ user_id: 1, collection_id: null }).fetch();
+    }
+    console.log(data);
+    data.forEach(function(item){
+      if(item.project_id != null && index.join('|').indexOf(item.project_id) == -1) {
+        index.push(item.project_id);
+        unqiue.push(item);
+      }
+    })
+    return unqiue;
   }
 });
 

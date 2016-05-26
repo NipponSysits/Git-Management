@@ -79,9 +79,10 @@ Meteor.publish('repository-list', function(collection_id, user_id) {
 
   let query = `
   SELECT 
-    r.repository_id, r.collection_id, r.user_id, r.project_id, 
+    r.repository_id, r.collection_id, r.user_id, r.project_id, p.name project_name,
     r.name, r.fullname, r.description, r.private, r.anonymous, r.logo 
   FROM repository r
+  LEFT JOIN repository_project p ON r.project_id = p.project_id
   ${ !level?``:`
   LEFT JOIN repository_contributor c 
     ON c.repository_id = r.repository_id AND c.permission in ('Contributors','Administrators')
