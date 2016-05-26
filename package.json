@@ -11,6 +11,7 @@
     "md5": "^2.1.0",
     "meteor-node-stubs": "^0.2.3",
     "moment": "^2.13.0",
+    "push.js": "0.0.7",
     "q": "^1.4.1",
     "socket.io-client": "^1.4.5"
   },

@@ -3,57 +3,101 @@ import { Meteor } 	from 'meteor/meteor';
 const config 		= require('$custom/config');
 const db 				= Mysql.connect(config.mysql);
 
-var monCollection = new Mongo.Collection("list.repository_collection");
-var monRepository = new Mongo.Collection("list.repository");
-
 Meteor.publish('collection-list', function() {
   // Meteor._sleepForMs(2000);
   let self = this;
   if(!self.userId) return [];
+  let UserProfile = Meteor.users.findOne({ _id: self.userId }).profile;
+  let level = UserProfile.role.level > 1;
 
-  let User = Meteor.users.findOne({ _id: self.userId }).profile;
-
-  let query = `
-  SELECT count(r.user_id) list, u.username collection_name, NULL collection_id, r.user_id 
-  FROM repository r
-  LEFT JOIN user u ON u.user_id = r.user_id
-  WHERE r.collection_id is null 
-  ${User.role.level > 1 ? `and r.anonymous = 'YES' or u.user_id = ${User.user_id}` : ``}
-  GROUP BY u.username, r.user_id
-  UNION ALL
-  SELECT count(p.collection_id) list, p.name collection_name, p.collection_id, NULL user_id
+  let query_collection = `
+  SELECT p.name collection_name, COUNT(p.collection_id) list, p.collection_id, NULL user_id
   FROM repository r
   LEFT JOIN repository_collection p ON r.collection_id = p.collection_id
-  LEFT JOIN repository_contributor c ON c.repository_id = r.repository_id
-  WHERE r.collection_id is not null 
-  ${User.role.level > 1 ? `and c.permission in ('Contributors','Administrators') and c.user_id = ${User.user_id}` : ``}
+  ${ !level?``:`
+  LEFT JOIN repository_contributor c 
+    ON c.repository_id = r.repository_id and c.permission in ('Contributors','Administrators')
+  `}
+  WHERE r.collection_id IS NOT NULL AND content_id IS NULL AND fork_id IS NULL
+  ${ !level?``:`
+  AND (c.user_id IS NULL OR (c.user_id IS NOT NULL AND c.user_id = ${UserProfile.user_id}))
+  AND (r.user_id = ${UserProfile.user_id} OR r.anonymous = 'YES')
+  AND (r.private = 'NO' OR (r.private = 'YES' AND r.user_id = ${UserProfile.user_id}))
+  `}
   GROUP BY p.name, p.collection_id;
   `;
 
-  db.query(query, function(err, data){
+  let query_user = `
+  SELECT u.username collection_name, count(r.user_id) list, NULL collection_id, r.user_id 
+  FROM repository r
+  ${ !level?``:`
+  LEFT JOIN repository_contributor c 
+    ON c.repository_id = r.repository_id and c.permission in ('Contributors','Administrators')
+  `}
+  LEFT JOIN user u ON u.user_id = r.user_id
+  WHERE r.collection_id IS NULL 
+  AND content_id IS NULL AND fork_id IS NULL
+  ${ !level?``:`
+  AND (c.user_id IS NULL OR (c.user_id IS NOT NULL AND c.user_id = ${UserProfile.user_id}))
+  AND (r.user_id = ${UserProfile.user_id} OR r.anonymous = 'YES')
+  AND (r.private = 'NO' OR (r.private = 'YES' AND r.user_id = ${UserProfile.user_id}))
+  `}
+  GROUP BY u.username, r.user_id 
+  `; // ${ !level?``:`OR p.collection_id IS NOT NULL `  }
+
+  db.query(query_collection, function(err, data){
   	if(err) self.error(err);
 		(data || []).forEach(function(item){
-      if((item.list > 0 && item.collection_id) || item.user_id) {
-        self.added('list.repository_collection', item.collection_id ? 'c-'+item.collection_id : 'u-'+item.user_id, item);
+      if(item.list > 0) {
+        self.added('list.collection-name', item.collection_id, item);
       }
 		});
-		self.ready();
+
+    db.query(query_user, function(err, data){
+      if(err) self.error(err);
+      (data || []).forEach(function(item){
+        if(item.list > 0) {
+          self.added('list.collection-user', item.user_id, item);
+        }
+      });
+  		self.ready();
+    });
   });
 });
 
 Meteor.publish('repository-list', function(collection_id, user_id) {
-  // Meteor._sleepForMs(2000);
+  // Meteor._sleepForMs(1000);
 
   let self = this;
   if(!self.userId) return [];
 
-  let User = Meteor.users.findOne({ _id: self.userId }).profile;
+  let UserProfile = Meteor.users.findOne({ _id: self.userId }).profile;
+  if(!collection_id && !user_id) {
+    user_id = UserProfile.user_id
+  }
+  let level = UserProfile.role.level > 1;
+
   let query = `
-  SELECT * FROM repository WHERE collection_id=${collection_id} or user_id=${user_id}
+  SELECT 
+    r.repository_id, r.collection_id, r.user_id, r.project_id, 
+    r.name, r.fullname, r.description, r.private, r.anonymous, r.logo 
+  FROM repository r
+  ${ !level?``:`
+  LEFT JOIN repository_contributor c 
+    ON c.repository_id = r.repository_id AND c.permission in ('Contributors','Administrators')
+  `}
+  WHERE content_id IS NULL AND fork_id IS NULL
+  ${ !level?``:`
+  AND ${collection_id?`r.collection_id=${collection_id}`:`r.collection_id IS NULL AND r.user_id=${user_id}`}
+  AND (c.user_id IS NULL OR (c.user_id IS NOT NULL AND c.user_id = ${UserProfile.user_id}))
+  AND (r.user_id = ${UserProfile.user_id} OR r.anonymous = 'YES')
+  AND (r.private = 'NO' OR (r.private = 'YES' AND r.user_id = ${UserProfile.user_id}))
+  `}
   `;
 
   db.query(query, function(err, data){
   	if(err) self.error(err);
+
 		(data || []).forEach(function(item){
   		self.added('list.repository', item.repository_id, item);
 		});
@@ -61,7 +105,7 @@ Meteor.publish('repository-list', function(collection_id, user_id) {
   });
 });
 
-// const liveDb 		= new LiveMysql(config.mysql);
+// const liveDbs 		= new LiveMysql(config.mysql);
 
 Meteor.publish('getDashboardProfile', function(username){
   // return liveDb.select(`SELECT * FROM user_access WHERE username='`+username+`'`, [{ 

@@ -47,11 +47,20 @@
             }
           }
           > .label {
+            border-radius: 0px;
             background-color: #27608d;
             color: #FFF;
           }
         }
-
+        > h5.ui.header {
+          border-bottom: 1px solid rgba(255, 255, 255, 0.55);
+          color: #E2E2E2;
+          padding-right: 14px;
+          margin-bottom: 0px;
+          text-transform: uppercase;
+          font-size: 10px;
+          text-align: right;
+        }
 
       }
 

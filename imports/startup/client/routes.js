@@ -16,9 +16,9 @@ BlazeLayout.setRoot('body');
 
 
 // 
-Tracker.autorun(function () {
-  if(!Meteor.userId()) { FlowRouter.go('sign'); }
-});
+// Tracker.autorun(function () {
+//   if(!Meteor.userId()) { FlowRouter.go('sign'); }
+// });
 
 
 const SignAccess = function(context, redirect) {
@@ -47,7 +47,9 @@ FlowRouter.route('/', {
 FlowRouter.route('/Repositories/:collection?', {
   name: 'repository',
   // subscriptions: function(params, queryParams) {
-  //   this.register('collection-list', Meteor.subscribe('collection-list', params.collection));
+  //   if(!params.collection) {
+  //     this.register('repository-list', );
+  //   }
   // },
   triggersEnter: [SignAccess],
   action:function() {
