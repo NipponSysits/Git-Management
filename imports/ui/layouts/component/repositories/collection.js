@@ -6,6 +6,8 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 require('/imports/language')('Collections');
 
+const moment = require('moment');
+
 import './collection.html';
 
 let monCollectionName = new Mongo.Collection("list.collection-name");
@@ -29,8 +31,17 @@ Template.Collections.helpers({
   CollectionNameCount: function() {
     return monCollectionName.find().count() > 0;
   },
-  showDesc: function(desc){
+  isDescription: function(desc){
     return desc ? true : false;
+  },
+  isNull: function(arg1, arg2){
+    return arg1 ? arg1 : arg2;
+  },
+  atDate: function(date){
+    return '';
+  },
+  atUser: function(date){
+    return '';
   },
   RepositoryReady: function() {
     return Session.get('ready-repository');

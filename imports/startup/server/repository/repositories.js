@@ -21,7 +21,7 @@ Meteor.publish('collection-list', function() {
   WHERE r.collection_id IS NOT NULL AND content_id IS NULL AND fork_id IS NULL
   ${ !level?``:`
   AND (c.user_id IS NULL OR (c.user_id IS NOT NULL AND c.user_id = ${UserProfile.user_id}))
-  AND (r.user_id = ${UserProfile.user_id} OR r.anonymous = 'YES')
+  AND (c.user_id = ${UserProfile.user_id} OR r.anonymous = 'YES')
   AND (r.private = 'NO' OR (r.private = 'YES' AND r.user_id = ${UserProfile.user_id}))
   `}
   GROUP BY p.name, p.collection_id;
@@ -39,7 +39,7 @@ Meteor.publish('collection-list', function() {
   AND content_id IS NULL AND fork_id IS NULL
   ${ !level?``:`
   AND (c.user_id IS NULL OR (c.user_id IS NOT NULL AND c.user_id = ${UserProfile.user_id}))
-  AND (r.user_id = ${UserProfile.user_id} OR r.anonymous = 'YES')
+  AND (c.user_id = ${UserProfile.user_id} OR r.anonymous = 'YES')
   AND (r.private = 'NO' OR (r.private = 'YES' AND r.user_id = ${UserProfile.user_id}))
   `}
   GROUP BY u.username, r.user_id 
@@ -80,10 +80,14 @@ Meteor.publish('repository-list', function(collection_id, user_id) {
   let query = `
   SELECT 
     r.repository_id, r.collection_id, r.user_id, r.project_id, p.name project_name,
-    r.name, r.fullname, r.description, r.private, r.anonymous, r.logo 
+    r.name, r.fullname, r.description, r.private, r.anonymous, r.logo, 
+    c.user_id admin_id, r.created_at
   FROM repository r
   LEFT JOIN repository_project p ON r.project_id = p.project_id
-  ${ !level?``:`
+  ${ !level?`
+  LEFT JOIN repository_contributor c 
+    ON c.repository_id = r.repository_id AND c.permission in ('Administrators')
+  `:`
   LEFT JOIN repository_contributor c 
     ON c.repository_id = r.repository_id AND c.permission in ('Contributors','Administrators')
   `}
@@ -91,7 +95,7 @@ Meteor.publish('repository-list', function(collection_id, user_id) {
   ${ !level?``:`
   AND ${collection_id?`r.collection_id=${collection_id}`:`r.collection_id IS NULL AND r.user_id=${user_id}`}
   AND (c.user_id IS NULL OR (c.user_id IS NOT NULL AND c.user_id = ${UserProfile.user_id}))
-  AND (r.user_id = ${UserProfile.user_id} OR r.anonymous = 'YES')
+  AND (c.user_id = ${UserProfile.user_id} OR r.anonymous = 'YES')
   AND (r.private = 'NO' OR (r.private = 'YES' AND r.user_id = ${UserProfile.user_id}))
   `}
   `;

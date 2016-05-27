@@ -77,10 +77,23 @@
         .content {
           > .header {
             font-size: 1.2em !important;
+            display: inline-block;
+          }
+          > .subheader {
+            display: inline-block;
+            font-size: 9px;
+            vertical-align: bottom;
+            color: #B9B9B9;
+            margin-left: 6px;
+            &:before {
+              content: '──';
+              padding-right: 6px;
+            }
           }
           > .description {
-            font-size: 0.88em !important;
+            font-size: 0.77em !important;
             line-height: 1.6em !important;
+            font-family: 'Segoe UI';
           }
         }
       }

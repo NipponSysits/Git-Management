@@ -117,7 +117,7 @@ Template.SignIn.onRendered(function() {
         }
 
         Meteor.loginWithPassword(auth.email, auth.password, function(err){
-          console.log('loginWithPassword', err);
+          console.log('loginWithPassword', !err ? 'Success' : err);
           if(!err) {
             $('.ui.dimmer.prepare').fadeIn(300);
             $('.ui.panel.sign-in').fadeOut(300, function(){
@@ -141,7 +141,7 @@ Template.SignIn.onRendered(function() {
                     $('.ui.sign-image').transition('fade right');
                   }
                 });
-                toPanelSignImage(user[0].fullname, auth.email, true);
+                toPanelSignImage(auth.email, auth.email, true);
               }
 
               $('.field.password').addClass('error');
