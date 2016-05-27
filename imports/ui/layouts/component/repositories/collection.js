@@ -38,7 +38,7 @@ Template.Collections.helpers({
     return arg1 ? arg1 : arg2;
   },
   atDate: function(date){
-    return '';
+    return 'created at '+moment(date).format('DD MMM YYYY');
   },
   atUser: function(date){
     return '';

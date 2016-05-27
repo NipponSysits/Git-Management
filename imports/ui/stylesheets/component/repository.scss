@@ -81,13 +81,13 @@
           }
           > .subheader {
             display: inline-block;
-            font-size: 9px;
+            font-size: 0.63em;
             vertical-align: bottom;
             color: #B9B9B9;
-            margin-left: 6px;
+            margin-left: 3px;
             &:before {
-              content: '──';
-              padding-right: 6px;
+              content: '─';
+              padding-right: 3px;
             }
           }
           > .description {
