@@ -7,7 +7,8 @@ Meteor.publish('collection-list', function() {
   // Meteor._sleepForMs(2000);
   let self = this;
   if(!self.userId) return [];
-  let UserProfile = Meteor.users.findOne({ _id: self.userId }).profile;
+  let getUser = Meteor.users.findOne({ _id: self.userId });
+  let UserProfile = getUser.profile;
   let level = UserProfile.role.level > 1;
 
   let query_collection = `
@@ -56,11 +57,23 @@ Meteor.publish('collection-list', function() {
 
     db.query(query_user, function(err, data){
       if(err) self.error(err);
+      let ownerCreated = false;
       (data || []).forEach(function(item){
-        if(item.list > 0) {
-          self.added('list.collection-user', item.user_id, item);
+        console.log(item.collection_name, getUser.username);
+        if(item.list > 0) self.added('list.collection-user', item.user_id, item);
+        if(item.collection_name == getUser.username) {
+          ownerCreated = true;
         }
       });
+      if(!ownerCreated) {
+        ownerCreated = { 
+          collection_name: getUser.username, 
+          list: 0, 
+          collection_id: null, 
+          user_id: UserProfile.user_id 
+        }
+        self.added('list.collection-user', UserProfile.user_id, ownerCreated);
+      }
   		self.ready();
     });
   });

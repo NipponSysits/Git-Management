@@ -47,14 +47,12 @@ div.ui.main.container {
     }
   }
 }
-div.ui.input {
-  background-color: #171d2c !important;
-  input {
+
+.ui.grid {
+  .ui.button {
     border-radius: 0px !important;
-    padding: .4em 1em !important;
   }
 }
-
 
 
 .ui.dimmer.component {
