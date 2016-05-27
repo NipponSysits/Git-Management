@@ -38,10 +38,10 @@ Template.Collections.helpers({
     return arg1 ? arg1 : arg2;
   },
   atDate: function(date){
-    return 'created at '+moment(date).format('DD MMM YYYY');
+    return 'Updated on '+moment(date).fromNow(true);
   },
-  atUser: function(date){
-    return '';
+  atUser: function(user_id){
+    return Meteor.users.findOne({ 'profile.user_id': user_id }).username;
   },
   RepositoryReady: function() {
     return Session.get('ready-repository');
@@ -50,11 +50,11 @@ Template.Collections.helpers({
     let self = Session.get('click-collection');
 
     if(self.collection_id) {
-      return monRepository.find({ collection_id: self.collection_id, project_id: project_id || null });
+      return monRepository.find({ collection_id: self.collection_id, project_id: project_id || null }, {sort:{name:1}});
     } else if(self.user_id) {
-      return monRepository.find({ user_id: self.user_id, collection_id: null, project_id: project_id || null });
+      return monRepository.find({ user_id: self.user_id, collection_id: null, project_id: project_id || null }, {sort:{name:1}});
     } else {
-      return monRepository.find({ user_id: 1, collection_id: null, project_id: null });
+      return monRepository.find({ user_id: 1, collection_id: null, project_id: null }, {sort:{name:1}});
     }
     
   },
@@ -62,13 +62,12 @@ Template.Collections.helpers({
     let self = Session.get('click-collection');
     let data = [], index = [], unqiue = [];
     if(self.collection_id) {
-      data = monRepository.find({ collection_id: self.collection_id }).fetch();
+      data = monRepository.find({ collection_id: self.collection_id }, {sort:{project_name:1}}).fetch();
     } else if(self.user_id) {
-      data = monRepository.find({ user_id: self.user_id, collection_id: null }).fetch();
+      data = monRepository.find({ user_id: self.user_id, collection_id: null }, {sort:{project_name:1}}).fetch();
     } else {
-      data = monRepository.find({ user_id: 1, collection_id: null }).fetch();
+      data = monRepository.find({ user_id: 1, collection_id: null }, {sort:{project_name:1}}).fetch();
     }
-    console.log(data);
     data.forEach(function(item){
       if(item.project_id != null && index.join('|').indexOf(item.project_id) == -1) {
         index.push(item.project_id);
@@ -87,15 +86,14 @@ Template.Collections.events({
 
     FlowRouter.setParams({ collection: this.collection_name });
     Session.set('click-collection', this);
-    Session.set('ready-repository', false);
-    Meteor.subscribe('repository-list', this.collection_id, this.user_id, function(){
-      Session.set('ready-repository', true);
-    });
+    // Session.set('ready-repository', false);
+    Meteor.subscribe('repository-list', this.collection_id, this.user_id);
   }
 });
 
-// var dbRepository = new Mongo.Collection("mysql.repository");
-// var dbRepositoryCollection = new Mongo.Collection("mysql.repository_collection");
+Tracker.autorun(function() {
+
+});
 
 Template.Collections.onCreated(() => {
   if(!Session.get('click-collection')) Session.set('click-collection', {});

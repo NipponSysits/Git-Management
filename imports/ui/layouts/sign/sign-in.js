@@ -121,6 +121,7 @@ Template.SignIn.onRendered(function() {
           if(!err) {
             $('.ui.dimmer.prepare').fadeIn(300);
             $('.ui.panel.sign-in').fadeOut(300, function(){
+              toPanelSignImage(auth.email, auth.email, true);
               return T.Init(T.Timestamp).then(function(){
                 $('.ui.panel.main').fadeIn();
                 //FlowRouter.go('dashboard', { username: Meteor.user().username });

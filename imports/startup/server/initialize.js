@@ -11,12 +11,10 @@ var dbRole 									= db.meteorCollection("role", "mysql.role");
 Meteor.startup(function () {
 
   Meteor.users.remove({}, function (error, result) {
-    if (error) {
-      console.log("Error removing user: ", error);
-    }
+    if (error) { console.log("Error removing user: ", error); }
   });
 
-  // Created User
+  console.log("recreate user.");
 	dbUser.find().forEach(function(user){
 		let role = dbRole.findOne({ roleId : user.roleId });
 
@@ -25,8 +23,8 @@ Meteor.startup(function () {
 			email: user.email, 
 			password: user.password,
 			profile: { 
-				email: user.email,
 				user_id: user.userId,
+				email: user.email,
 				fullname: user.name+(user.surname?' '+user.surname:''),
 				position: user.position,
 				role: role,
@@ -38,11 +36,13 @@ Meteor.startup(function () {
 });
 
 process.on("SIGTERM", function() {
+  console.log("SIGTERM END");
   db.end();
 	db.destroy();
 });
 
 process.on("SIGINT", function() {
+  console.log("SIGINT END");
   db.end();
 	db.destroy();
 });

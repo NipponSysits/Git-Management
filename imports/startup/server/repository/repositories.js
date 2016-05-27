@@ -45,6 +45,7 @@ Meteor.publish('collection-list', function() {
   GROUP BY u.username, r.user_id 
   `; // ${ !level?``:`OR p.collection_id IS NOT NULL `  }
 
+
   db.query(query_collection, function(err, data){
   	if(err) self.error(err);
 		(data || []).forEach(function(item){
@@ -81,7 +82,7 @@ Meteor.publish('repository-list', function(collection_id, user_id) {
   SELECT 
     r.repository_id, r.collection_id, r.user_id, r.project_id, p.name project_name,
     r.name, r.fullname, r.description, r.private, r.anonymous, r.logo, 
-    c.user_id admin_id, r.created_at
+    c.user_id admin_id, r.updated_at
   FROM repository r
   LEFT JOIN repository_project p ON r.project_id = p.project_id
   ${ !level?`
@@ -102,10 +103,9 @@ Meteor.publish('repository-list', function(collection_id, user_id) {
 
   db.query(query, function(err, data){
   	if(err) self.error(err);
-
-		(data || []).forEach(function(item){
-  		self.added('list.repository', item.repository_id, item);
-		});
+    (data || []).forEach(function(item){
+      self.added('list.repository', item.repository_id, item);
+    });
 		self.ready();
   });
 });
