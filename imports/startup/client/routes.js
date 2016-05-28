@@ -11,30 +11,15 @@ import '../../ui/layouts/main.js';
 import '../../ui/layouts/error.js';
 
 import './routes-sign.js';
+import './routes-source.js';
 
 BlazeLayout.setRoot('body');
 
-
-// 
-// Tracker.autorun(function () {
-//   if(!Meteor.userId()) { FlowRouter.go('sign'); }
-// });
-
-
-const SignAccess = function(context, redirect) {
-  if(!Meteor.userId()) {
-    redirect('sign');
-  }
-}
-const Dashboard = function(context, redirect) {
-  // if(Meteor.userId()) {
-  //   redirect('dashboard', { username: 'dvgamer' });
-  // }
-}
-
 FlowRouter.route('/', {
   name: 'home',
-  triggersEnter: [SignAccess],
+  triggersEnter: function(context, redirect) {
+    if(!Meteor.userId()) redirect('sign');
+  },
   action:function() {
     BlazeLayout.render('app', { 
       main: 'Dashboard', 
@@ -43,63 +28,6 @@ FlowRouter.route('/', {
     });
   }
 });
-
-FlowRouter.route('/Repositories/:collection?', {
-  name: 'repository',
-  // subscriptions: function(params, queryParams) {
-  //   if(!params.collection) {
-  //     this.register('repository-list', );
-  //   }
-  // },
-  triggersEnter: [SignAccess],
-  action:function() {
-    BlazeLayout.render('app', { 
-      navigator: 'Navigator',
-      repository: 'Collections',
-      main: 'Repositories', 
-    }); 
-     
-  },
-});
-
-FlowRouter.route('/Contents/:name?', {
-  name: 'content',
-  triggersEnter: [SignAccess],
-  action:function() {
-    BlazeLayout.render('app', { 
-      navigator: 'Navigator',
-      repository: 'Content',
-      main: 'Repositories', 
-    }); 
-     
-  },
-});
-
-FlowRouter.route('/Fork', {
-  name: 'fork',
-  triggersEnter: [SignAccess],
-  action:function() {
-    BlazeLayout.render('app', { 
-      navigator: 'Navigator',
-      repository: 'Fork',
-      main: 'Repositories', 
-    }); 
-     
-  },
-});
-
-
-FlowRouter.route('/:collection/:repository', {
-  name: 'source',
-  triggersEnter: [SignAccess],
-  action:function() {
-    BlazeLayout.render('app', { 
-      main: 'Dashboard', 
-      navigator: 'Navigator'
-    });
-  },
-});
-
 
 FlowRouter.route('/:username?', {
   name: 'dashboard',

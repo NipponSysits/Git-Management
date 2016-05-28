@@ -18,7 +18,6 @@ Template.Fork.helpers({
   }
 });
 
-Repos = new Mongo.Collection("repositories");
 Template.Fork.onCreated(() => {
 	var a = Meteor.subscribe('collection', 1, function(data){
 		console.log('collection', a);

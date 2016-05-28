@@ -1,0 +1,95 @@
+<template name="RepositoryNew">
+	<div class="sixteen wide column">
+		<div class="ui stackable one column grid component">
+		  <div class="column">
+		  	<h5>Repository</h5>
+		  	<div class="content">
+					<div class="ui grid">
+						<div class="seven wide column">
+							<form class="ui form repository_new">
+							  <h4 class="ui dividing header">Create a new repository</h4>
+	  						<div class="fields">
+						      <div class="six wide field">
+							    	<label>Owner</label>
+					        	<input type="text" name="repository[collection]" placeholder="Collection name">
+						      </div>
+						      <div class="ten wide field">
+							    	<label>Repository</label>
+					        	<input type="text" name="repository[name]" placeholder="Repository name">
+						      </div>
+						    </div>
+							  <div class="field">
+							    <label>Title</label>
+					        <input type="text" name="repository[title]" placeholder="Optional">
+							  </div>
+							  <div class="field">
+							    <label>Description</label>
+							    <textarea name="repository[description]" placeholder="Optional" rows="2"></textarea>
+							  </div>
+							  <div class="ui section divider"></div>
+							  <div class="grouped type fields">
+							    <label>How often do you use checkboxes?</label>
+							    <div class="fields">
+      							<div class="one wide field">
+								      <div class="ui radio checkbox">
+								        <input type="radio" id="team" name="repository[type]" checked="checked">
+								        <label></label>
+								      </div>
+							      </div>
+							      <label class="fourteen wide field" for="team">
+											<h4 class="ui header">
+											  <i class="users icon"></i>
+											  <div class="content">
+											    Team
+											    <div class="sub header">Some people can see this repository</div>
+											  </div>
+											</h4>
+							      </label>
+							    </div>
+							    <div class="fields">
+      							<div class="one wide field">
+								      <div class="ui radio checkbox">
+								        <input type="radio" id="private" name="repository[type]">
+								        <label></label>
+								      </div>
+							      </div>
+							      <label class="fourteen wide field" for="private">
+											<h4 class="ui header">
+											  <i class="lock icon"></i>
+											  <div class="content">
+											    Private
+											    <div class="sub header">You choose who can see and commit to this repository.</div>
+											  </div>
+											</h4>
+							      </label>
+							    </div>
+								  <div class="ui horizontal divider">Or</div>
+							    <div class="fields">
+	    							<div class="one wide field">
+								      <div class="ui radio checkbox">
+								        <input type="radio" id="anonymous" name="repository[type]">
+								        <label></label>
+								      </div>
+							      </div>
+							      <label class="fourteen wide field" for="anonymous">
+											<h4 class="ui header">
+											  <i class="world icon"></i>
+											  <div class="content">
+											    Anonymous
+											    <div class="sub header">Anyone can see this repository.</div>
+											  </div>
+											</h4>
+							      </label>
+							    </div>
+						    </div>
+
+							</form>	
+						</div>
+
+					</div>
+		  	</div>
+		  </div>
+		</div>
+	</div>
+
+</template>	

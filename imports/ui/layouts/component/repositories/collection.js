@@ -10,9 +10,6 @@ const moment = require('moment');
 
 import './collection.html';
 
-let monCollectionName = new Mongo.Collection("list.collection-name");
-let monCollectionUser = new Mongo.Collection("list.collection-user");
-let monRepository = new Mongo.Collection("list.repository");
 
 Template.Collections.helpers({
   // // the collection cursor
@@ -20,16 +17,16 @@ Template.Collections.helpers({
     return Session.get('ready-collection');
   },
   CollectionUserItems: function() {
-    return monCollectionUser.find();
+    return dbListCollectionUser.find();
   },
   CollectionUserCount: function() {
-    return monCollectionUser.find().count() > 0;
+    return dbListCollectionUser.find().count() > 0;
   },
   CollectionNameItems: function() {
-    return monCollectionName.find();
+    return dbListCollectionName.find();
   },
   CollectionNameCount: function() {
-    return monCollectionName.find().count() > 0;
+    return dbListCollectionName.find().count() > 0;
   },
   isDescription: function(desc){
     return desc ? true : false;
@@ -41,7 +38,7 @@ Template.Collections.helpers({
     return 'Updated on '+moment(date).fromNow(true);
   },
   atUser: function(user_id){
-    return Meteor.users.findOne({ 'profile.user_id': user_id }).username;
+    return (Meteor.users.findOne({ 'profile.user_id': user_id }) || {}).username;
   },
   RepositoryReady: function() {
     return Session.get('ready-repository');
@@ -50,11 +47,11 @@ Template.Collections.helpers({
     let self = Session.get('click-collection');
 
     if(self.collection_id) {
-      return monRepository.find({ collection_id: self.collection_id, project_id: project_id || null }, {sort:{name:1}});
+      return dbListRepository.find({ collection_id: self.collection_id, project_id: project_id || null }, {sort:{name:1}});
     } else if(self.user_id) {
-      return monRepository.find({ user_id: self.user_id, collection_id: null, project_id: project_id || null }, {sort:{name:1}});
+      return dbListRepository.find({ user_id: self.user_id, collection_id: null, project_id: project_id || null }, {sort:{name:1}});
     } else {
-      return monRepository.find({ user_id: 1, collection_id: null, project_id: null }, {sort:{name:1}});
+      return dbListRepository.find({ user_id: 1, collection_id: null, project_id: null }, {sort:{name:1}});
     }
     
   },
@@ -62,11 +59,11 @@ Template.Collections.helpers({
     let self = Session.get('click-collection');
     let data = [], index = [], unqiue = [];
     if(self.collection_id) {
-      data = monRepository.find({ collection_id: self.collection_id }, {sort:{project_name:1}}).fetch();
+      data = dbListRepository.find({ collection_id: self.collection_id }, {sort:{project_name:1}}).fetch();
     } else if(self.user_id) {
-      data = monRepository.find({ user_id: self.user_id, collection_id: null }, {sort:{project_name:1}}).fetch();
+      data = dbListRepository.find({ user_id: self.user_id, collection_id: null }, {sort:{project_name:1}}).fetch();
     } else {
-      data = monRepository.find({ user_id: 1, collection_id: null }, {sort:{project_name:1}}).fetch();
+      data = dbListRepository.find({ user_id: 1, collection_id: null }, {sort:{project_name:1}}).fetch();
     }
     data.forEach(function(item){
       if(item.project_id != null && index.join('|').indexOf(item.project_id) == -1) {
@@ -88,6 +85,9 @@ Template.Collections.events({
     Session.set('click-collection', this);
     // Session.set('ready-repository', false);
     Meteor.subscribe('repository-list', this.collection_id, this.user_id);
+  },
+  'click .repository .button.repository_new': function(e){
+    FlowRouter.go('repository.new');
   }
 });
 
@@ -102,7 +102,7 @@ Template.Collections.onCreated(() => {
 
   Meteor.subscribe('collection-list', function(){
     let collection_name = FlowRouter.getParam('collection');
-    let self = monCollectionUser.findOne({collection_name:collection_name}) || monCollectionName.findOne({collection_name:collection_name}) || {};
+    let self = dbListCollectionUser.findOne({collection_name:collection_name}) || dbListCollectionName.findOne({collection_name:collection_name}) || {};
     if(collection_name) {
       $(`.collection > .ui.menu a.item[data-item="${collection_name}"]`).addClass('selected');
       Session.set('click-collection', self);

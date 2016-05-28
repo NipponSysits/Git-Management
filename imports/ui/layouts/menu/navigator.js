@@ -75,10 +75,11 @@ let onButton = { SignOut: false };
 
 Template.Navigator.onRendered(function() {
 	var self = this;
+  let usr = (Meteor.user() || { profile: {} }).profile;
 
   $('.user-menu > .item.notify').dropdown();
   $('.user-menu > .item.profile').dropdown();
-  $('.user-menu > .item.profile').avatar('kem@ns.co.th', 64);
+  $('.user-menu > .item.profile').avatar(usr.email, 64);
 
   $('.ui.access.grid .dropdown.profile .item.signout').click(function(){
     $('.signout.modal').modal({

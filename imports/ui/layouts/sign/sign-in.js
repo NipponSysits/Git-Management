@@ -74,8 +74,10 @@ Template.SignIn.onRendered(function() {
   if(T.Storage('signin-remember-id') == 'check' && T.Storage('signin-username')) {
     let user = T.Storage('signin-username');
     toPanelSignImage(user.fullname, user.email);
+    $('.field.password input').focus();
   } else {
     toPanelSignId();
+    $('.field.username input').focus();
   }
 
   $('.ui.sign-in.form').form({
@@ -157,43 +159,6 @@ Template.SignIn.onRendered(function() {
         });
 
 
-        // T.Call({ url:'/api/sign-in', data: fields }).then(function(e, res){
-        //   $('.ui.sign-in.button').removeClass('loading');
-        //   if (!e.onError) {
-        //     // display: "Kananek T.", email: "kem@ns.co.th"
-        //     $('.ui.sign-in.form').form('get field','password').val('');
-        //     $('.ui.dimmer.prepare').transition('fade');
-        //     $('.ui.panel.sign-in').fadeOut(300, function(){
-        //       onAccess(res.user, 'dashboard');
-        //       eventSignInSuccess();
-        //     });
-        //   } else {
-        //     eventSignInSuccess();
-        //     $('.ui.access.grid').hide();
-        //     if(!res.name) {
-        //       //console.log('username fail');
-        //       $('.field.username').addClass('error');
-        //       $('.field.username input').focus();
-        //     }
-        //     if(!res.pass) {
-        //       //console.log('password fail');
-
-        //     }
-
-        //   }
-
-        //   if(res.name && $('.ui.sign-image').css('display') == 'none') {
-        //     T.Storage('signin-username', $('.ui.sign-in.form').form('get field','email').val());
-        //     $('.ui.sign-id').transition('remove looping').transition({ 
-        //       animation: 'fade right', 
-        //       onComplete: function(){
-        //         $('.ui.sign-image').transition('fade right');
-        //       }
-        //     });
-        //     eventRememberSignIn($('.ui.sign-in.form').form('get field','email').val());
-        //   }
-
-        // });
       }
       return false;
     },

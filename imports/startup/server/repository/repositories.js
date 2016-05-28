@@ -44,7 +44,7 @@ Meteor.publish('collection-list', function() {
   AND (r.private = 'NO' OR (r.private = 'YES' AND r.user_id = ${UserProfile.user_id}))
   `}
   GROUP BY u.username, r.user_id 
-  `; // ${ !level?``:`OR p.collection_id IS NOT NULL `  }
+  `; // ${ !level?``:`OR p.collection_id IS NOT NULLs `  }
 
 
   db.query(query_collection, function(err, data){
@@ -59,7 +59,6 @@ Meteor.publish('collection-list', function() {
       if(err) self.error(err);
       let ownerCreated = false;
       (data || []).forEach(function(item){
-        console.log(item.collection_name, getUser.username);
         if(item.list > 0) self.added('list.collection-user', item.user_id, item);
         if(item.collection_name == getUser.username) {
           ownerCreated = true;

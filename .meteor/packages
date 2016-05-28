@@ -28,3 +28,5 @@ accounts-base
 accounts-password
 accounts-google
 nodets:mysql
+vue:vue
+dburles:mongo-collection-instances
