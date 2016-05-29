@@ -1,4 +1,4 @@
-<template name="RepositoryNew">
+<template name="RepositoryCreate">
 	<div class="sixteen wide column">
 		<div class="ui stackable one column grid component">
 		  <div class="column">
@@ -10,12 +10,19 @@
 							  <h4 class="ui dividing header">Create a new repository</h4>
 	  						<div class="fields">
 						      <div class="six wide field">
-							    	<label>Owner</label>
-					        	<input type="text" name="repository[collection]" placeholder="Collection name">
+							    	<label>Collection</label>
+										<div class="ui fluid search selection collection dropdown">
+										  <input type="hidden" name="repository[collection]">
+										  <i class="dropdown icon"></i>
+										  <div class="text">dvgamer</div>
+										  <div class="menu">
+											  <div class="item" data-value="af">Afghanistan</div>
+											</div>
+										</div>
 						      </div>
-						      <div class="ten wide field">
+						      <div class="ten wide repository field">
 							    	<label>Repository</label>
-					        	<input type="text" name="repository[name]" placeholder="Repository name">
+					        	<input id="repository" type="text" name="repository[name]" placeholder="Repository name">
 						      </div>
 						    </div>
 							  <div class="field">

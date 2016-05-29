@@ -7,24 +7,24 @@ require('/imports/language')('Content');
 
 import './content.html';
 
-Template.Content.helpers({
-  // the collection cursor
-  collection: function () {
-    return Template.instance().collection();
-  },
-  // are there more collection to show?
-  hasMorePosts: function () {
-    return Template.instance().collection().count() >= Template.instance().limit.get();
-  }
-});
+// Template.Content.helpers({
+//   // the collection cursor
+//   collection: function () {
+//     return Template.instance().collection();
+//   },
+//   // are there more collection to show?
+//   hasMorePosts: function () {
+//     return Template.instance().collection().count() >= Template.instance().limit.get();
+//   }
+// });
 
-Template.Content.onCreated(() => {
-	var a = Meteor.subscribe('collection', 1, function(data){
-		console.log('collection', a);
-	});
-});
+// Template.Content.onCreated(() => {
+// 	var a = Meteor.subscribe('collection', 1, function(data){
+// 		console.log('collection', a);
+// 	});
+// });
 
 
-Template.Content.onRendered(() => {
-	console.log(Repos.find().fetch());
-});
+// Template.Content.onRendered(() => {
+// 	console.log(Repos.find().fetch());
+// });

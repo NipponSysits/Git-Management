@@ -3,6 +3,15 @@ import { Meteor } 	from 'meteor/meteor';
 const config 		= require('$custom/config');
 const db 				= Mysql.connect(config.mysql);
 
+
+Meteor.publish('collection-add', function(data) {
+  let self = this;
+  // let data = { collection_name: "Test New", list: 99, collection_id: 99, user_id: null };
+  self.added('list.collection-name', data.collection_id, data);
+  self.ready();
+});
+
+
 Meteor.publish('collection-list', function() {
   // Meteor._sleepForMs(2000);
   let self = this;
@@ -20,11 +29,11 @@ Meteor.publish('collection-list', function() {
     ON c.repository_id = r.repository_id and c.permission in ('Contributors','Administrators')
   `}
   WHERE r.collection_id IS NOT NULL AND content_id IS NULL AND fork_id IS NULL
-  ${ !level?``:`
-  AND (c.user_id IS NULL OR (c.user_id IS NOT NULL AND c.user_id = ${UserProfile.user_id}))
-  AND (c.user_id = ${UserProfile.user_id} OR r.anonymous = 'YES')
-  AND (r.private = 'NO' OR (r.private = 'YES' AND r.user_id = ${UserProfile.user_id}))
-  `}
+    ${ !level?``:`
+    AND (c.user_id IS NULL OR (c.user_id IS NOT NULL AND c.user_id = ${UserProfile.user_id}))
+    AND (c.user_id = ${UserProfile.user_id} OR r.anonymous = 'YES')
+    AND (r.private = 'NO' OR (r.private = 'YES' AND r.user_id = ${UserProfile.user_id}))
+    `}
   GROUP BY p.name, p.collection_id;
   `;
 
@@ -34,15 +43,15 @@ Meteor.publish('collection-list', function() {
   ${ !level?``:`
   LEFT JOIN repository_contributor c 
     ON c.repository_id = r.repository_id and c.permission in ('Contributors','Administrators')
-  `}
+    `}
   LEFT JOIN user u ON u.user_id = r.user_id
   WHERE r.collection_id IS NULL 
-  AND content_id IS NULL AND fork_id IS NULL
-  ${ !level?``:`
-  AND (c.user_id IS NULL OR (c.user_id IS NOT NULL AND c.user_id = ${UserProfile.user_id}))
-  AND (c.user_id = ${UserProfile.user_id} OR r.anonymous = 'YES')
-  AND (r.private = 'NO' OR (r.private = 'YES' AND r.user_id = ${UserProfile.user_id}))
-  `}
+    AND content_id IS NULL AND fork_id IS NULL
+    ${ !level?``:`
+    AND (c.user_id IS NULL OR (c.user_id IS NOT NULL AND c.user_id = ${UserProfile.user_id}))
+    AND (c.user_id = ${UserProfile.user_id} OR r.anonymous = 'YES')
+    AND (r.private = 'NO' OR (r.private = 'YES' AND r.user_id = ${UserProfile.user_id}))
+    `}
   GROUP BY u.username, r.user_id 
   `; // ${ !level?``:`OR p.collection_id IS NOT NULLs `  }
 
@@ -78,25 +87,28 @@ Meteor.publish('collection-list', function() {
   });
 });
 
-Meteor.publish('repository-list', function(collection_id, user_id) {
+Meteor.publish('repository-list', function() {
   // Meteor._sleepForMs(1000);
 
   let self = this;
   if(!self.userId) return [];
 
   let UserProfile = Meteor.users.findOne({ _id: self.userId }).profile;
-  if(!collection_id && !user_id) {
-    user_id = UserProfile.user_id
-  }
+  // if(!collection_id && !user_id) {
+  //   user_id = UserProfile.user_id
+  // }
   let level = UserProfile.role.level > 1;
 
   let query = `
   SELECT 
     r.repository_id, r.collection_id, r.user_id, r.project_id, p.name project_name,
-    r.name, r.fullname, r.description, r.private, r.anonymous, r.logo, 
+    co.name collection_name, u.username, r.name repository_name, 
+    r.fullname, r.description, r.private, r.anonymous, r.logo,    
     c.user_id admin_id, r.updated_at
   FROM repository r
+  LEFT JOIN user u ON u.user_id = r.user_id
   LEFT JOIN repository_project p ON r.project_id = p.project_id
+  LEFT JOIN repository_collection co ON co.collection_id = r.collection_id
   ${ !level?`
   LEFT JOIN repository_contributor c 
     ON c.repository_id = r.repository_id AND c.permission in ('Administrators')
@@ -106,7 +118,6 @@ Meteor.publish('repository-list', function(collection_id, user_id) {
   `}
   WHERE content_id IS NULL AND fork_id IS NULL
   ${ !level?``:`
-  AND ${collection_id?`r.collection_id=${collection_id}`:`r.collection_id IS NULL AND r.user_id=${user_id}`}
   AND (c.user_id IS NULL OR (c.user_id IS NOT NULL AND c.user_id = ${UserProfile.user_id}))
   AND (c.user_id = ${UserProfile.user_id} OR r.anonymous = 'YES')
   AND (r.private = 'NO' OR (r.private = 'YES' AND r.user_id = ${UserProfile.user_id}))

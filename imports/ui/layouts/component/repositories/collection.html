@@ -1,19 +1,19 @@
-<template name="Collections">
+<template name="RepositoryCollection">
 	<div class="three wide column collection">
 		<div class="ui vertical menu">
-			{{#if CollectionUserCount}}
+			{{#if UsernameCount}}
 				<h5 class="ui dividing header">username<a class="anchor" id="states"></a></h5>
 			{{/if}}
-		  {{#each CollectionUserItems}}
+		  {{#each UsernameItems}}
 			  <a class="item" data-item="{{collection_name}}">
 			    {{collection_name}}
 			    <div class="ui label">{{list}}</div>
 			  </a>
 		  {{/each}}
-			{{#if CollectionUserCount}}
+			{{#if CollectionCount}}
 				<h5 class="ui dividing header">collection<a class="anchor" id="states"></a></h5>
 			{{/if}}
-		  {{#each CollectionNameItems}}
+		  {{#each CollectionItems}}
 			  <a class="item" data-item="{{collection_name}}">
 			    {{collection_name}}
 			    <div class="ui label">{{list}}</div>
@@ -21,63 +21,5 @@
 		  {{/each}}
 		</div>
 	</div>
-	<div class="thirteen wide column repository">
-		<div class="ui grid">
-			<div class="four wide column left floated middle aligned" style="margin-left:10px;">
-				<div class="ui transparent icon fluid input">
-				  <input type="text" placeholder="fillter repository...">
-				  <i class="search icon"></i>
-				</div>
-			</div>
-			<div class="four wide column right floated">
-				<button class="ui fluid primary button repository_new">Create</button>
-			</div>
-		</div>
-		<div class="ui relaxed divided list">
-		  {{#each RepositoryItems}}
-		  <div class="item">
-	      <div class="created right floated">{{atDate updated_at}}</div>
-		    <i class="large github middle aligned icon"></i>
-				{{#if isDescription description}}
-			    <div class="content">
-			      <a class="header">{{isNull fullname name}}</a>
-			      {{#if atUser admin_id}}<div class="subheader">{{atUser admin_id}}</div>{{/if}}
-			      <div class="description">{{description}}</div>
-			    </div>
-				{{else}}
-			    <div class="content" style="padding-top:3px;">
-			      <a class="header">{{isNull fullname name}}</a>
-			      {{#if atUser admin_id}}<div class="subheader">{{atUser admin_id}}</div>{{/if}}
-			    </div>
-				{{/if}}
-		  </div>
-		  {{/each}}
-		</div>
-	  {{#each PrejectItems}}
-			<h2 class="ui">
-			  <div class="content">{{project_name}}</div>
-			</h2>
-			<div class="ui relaxed divided list">
-		  {{#each RepositoryItems project_id}}
-		  <div class="item">
-		  	<div class="created right floated">{{atDate updated_at}}</div>
-		    <i class="large github middle aligned icon"></i>
-					{{#if isDescription description}}
-				    <div class="content">
-			      	<a class="header">{{isNull fullname name}}</a>
-				      {{#if atUser admin_id}}<div class="subheader">{{atUser admin_id}}</div>{{/if}}
-				      <div class="description">{{description}}</div>
-				    </div>
-					{{else}}
-				    <div class="content" style="padding-top:3px;">
-				      <a class="header">{{isNull fullname name}}</a>
-				      {{#if atUser admin_id}}<div class="subheader">{{atUser admin_id}}</div>{{/if}}
-				    </div>
-					{{/if}}
-			  </div>
-			  {{/each}}
-			</div>
-	  {{/each}}
-    <div class="ui centered medium inline indeterminate text loader" style="top:180px">Preparing repositories</div>
-	</div>
+	{{> RepositoryList }}
 </template>	

@@ -22,7 +22,7 @@ Meteor.startup(() => {
 });
 
 Template.app.onCreated(function() {
-	Meteor.subscribe('users');
+	
 });
 
 Template.app.onRendered(function() {

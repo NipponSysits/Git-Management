@@ -14,20 +14,33 @@ FlowRouter.route('/Repository.New', {
   action:function() {
     BlazeLayout.render('app', { 
       navigator: 'Navigator',
-      repository: 'RepositoryNew',
+      component: 'RepositoryCreate',
       main: 'Repositories', 
     }); 
      
   },
 });
 
-FlowRouter.route('/Repositories/:collection?', {
+FlowRouter.route('/Repositories', {
   name: 'repository',
   triggersEnter: [SignAccess],
   action:function() {
     BlazeLayout.render('app', { 
       navigator: 'Navigator',
-      repository: 'Collections',
+      component: 'RepositoryCollection',
+      main: 'Repositories', 
+    }); 
+     
+  },
+});
+
+FlowRouter.route('/Repositories/:collection', {
+  name: 'repository.list',
+  triggersEnter: [SignAccess],
+  action:function() {
+    BlazeLayout.render('app', { 
+      navigator: 'Navigator',
+      component: 'RepositoryCollection',
       main: 'Repositories', 
     }); 
      
@@ -40,7 +53,7 @@ FlowRouter.route('/Contents/:name?', {
   action:function() {
     BlazeLayout.render('app', { 
       navigator: 'Navigator',
-      repository: 'Content',
+      component: 'Content',
       main: 'Repositories', 
     }); 
      
@@ -53,7 +66,7 @@ FlowRouter.route('/Fork', {
   action:function() {
     BlazeLayout.render('app', { 
       navigator: 'Navigator',
-      repository: 'Fork',
+      component: 'Fork',
       main: 'Repositories', 
     }); 
      
@@ -62,11 +75,11 @@ FlowRouter.route('/Fork', {
 
 
 FlowRouter.route('/:collection/:repository', {
-  name: 'source',
+  name: 'repository.detail',
   triggersEnter: [SignAccess],
   action:function() {
     BlazeLayout.render('app', { 
-      main: 'Dashboard', 
+      main: 'Repository', 
       navigator: 'Navigator'
     });
   },

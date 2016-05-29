@@ -11,6 +11,7 @@ import '../../ui/layouts/main.js';
 import '../../ui/layouts/error.js';
 
 import './routes-sign.js';
+import './routes-nippon.js';
 import './routes-source.js';
 
 BlazeLayout.setRoot('body');

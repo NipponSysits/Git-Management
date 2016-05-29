@@ -105,10 +105,28 @@
     }
     // .type.grouped .field:has(.ui.radio.checkbox>input:checked) + label.field .content
     .repository_new {
+      .ui.collection.dropdown {
+        border-radius: 0px; 
+        > .menu {
+          border-radius: 0px;
+        }
+      }
+      textarea {
+        border-radius: 0px;
+      }
+      input {
+        border-radius: 0px;
+        &:focus {
+          border-radius: 0px;
+        }
+      }
+      .field.repository input {
+
+      }
       > .type.grouped {
         > .fields {
           > label.field {
-            cursor: pointer;;
+            cursor: pointer;
           }
         }
         .radio {

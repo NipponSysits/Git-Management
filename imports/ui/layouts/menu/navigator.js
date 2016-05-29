@@ -38,7 +38,6 @@ Template.Navigator.events({
   	$('.user-menu > .item.home').addClass('selected');
   	// $('.form.sign-in').transition('fade right', function(){
     if(Meteor.userId()) {
-      console.log('click');
 		  FlowRouter.go('dashboard');
     } else {
       FlowRouter.go('sign');
@@ -58,9 +57,6 @@ Template.Navigator.events({
   	// $('.form.sign-in').transition('fade right', function(){
 		FlowRouter.go('nippon');
   	// });
-  },
-  'click .user-menu .item.notify': function(event){
-    // $('.ui.notification.sidebar').sidebar('toggle');
   },
   'click .item.profile .menu .item.profile': function(event){
   	$('.user-menu > .item').removeClass('selected');
