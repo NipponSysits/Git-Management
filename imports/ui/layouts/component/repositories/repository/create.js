@@ -33,6 +33,7 @@ Template.RepositoryCreate.onCreated(() => {
 
 Template.RepositoryCreate.onRendered(() => {
 	$('.ui.collection.dropdown').dropdown({
+    showOnFocus: false,
 		onNoResults:function(val){
 			if(/[^A-Za-z0-9_-]+/ig.exec(val)) {
 				$(this).addClass('error');
