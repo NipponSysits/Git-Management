@@ -36,7 +36,7 @@ FlowRouter.route('/Repositories', {
 
 FlowRouter.route('/Repositories/:collection', {
   name: 'repository.list',
-  triggersEnter: [SignAccess],
+  // triggersEnter: [SignAccess],
   action:function() {
     BlazeLayout.render('app', { 
       navigator: 'Navigator',
