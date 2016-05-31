@@ -17,13 +17,13 @@ Template.RepositoryCollection.helpers({
     return Session.get('ready-collection');
   },
   UsernameItems: function() {
-    return dbListCollectionUser.find();
+    return dbListCollectionUser.find({}, {sort:{collection_name:1}});
   },
   UsernameCount: function() {
     return dbListCollectionUser.find().count() > 0;
   },
   CollectionItems: function() {
-    return dbListCollectionName.find();
+    return dbListCollectionName.find({}, {sort:{collection_name:1}});
   },
   CollectionCount: function() {
     return dbListCollectionName.find().count() > 0;
@@ -35,8 +35,8 @@ Template.RepositoryCollection.helpers({
 
 Template.RepositoryCollection.events({
   'click .collection > .ui.menu a.item': function(e) {
-    $('.collection > .ui.menu a.item').removeClass('selected');
-    $(e.currentTarget).addClass('selected');
+    // $('.collection > .ui.menu a.item').removeClass('selected');
+    // $(e.currentTarget).addClass('selected');
     FlowRouter.go('repository.list', { collection: this.collection_name });
   }
 });
