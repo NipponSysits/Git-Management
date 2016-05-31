@@ -17,13 +17,13 @@ Template.RepositoryCollection.helpers({
     return Session.get('ready-collection');
   },
   UsernameItems: function() {
-    return dbListCollectionUser.find();
+    return dbListCollectionUser.find({}, {sort:{collection_name:1}});
   },
   UsernameCount: function() {
     return dbListCollectionUser.find().count() > 0;
   },
   CollectionItems: function() {
-    return dbListCollectionName.find();
+    return dbListCollectionName.find({}, {sort:{collection_name:1}});
   },
   CollectionCount: function() {
     return dbListCollectionName.find().count() > 0;
