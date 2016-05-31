@@ -3,7 +3,7 @@ MAINTAINER Touno-K.com
 # WORKDIR /app
 # PORT 3000
 
-RUN cd /data/app 
+RUN cd /app/source 
 	&& git pull origin master \
 	&& meteor build /app --directory --architecture=os.linux.x86_64 \
   && cd /app/bundle/programs/server \
