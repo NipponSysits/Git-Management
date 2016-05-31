@@ -1,28 +1,23 @@
 <template name="Navigator">
   <div class="computer tablet only row user-menu">
     {{#if isLogin}}
-      {{#if isDebug}}
       <a class="ui item home">
         <i class="home icon big"></i>
       </a>
-      {{/if}}
 
       <a class="ui item repository">
         <i class="repository icon big"></i>
       </a>
-      {{#if isAttended}}
       <a class="ui item nippon">
         <i class="nippon icon big"></i>
       </a>
-      {{/if}}
-
       <div class="ui item content">
         <div class="content">
           <div class="ui fullname sub header">{{getFullname}}</div>
           <div class="ui position">({{getPosition}})</div>
         </div>
       </div>
-      <div class="ui top right dropdown item profile online" style="background-size: contain;">
+      <div class="ui top right dropdown item profile online" style="background-size: contain; background-image:{{getAvatar}};">
         <a class="ui item user" style="width: 50px;">
         </a>
         <div class="menu">

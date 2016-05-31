@@ -28,27 +28,26 @@ Template.RepositoryList.helpers({
     return arg1 ? arg1 : arg2;
   },
   atDate: function(date){
-    return 'Updated on '+moment(date).fromNow(true);
-  },
-  atUser: function(user_id){
-    return (Meteor.users.findOne({ 'profile.user_id': user_id }) || {}).username;
+    return date ? 'Updated on '+moment(date).fromNow(true) : '';
   },
   isReady: function() {
     return Session.get('collection');
   },
   Repository: function(project_id) {
     let collection = { collection_name: FlowRouter.getParam('collection') || (Meteor.user() || {}).username };
-    let self = dbListCollectionName.findOne(collection) || dbListCollectionUser.findOne(collection);
+    if(collection) {
+      let self = dbListCollectionName.findOne(collection) || dbListCollectionUser.findOne(collection);
 
-    $('.collection > .ui.menu a.item').removeClass('selected');
-    $(`.collection > .ui.menu a.item[data-item="${collection.collection_name}"]`).addClass('selected');
+      $('.collection > .ui.menu a.item').removeClass('selected');
+      $(`.collection > .ui.menu a.item[data-item="${collection.collection_name}"]`).addClass('selected');
 
-    if(self.collection_id) {
-      return dbListRepository.find({ collection_id: self.collection_id, project_id: project_id || null }, {sort:{name:1}});
-    } else if(self.user_id) {
-      return dbListRepository.find({ user_id: self.user_id, collection_id: null, project_id: project_id || null }, {sort:{name:1}});
-    } else {
-      return dbListRepository.find({ user_id: 1, collection_id: null, project_id: null }, {sort:{name:1}});
+      if(self.collection_id) {
+        return dbListRepository.find({ collection_id: self.collection_id, project_id: project_id || null }, {sort:{name:1}});
+      } else if(self.user_id) {
+        return dbListRepository.find({ user_id: self.user_id, collection_id: null, project_id: project_id || null }, {sort:{name:1}});
+      } else {
+        return dbListRepository.find({ user_id: 1, collection_id: null, project_id: null }, {sort:{name:1}});
+      }
     }
     
   },

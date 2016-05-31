@@ -8,7 +8,7 @@ require('/imports/language')('Nippon');
 import './nippon.html';
 
 Template.Nippon.onRendered(() => {
-  $('.ui.dimmer.prepare').fadeOut(300);
+  // $('.ui.dimmer.prepare').fadeOut(300);
   $('.ui.panel.sign-in').hide();
   $('.ui.panel.main').show();
   

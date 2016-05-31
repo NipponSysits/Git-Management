@@ -1,5 +1,5 @@
 <template name="Repository">
-<div class="ui stackable two column grid component">
+<div class="ui stackable two column grid component repository-detail">
 	<div class="eleven wide column">
 		<h5>Repository</h5>
 		<div class="content">
@@ -58,6 +58,7 @@
 	<div class="five wide column">
 		<h5>Repository</h5>
 		<div class="content">
+      <h4 class="ui dividing header">{{RepositoryName}}</h4>
 			<div class="ui stackable two column grid">
 				<div class="column">
 					<div class="ui fluid label">
@@ -76,20 +77,18 @@
 			</div>
 			<div class="ui grid">
 				<div class="sixteen wide column" style="padding-top:0px;">
-					<div class="ui fluid small action input">
-					  <input type="text" readonly value="http://ww.short.url/c0opq">
-            <button class="ui icon button">
+					<div class="ui fluid small action input clipboard">
+					  <input id="git" type="text" readonly value="{{DomainName}}">
+            <button class="ui icon button copy" data-clipboard-target="#git">
               <i class="copy icon"></i>
             </button>
-            <button class="ui icon button">
+            <button class="ui icon button download">
               <i class="download icon"></i>
             </button>
 					</div>
 				</div>
 			</div>
-		 
-
-        <h4 class="ui dividing header">History logs</h4>
+      <h4 class="ui dividing header">History logs</h4>
 
 
 

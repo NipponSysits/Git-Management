@@ -1,11 +1,14 @@
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
+import { Tracker } from 'meteor/tracker';
 import { Session } from 'meteor/session';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
 require('/imports/language')('Navigator');
 
 import './navigator.html';
+
+const md5 = require('md5');
 
 
 Template.Navigator.helpers({
@@ -15,17 +18,18 @@ Template.Navigator.helpers({
   isLogin: function(){
     return Meteor.userId();
   },
-	isAttended: function(){
-    let usr = (Meteor.user() || { profile: {} }).profile
-	  return usr.attended ? true : false;
-	},
+  isWait: function(){
+    return Meteor.user();
+  },
 	getFullname: function(){
-    let usr = (Meteor.user() || { profile: {} }).profile
-	  return usr.fullname;
+	  return (Meteor.user() || { profile: {} }).profile.fullname;
 	},
+  getAvatar: function(){
+    let email = (Meteor.user() || { profile: {} }).profile.email;
+    return `url('//www.gravatar.com/avatar${email?`/${md5(email)}`:``}?d=mm&s=64')`;
+  },
 	getPosition: function(){
-    let usr = (Meteor.user() || { profile: {} }).profile
-	  return usr.position;
+	  return (Meteor.user() || { profile: {} }).profile.position;
 	}, 
 });
 
@@ -69,13 +73,17 @@ Template.Navigator.events({
 
 let onButton = { SignOut: false };
 
+Tracker.autorun(function() {
+  if(Meteor.user()) {   
+    $('.user-menu > .item.nippon').hide();
+    $('.ui.dimmer.prepare').fadeOut(300); 
+  }
+});
+
+
 Template.Navigator.onRendered(function() {
 	var self = this;
-  let usr = (Meteor.user() || { profile: {} }).profile;
-
-  $('.user-menu > .item.notify').dropdown();
-  $('.user-menu > .item.profile').dropdown();
-  $('.user-menu > .item.profile').avatar(usr.email, 64);
+   // $('.user-menu > .item.profile').avatar(null, 64);
 
   $('.ui.access.grid .dropdown.profile .item.signout').click(function(){
     $('.signout.modal').modal({

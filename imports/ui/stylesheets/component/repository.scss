@@ -103,7 +103,7 @@
         }
       }
     }
-    // .type.grouped .field:has(.ui.radio.checkbox>input:checked) + label.field .content
+    // .type.grouped .field:has(.ui.radio.checkboxin>input:checked) + label.field .content
     .repository_new {
       .ui.collection.dropdown {
         border-radius: 0px; 
@@ -136,6 +136,21 @@
         .icon {
           font-size: 2.2em;
         }
+      }
+    }
+  }
+  &.repository-detail {
+    
+    .input.clipboard {
+      > input {
+        border-radius: 0px;
+        padding: 5px;
+      }
+      > button.copy {
+        padding: 6px;
+      }
+      > button.download {
+        padding: 6px;
       }
     }
   }

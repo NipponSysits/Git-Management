@@ -20,13 +20,13 @@
 					{{#if isDescription description}}
 				    <div class="content">
 				      <a class="header">{{isNull fullname repository_name}}</a>
-				      {{#if atUser admin_id}}<div class="subheader">{{atUser admin_id}}</div>{{/if}}
+				      {{#if admin}}<div class="subheader">{{admin}}</div>{{/if}}
 				      <div class="description">{{description}}</div>
 				    </div>
 					{{else}}
 				    <div class="content" style="padding-top:3px;">
 				      <a class="header">{{isNull fullname repository_name}}</a>
-				      {{#if atUser admin_id}}<div class="subheader">{{atUser admin_id}}</div>{{/if}}
+				      {{#if admin}}<div class="subheader">{{admin}}</div>{{/if}}
 				    </div>
 					{{/if}}
 			  </div>
@@ -44,13 +44,13 @@
 						{{#if isDescription description}}
 					    <div class="content">
 				      	<a class="header">{{isNull fullname repository_name}}</a>
-					      {{#if atUser admin_id}}<div class="subheader">{{atUser admin_id}}</div>{{/if}}
+					      {{#if admin}}<div class="subheader">{{admin}}</div>{{/if}}
 					      <div class="description">{{description}}</div>
 					    </div>
 						{{else}}
 					    <div class="content" style="padding-top:3px;">
 					      <a class="header">{{isNull fullname repository_name}}</a>
-					      {{#if atUser admin_id}}<div class="subheader">{{atUser admin_id}}</div>{{/if}}
+					      {{#if admin}}<div class="subheader">{{admin}}</div>{{/if}}
 					    </div>
 						{{/if}}
 				  </div>
