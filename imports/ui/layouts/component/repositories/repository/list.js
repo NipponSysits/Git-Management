@@ -30,6 +30,9 @@ Template.RepositoryList.helpers({
     let collection = { collection_name: FlowRouter.getParam('collection') || (Meteor.user() || {}).username };
     let self = dbListCollectionName.findOne(collection) || dbListCollectionUser.findOne(collection);
 
+    $('.collection > .ui.menu a.item').removeClass('selected');
+    $(`.collection > .ui.menu a.item[data-item="${collection.collection_name}"]`).addClass('selected');
+
     if(self.collection_id) {
       return dbListRepository.find({ collection_id: self.collection_id, project_id: project_id || null }, {sort:{name:1}});
     } else if(self.user_id) {
