@@ -1,7 +1,8 @@
 import { Meteor } 	from 'meteor/meteor';
 
 const config 		= require('$custom/config');
-const db 				= Mysql.connect(config.mysql);
+const mon       = require('$custom/schema');
+const db        = Mysql.connect(config.mysql);
 
 
 Meteor.publish('collection-add', function(data) {
@@ -21,7 +22,7 @@ Meteor.publish('collection-list', function() {
   let level = UserProfile.role.level > 1;
 
   let query_collection = `
-  SELECT p.name collection_name, COUNT(p.collection_id) list, p.collection_id, NULL user_id
+  SELECT p.name collection_name, LOWER(p.name) order_name, COUNT(p.collection_id) list, p.collection_id, NULL user_id
   FROM repository r
   LEFT JOIN repository_collection p ON r.collection_id = p.collection_id
   ${ !level?``:`
@@ -38,7 +39,7 @@ Meteor.publish('collection-list', function() {
   `;
 
   let query_user = `
-  SELECT u.username collection_name, count(r.user_id) list, NULL collection_id, r.user_id 
+  SELECT u.username collection_name, LOWER(u.username) order_name, count(r.user_id) list, NULL collection_id, r.user_id 
   FROM repository r
   ${ !level?``:`
   LEFT JOIN repository_contributor c 
@@ -104,14 +105,16 @@ Meteor.publish('repository-list', function() {
     r.repository_id, r.collection_id, r.user_id, r.project_id, p.name project_name,
     co.name collection_name, u.username, r.name repository_name, 
     r.fullname, r.description, r.private, r.anonymous, r.logo,    
-    c.user_id admin_id, r.updated_at
+    ua.username admin, r.updated_at
   FROM repository r
   LEFT JOIN user u ON u.user_id = r.user_id
   LEFT JOIN repository_project p ON r.project_id = p.project_id
   LEFT JOIN repository_collection co ON co.collection_id = r.collection_id
+  LEFT JOIN repository_contributor ad 
+    ON ad.repository_id = r.repository_id AND ad.permission in ('Administrators')
+  LEFT JOIN user ua ON ua.user_id = ad.user_id
   ${ !level?`
-  LEFT JOIN repository_contributor c 
-    ON c.repository_id = r.repository_id AND c.permission in ('Administrators')
+
   `:`
   LEFT JOIN repository_contributor c 
     ON c.repository_id = r.repository_id AND c.permission in ('Contributors','Administrators')
@@ -127,7 +130,12 @@ Meteor.publish('repository-list', function() {
   db.query(query, function(err, data){
   	if(err) self.error(err);
     (data || []).forEach(function(item){
-      self.added('list.repository', item.repository_id, item);
+      // console.log(item);
+      mon.Commit.findOne({ repository_id: item.repository_id }, function(err, commit) {
+        item.updated_at = (commit || {}).since;
+        self.added('list.repository', item.repository_id, item);
+      });
+      
     });
 		self.ready();
   });

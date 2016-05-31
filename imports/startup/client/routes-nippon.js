@@ -24,7 +24,8 @@ nipponRoutes.route('/', {
   name: 'nippon',
   action: function() {
     BlazeLayout.render('app', { 
-      navigator: 'Navigator'
+      navigator: 'Navigator',
+      main: 'Nippon'
     });
   }
 });

@@ -1,7 +1,6 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 import { Session } from 'meteor/session';
-import { Tracker } from 'meteor/tracker'
 import { Meteor } from 'meteor/meteor';
 
 // Import to load these templates
