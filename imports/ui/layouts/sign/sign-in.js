@@ -21,18 +21,30 @@ let toPanelSignId = function(fade){
   }
 }
 
-let toPanelSignImage = function(fullname, email, fade){
+let toPanelSignImage = function(fullname, email, status, fade){
   onButton.SignImage = true;
-  $('.ui.button.sign-in').removeAttr('style');
-  $('.ui.button.sign-back, .or.sign-or').show();
-  if(!fade) {
-    $('.form.sign-in .sign-id').hide();
-    $('.form.sign-in .sign-image').show();
+  if(status) {
+    $('.ui.button.sign-in').removeAttr('style');
+    $('.ui.button.sign-back, .or.sign-or').show();
+    if(!fade) {
+      $('.form.sign-in .sign-id').hide();
+      $('.form.sign-in .sign-image').show();
+    } 
+    $('.field.username input').val(fullname);
+  } else {
+    if(!fade) {
+      $('.form.sign-in .sign-id').hide();
+      $('.form.sign-in .sign-image').show();
+    }
+    $('.ui.button.sign-back').removeAttr('style');
+    $('.ui.button.sign-in, .or.sign-or, .ui.sign-trouble').hide();
+    $('.ui.button.sign-back').show();
+    $('.field.username input').val(email);
   }
-  $('.field.username input').val(email);
+
   $('.form.sign-in .sign-avartar').avatar(email, 256);
   $('.form.sign-in .sign-email').html(fullname);
-  T.Storage('signin-username', { fullname: fullname, email: email});
+  T.Storage('signin-username', { fullname: fullname, email: email, status: status});
 }
 
 
@@ -51,9 +63,19 @@ Template.SignIn.events({
         animation: 'fade left', 
         onComplete: function(){
           $('.ui.sign-id').transition('fade left');
+          $('.ui.sign-password').transition('fade left');
+          $('.ui.button.sign-in, .ui.sign-trouble').show();
+          $('.ui.button.sign-back').css('max-width', '83px');
         }
       });
     	toPanelSignId(true);
+    }
+    if(!T.Storage('signin-username').status) {
+      $('.ui.sign-deined').transition('hide');
+      $('.field.password input').val('');
+      $('.field.username input').val('').focus();
+      $('.ui.remember-id').checkbox('uncheck');
+      onButton.SignImage = false;
     }
   }
 });
@@ -73,7 +95,9 @@ Template.SignIn.onRendered(function() {
 
   if(T.Storage('signin-remember-id') == 'check' && T.Storage('signin-username')) {
     let user = T.Storage('signin-username');
-    toPanelSignImage(user.fullname, user.email);
+    toPanelSignImage(user.fullname, user.email, user.status);
+    $('.ui.button.sign-back, .or.sign-or, .ui.button.sign-in, .ui.sign-trouble').show();
+    $('.ui.button.sign-back').css('max-width', '83px');
     $('.field.password input').focus();
   } else {
     toPanelSignId();
@@ -119,23 +143,39 @@ Template.SignIn.onRendered(function() {
         }
 
         Meteor.loginWithPassword(auth.email, auth.password, function(err){
-          console.log('loginWithPassword', !err ? 'Success' : err);
+          console.log('loginWithPassword', !err ? 'Successful.' : err);
           if(!err) {
-            if(Meteor.user().profile.status) {
+            var profile = Meteor.user().profile;
+            if(profile.status) {
               $('.ui.dimmer.prepare').fadeIn(300);
               $('.ui.panel.sign-in').fadeOut(300, function(){
-                toPanelSignImage(auth.email, auth.email, true);
-                return T.Init(T.Timestamp).then(function(){
+                toPanelSignImage(profile.fullname, auth.email, true, true);
+                T.Init(T.Timestamp).then(function(){
                   $('.ui.panel.main').fadeIn();
                   FlowRouter.go('repository');
                 });
               });
             } else {
-              console.log('Deny', Meteor.user().profile);
+              console.log('Access is denied');
+              $('.ui.sign-password').transition({ 
+                animation: 'fade right', 
+                onComplete: function(){
+                  $('.ui.sign-deined').transition('fade right');
+                }
+              });
+              if(!onButton.SignImage) {
+                $('.ui.sign-id').transition('remove looping').transition({ 
+                  animation: 'fade right', 
+                  onComplete: function(){
+                    $('.ui.sign-image').transition('fade right');
+                  }
+                });
+              }
               Meteor.logout(function() {
-
+                toPanelSignImage(profile.fullname, profile.email, false, true);
               });
             }
+
           } else {
             if (err.reason == "User not found") {
               $('.field.username').addClass('error');
@@ -149,7 +189,7 @@ Template.SignIn.onRendered(function() {
                     $('.ui.sign-image').transition('fade right');
                   }
                 });
-                toPanelSignImage(auth.email, auth.email, true);
+                toPanelSignImage(auth.email, auth.email, true, true);
               }
 
               $('.field.password').addClass('error');

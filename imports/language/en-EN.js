@@ -11,6 +11,7 @@ module.exports = {
 		password		:'Password',
 		back				:'Back',
 		login				:'Login',
+		deined			:'Access is deined.',
 		trouble			:'Trouble Signing In?',
 		or					:'or',
 		valid: {

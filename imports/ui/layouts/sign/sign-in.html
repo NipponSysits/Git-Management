@@ -25,20 +25,27 @@
           </div>
         </div>
       </div>
-      <h4>{{translate 'password'}}</h4>
-      <div class="password field">
-        <div class="ui fluid left icon input">
-          <i class="lock icon"></i>
-          <input type="password" id="password" name="password" placeholder="{{translate 'password'}}">
+      <div class="ui column sign-password" style="margin: 1rem 0rem;">
+        <h4>{{translate 'password'}}</h4>
+        <div class="password field">
+          <div class="ui fluid left icon input">
+            <i class="lock icon"></i>
+            <input type="password" id="password" name="password" placeholder="{{translate 'password'}}">
+          </div>
         </div>
       </div>
-      <div class="ui buttons column" style="width:100%">
-        <div class="ui sign-back button large" style="max-width:83px;">{{translate 'back'}}</div>
-        <div class="or sign-or"></div>
-        <div class="ui positive sign-in large submit button">{{translate 'login'}}</div>
+      <div class="ui column sign-deined" style="display:none;margin:1rem 0rem;text-transform: uppercase;text-align:center;">
+        <h2>{{translate 'deined'}}</h2>
       </div>
-      <div class="ui column" style="padding-top:10px;">
-        <b>{{translate 'or'}} </b><a class="link" id="sign-trouble">{{translate 'trouble'}}</a>
+      <div class="ui column">
+        <div class="ui buttons column" style="width:100%">
+          <div class="ui sign-back button large" style="max-width:83px;">{{translate 'back'}}</div>
+          <div class="or sign-or"></div>
+          <div class="ui positive sign-in large submit button">{{translate 'login'}}</div>
+        </div>
+        <div class="ui column sign-trouble" style="padding-top:10px;">
+          <b>{{translate 'or'}} </b><a class="link" id="sign-trouble">{{translate 'trouble'}}</a>
+        </div>
       </div>
     </form>
   </div>
