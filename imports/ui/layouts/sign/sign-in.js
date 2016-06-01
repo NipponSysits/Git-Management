@@ -63,9 +63,11 @@ Template.SignIn.events({
         animation: 'fade left', 
         onComplete: function(){
           $('.ui.sign-id').transition('fade left');
-          $('.ui.sign-password').transition('fade left');
-          $('.ui.button.sign-in, .ui.sign-trouble').show();
-          $('.ui.button.sign-back').css('max-width', '83px');
+          if(!T.Storage('signin-username').status) {
+            $('.ui.sign-password').transition('fade left');
+            $('.ui.button.sign-in, .ui.sign-trouble').show();
+            $('.ui.button.sign-back').css('max-width', '83px');
+          }
         }
       });
     	toPanelSignId(true);
