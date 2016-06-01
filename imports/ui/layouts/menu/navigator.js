@@ -84,6 +84,7 @@ Tracker.autorun(function() {
 Template.Navigator.onRendered(function() {
 	var self = this;
    // $('.user-menu > .item.profile').avatar(null, 64);
+  $('.user-menu > .item.profile').dropdown();
 
   $('.ui.access.grid .dropdown.profile .item.signout').click(function(){
     $('.signout.modal').modal({

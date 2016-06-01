@@ -121,17 +121,21 @@ Template.SignIn.onRendered(function() {
         Meteor.loginWithPassword(auth.email, auth.password, function(err){
           console.log('loginWithPassword', !err ? 'Success' : err);
           if(!err) {
-            $('.ui.dimmer.prepare').fadeIn(300);
-            $('.ui.panel.sign-in').fadeOut(300, function(){
-              toPanelSignImage(auth.email, auth.email, true);
-              return T.Init(T.Timestamp).then(function(){
-                $('.ui.panel.main').fadeIn();
-                
-                //FlowRouter.go('dashboard', { username: Meteor.user().username });
-                FlowRouter.go('repository');
-                
+            if(Meteor.user().profile.status) {
+              $('.ui.dimmer.prepare').fadeIn(300);
+              $('.ui.panel.sign-in').fadeOut(300, function(){
+                toPanelSignImage(auth.email, auth.email, true);
+                return T.Init(T.Timestamp).then(function(){
+                  $('.ui.panel.main').fadeIn();
+                  FlowRouter.go('repository');
+                });
               });
-            });
+            } else {
+              console.log('Deny', Meteor.user().profile);
+              Meteor.logout(function() {
+
+              });
+            }
           } else {
             if (err.reason == "User not found") {
               $('.field.username').addClass('error');
