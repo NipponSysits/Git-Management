@@ -30,7 +30,7 @@ let toPanelSignImage = function(fullname, email, status, fade){
       $('.form.sign-in .sign-id').hide();
       $('.form.sign-in .sign-image').show();
     } 
-    $('.field.username input').val(fullname);
+    $('.field.username input').val(email);
   } else {
     if(!fade) {
       $('.form.sign-in .sign-id').hide();
@@ -95,6 +95,7 @@ Template.SignIn.onRendered(function() {
   $('.ui.panel.main').hide();
   $('.ui.remember-id').checkbox(T.Storage('signin-remember-id') || 'uncheck');  // 
 
+  console.log(T.Storage('signin-username'));
   if(T.Storage('signin-remember-id') == 'check' && T.Storage('signin-username')) {
     let user = T.Storage('signin-username');
     toPanelSignImage(user.fullname, user.email, user.status);
