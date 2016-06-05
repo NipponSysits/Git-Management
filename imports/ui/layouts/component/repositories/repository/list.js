@@ -21,11 +21,14 @@ import './list.html';
 
 
 Template.RepositoryList.helpers({
-  isDescription: function(desc){
+  isTrue: function(desc){
     return desc ? true : false;
   },
   isNull: function(arg1, arg2){
     return arg1 ? arg1 : arg2;
+  },
+  isYes: function(arg1, arg2){
+    return arg1 == 'YES' || arg2 == 'YES' ? true : false;
   },
   atDate: function(date){
     return date ? 'Updated on '+moment(date).fromNow(true) : '';
@@ -36,7 +39,7 @@ Template.RepositoryList.helpers({
   Repository: function(project_id) {
     let collection = { collection_name: FlowRouter.getParam('collection') || (Meteor.user() || {}).username };
     if(collection) {
-      let self = dbListCollectionName.findOne(collection) || dbListCollectionUser.findOne(collection);
+      let self = dbListCollectionName.findOne(collection) || dbListCollectionUser.findOne(collection) || {};
 
       $('.collection > .ui.menu a.item').removeClass('selected');
       $(`.collection > .ui.menu a.item[data-item="${collection.collection_name}"]`).addClass('selected');
@@ -53,7 +56,7 @@ Template.RepositoryList.helpers({
   },
   PrejectItems: function() {
     let collection = { collection_name: FlowRouter.getParam('collection') || (Meteor.user() || {}).username };
-    let self = dbListCollectionName.findOne(collection) || dbListCollectionUser.findOne(collection);
+    let self = dbListCollectionName.findOne(collection) || dbListCollectionUser.findOne(collection) || {};
 
     let data = [], index = [], unqiue = [];
     if(self.collection_id) {
@@ -63,6 +66,7 @@ Template.RepositoryList.helpers({
     } else {
       data = dbListRepository.find({ user_id: 1, collection_id: null }, {sort:{project_name:1}}).fetch();
     }
+    unqiue.push(null)
     data.forEach(function(item){
       if(item.project_id != null && index.join('|').indexOf(item.project_id) == -1) {
         index.push(item.project_id);

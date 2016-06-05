@@ -34,7 +34,8 @@ Template.Repository.onCreated(() => {
 Template.Repository.onRendered(() => {
   $('.ui.panel.sign-in').hide();
   $('.ui.panel.main').show();
-  
+  $('.ui.branch.dropdown').dropdown();
+
   $('.user-menu > .item').removeClass('selected');
   $('.user-menu > .item.repository').addClass('selected');
 

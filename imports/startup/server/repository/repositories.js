@@ -1,7 +1,7 @@
 import { Meteor } 	from 'meteor/meteor';
 
 const config 		= require('$custom/config');
-const mon       = require('$custom/schema');
+const mongo     = require('$custom/schema');
 const db        = Mysql.connect(config.mysql);
 
 
@@ -129,22 +129,24 @@ Meteor.publish('repository-list', function() {
 
   db.query(query, function(err, data){
   	if(err) self.error(err);
+
     (data || []).forEach(function(item){
-      // console.log(item);
-      mon.Commit.findOne({ repository_id: item.repository_id }, function(err, commit) {
-        item.updated_at = (commit || {}).since;
+      var findCommits = mongo.Commit.findOne({ repository_id: item.repository_id }).sort({since : -1});
+      findCommits.exec(function(err, result){
+        if(err) console.log(err);
+
+        item.updated_at = (result || {}).since || item.updated_at;        
         self.added('list.repository', item.repository_id, item);
       });
-      
     });
 		self.ready();
   });
 });
 
-// const liveDbs 		= new LiveMysql(config.mysql);
+// const liveDbs 	s	= new LiveMysql(config.mysql);
 
 Meteor.publish('getDashboardProfile', function(username){
-  // return liveDb.select(`SELECT * FROM user_access WHERE username='`+username+`'`, [{ 
+  // return liveDb.select(`SELECT * FROM users WHERE username='`+username+`'`, [{ 
   // 	table: 'user' 
   // }]);
   this.ready();

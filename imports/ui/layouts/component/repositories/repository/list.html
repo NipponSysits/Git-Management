@@ -12,47 +12,30 @@
 			</div>
 		</div>
 		{{#if isReady}}
-			<div class="ui relaxed divided list">
-			  {{#each Repository}}
-			  <div class="item">
-		      <div class="created right floated">{{atDate updated_at}}</div>
-			    <i class="large github middle aligned icon"></i>
-					{{#if isDescription description}}
-				    <div class="content">
-				      <a class="header">{{isNull fullname repository_name}}</a>
-				      {{#if admin}}<div class="subheader">{{admin}}</div>{{/if}}
-				      <div class="description">{{description}}</div>
-				    </div>
-					{{else}}
-				    <div class="content" style="padding-top:3px;">
-				      <a class="header">{{isNull fullname repository_name}}</a>
-				      {{#if admin}}<div class="subheader">{{admin}}</div>{{/if}}
-				    </div>
-					{{/if}}
-			  </div>
-			  {{/each}}
-			</div>
 		  {{#each PrejectItems}}
-				<h2 class="ui">
-				  <div class="content">{{project_name}}</div>
-				</h2>
+		  	{{#if isTrue project_id}}
+					<h2 class="ui">
+					  <div class="content">{{project_name}}</div>
+					</h2>
+				{{/if}}
 				<div class="ui relaxed divided list">
 			  {{#each Repository project_id}}
 			  <div class="item">
 			  	<div class="created right floated">{{atDate updated_at}}</div>
 			    <i class="large github middle aligned icon"></i>
-						{{#if isDescription description}}
-					    <div class="content">
-				      	<a class="header">{{isNull fullname repository_name}}</a>
-					      {{#if admin}}<div class="subheader">{{admin}}</div>{{/if}}
-					      <div class="description">{{description}}</div>
-					    </div>
-						{{else}}
-					    <div class="content" style="padding-top:3px;">
-					      <a class="header">{{isNull fullname repository_name}}</a>
-					      {{#if admin}}<div class="subheader">{{admin}}</div>{{/if}}
-					    </div>
-						{{/if}}
+				    <div class="content">
+			      	<a class="header">{{isNull fullname repository_name}}</a>
+							{{#if isYes private anonymous}}
+					      <div class="icon">
+					      	{{#if isYes private}}<i class="large lock icon"></i>{{/if}}
+					      	{{#if isYes anonymous}}<i class="large world icon"></i>{{/if}}
+					      </div>
+							{{/if}}
+				      <div class="description">
+					      <span class="admin">{{admin}}</span>
+					      {{#if isTrue description}}<span class="desc">{{description}}</span>{{/if}}
+				      </div>
+				    </div>
 				  </div>
 				  {{/each}}
 				</div>
