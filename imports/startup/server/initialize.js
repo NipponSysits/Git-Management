@@ -11,28 +11,28 @@ var dbRole = db.meteorCollection("role", "mysql.role");
 
 Meteor.startup(function () {
 
-  Meteor.users.remove({}, function (error, result) {
-    if (error) { console.log("Error removing user: ", error); }
+  // Meteor.users.remove({}, function (error, result) {
+  //   if (error) { console.log("Error removing user: ", error); }
 
-		dbUser.find().forEach(function(user){
-			let role = dbRole.findOne({ roleId : user.roleId });
+		// dbUser.find().forEach(function(user){
+		// 	let role = dbRole.findOne({ roleId : user.roleId });
 
-			Accounts.createUser({ 
-				username: user.username, 
-				email: user.signId, 
-				password: user.password,
-				profile: {
-					status: user.status == 'ON' ? true : false,
-					user_id: user.userId,
-					email: user.signId,
-					fullname: user.name+(user.surname?' '+user.surname:''),
-					position: user.position,
-					role: role,
-					attended: user.attended
-				}
-			});
-		});
-  });
+		// 	Accounts.createUser({ 
+		// 		username: user.username, 
+		// 		email: user.signId, 
+		// 		password: user.password,
+		// 		profile: {
+		// 			status: user.status == 'ON' ? true : false,
+		// 			user_id: user.userId,
+		// 			email: user.signId,
+		// 			fullname: user.name+(user.surname?' '+user.surname:''),
+		// 			position: user.position,
+		// 			role: role,
+		// 			attended: user.attended
+		// 		}
+		// 	});
+		// });
+  // });
 
 });
 
