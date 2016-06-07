@@ -37,6 +37,7 @@ Template.RepositoryCollection.events({
   'click .collection > .ui.menu a.item': function(e) {
     // $('.collection > .ui.menu a.item').removeClass('selected');
     // $(e.currentTarget).addClass('selected');
+    $('.filter.input input').val('');
     FlowRouter.go('repository.list', { collection: this.collection_name });
   }
 });

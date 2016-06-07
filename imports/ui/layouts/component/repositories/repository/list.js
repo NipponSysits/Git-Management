@@ -45,11 +45,11 @@ Template.RepositoryList.helpers({
       $(`.collection > .ui.menu a.item[data-item="${collection.collection_name}"]`).addClass('selected');
 
       if(self.collection_id) {
-        return dbListRepository.find({ collection_id: self.collection_id, project_id: project_id || null }, {sort:{name:1}});
+        return dbListRepository.find({ collection_id: self.collection_id, project_id: project_id || null }, {sort:{order_repository:1}});
       } else if(self.user_id) {
-        return dbListRepository.find({ user_id: self.user_id, collection_id: null, project_id: project_id || null }, {sort:{name:1}});
+        return dbListRepository.find({ user_id: self.user_id, collection_id: null, project_id: project_id || null }, {sort:{order_repository:1}});
       } else {
-        return dbListRepository.find({ user_id: 1, collection_id: null, project_id: null }, {sort:{name:1}});
+        return dbListRepository.find({ user_id: 1, collection_id: null, project_id: null }, {sort:{order_repository:1}});
       }
     }
     
@@ -60,11 +60,11 @@ Template.RepositoryList.helpers({
 
     let data = [], index = [], unqiue = [];
     if(self.collection_id) {
-      data = dbListRepository.find({ collection_id: self.collection_id }, {sort:{project_name:1}}).fetch();
+      data = dbListRepository.find({ collection_id: self.collection_id }, {sort:{order_project:1}}).fetch();
     } else if(self.user_id) {
-      data = dbListRepository.find({ user_id: self.user_id, collection_id: null }, {sort:{project_name:1}}).fetch();
+      data = dbListRepository.find({ user_id: self.user_id, collection_id: null }, {sort:{order_project:1}}).fetch();
     } else {
-      data = dbListRepository.find({ user_id: 1, collection_id: null }, {sort:{project_name:1}}).fetch();
+      data = dbListRepository.find({ user_id: 1, collection_id: null }, {sort:{order_project:1}}).fetch();
     }
     unqiue.push(null)
     data.forEach(function(item){
@@ -77,6 +77,20 @@ Template.RepositoryList.helpers({
   }
 });
 
+var funcFilter = function(e) {
+  if($(e.currentTarget).val().trim() !== "") {
+    $('.repository .ui.list > .item').each(function(i, list){
+      if((new RegExp($(e.currentTarget).val().trim(), 'ig')).exec($(list).find('.header').html())) {
+        $(list).addClass('visible').show();
+      } else {
+        $(list).addClass('hidden').hide();
+      }
+    });
+  } else {
+    $('.repository .ui.list > .item.hidden').show();
+  }
+}
+
 Template.RepositoryList.events({
   'click .column.repository .list > div.item': function(){
     FlowRouter.go('repository.detail', { collection: this.collection_name || this.username, repository: this.repository_name+'.git' })
@@ -84,9 +98,8 @@ Template.RepositoryList.events({
   'click .repository .button.repository_new': function(e){
     FlowRouter.go('repository.new');
   },
-  'change .filter.input input': function(e) {
-    //(new RegExp('a', 'ig')).exec($('.repository .ui.list > .item .header').html())
-  }
+  'keydown .filter.input input': funcFilter,
+  'keyup .filter.input input': funcFilter
 });
 
 Template.RepositoryList.onCreated(() => {
