@@ -83,6 +83,9 @@ Template.RepositoryList.events({
   },
   'click .repository .button.repository_new': function(e){
     FlowRouter.go('repository.new');
+  },
+  'change .filter.input input': function(e) {
+    //(new RegExp('a', 'ig')).exec($('.repository .ui.list > .item .header').html())
   }
 });
 

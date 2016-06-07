@@ -20,8 +20,8 @@ Template.Repository.helpers({
 });
 
 Template.Repository.events({
-  'click .collection > .ui.menu a.item': function(e) {
-
+  'change .filter.input input': function(e) {
+  	//(new RegExp('a', 'ig')).exec($('.repository .ui.list > .item .header').html())
   }
 });
 
