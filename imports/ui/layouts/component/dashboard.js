@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor';
+import { Tracker } from 'meteor/tracker';
 import { Template } from 'meteor/templating';
 import { Session } from 'meteor/session';
 import { FlowRouter } from 'meteor/kadira:flow-router';
@@ -8,6 +9,15 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 require('/imports/language')('Dashboard');
 
 import './dashboard.html';
+
+
+// Tracker.autorun(function(c) {
+//   if(Session.get('sign-in')) {
+//     console.log('Dashboard');
+//     if(!$('.ui.dimmer.prepare').hasClass('hidden')) { $('.ui.dimmer.prepare').transition('fade'); }
+//     c.stop();
+//   }
+// });
 
 
 Template.Dashboard.onCreated(function(){

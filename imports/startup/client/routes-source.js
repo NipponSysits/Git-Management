@@ -76,7 +76,10 @@ FlowRouter.route('/Fork', {
 
 FlowRouter.route('/:collection/:repository', {
   name: 'repository.detail',
-  triggersEnter: [SignAccess],
+  subscriptions: function(){
+    let param = { collection_name: FlowRouter.getParam('collection'), repository_name: FlowRouter.getParam('repository') };
+    this.register('repository-get', Meteor.subscribe('repository-get', param));
+  },
   action:function() {
     BlazeLayout.render('app', { 
       main: 'Repository', 

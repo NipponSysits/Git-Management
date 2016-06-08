@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import { Tracker } from 'meteor/tracker'
+import { Tracker } from 'meteor/tracker';
 import { Template } from 'meteor/templating';
 import { Session } from 'meteor/session';
 import { FlowRouter } from 'meteor/kadira:flow-router';
@@ -34,7 +34,7 @@ Template.RepositoryList.helpers({
     return date ? 'Updated on '+moment(date).fromNow(true) : '';
   },
   isReady: function() {
-    return Session.get('collection');
+    return Session.get('repository');
   },
   Repository: function(project_id) {
     let collection = { collection_name: FlowRouter.getParam('collection') || (Meteor.user() || {}).username };
@@ -81,15 +81,16 @@ var funcFilter = function(e) {
   if($(e.currentTarget).val().trim() !== "") {
     $('.repository .ui.list > .item').each(function(i, list){
       if((new RegExp($(e.currentTarget).val().trim(), 'ig')).exec($(list).find('.header').html())) {
-        $(list).addClass('visible').show();
+        $(list).removeClass('hidden').addClass('visible');
       } else {
-        $(list).addClass('hidden').hide();
+        $(list).removeClass('visible').addClass('hidden');
       }
     });
   } else {
-    $('.repository .ui.list > .item.hidden').show();
+    $('.repository .ui.list > .item.hidden').removeClass('hidden');
   }
 }
+
 
 Template.RepositoryList.events({
   'click .column.repository .list > div.item': function(){
@@ -103,15 +104,14 @@ Template.RepositoryList.events({
 });
 
 Template.RepositoryList.onCreated(() => {
-  Session.setDefault('collection', false);
+  Session.setDefault('repository', false);
 });
 
 Template.RepositoryList.onRendered(() => {
   Meteor.subscribe('collection-list', function(){
-    let name = FlowRouter.getParam('collection') || (Meteor.user() || {}).username;
-    let collection = { collection_name: name };
-    let self = dbListCollectionName.findOne(collection) || dbListCollectionUser.findOne(collection);
-    Session.set('collection', true);
-    Meteor.subscribe('repository-list', self.collection_id, self.user_id);
+    
+  });
+  Meteor.subscribe('repository-list', function(){
+    Session.set('repository', true);
   });
 });

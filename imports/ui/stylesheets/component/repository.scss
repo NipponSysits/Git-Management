@@ -73,6 +73,12 @@
         margin-top: 1.7rem;
         > .item {
           padding-left: 12px;
+          &.hidden {
+            display: none !important;
+          }
+          &.visible {
+            
+          }
           &:hover {
             cursor: pointer;
             background-color: #ececec; 

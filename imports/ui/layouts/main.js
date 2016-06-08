@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
+import { Tracker } from 'meteor/tracker';
 import { Session } from 'meteor/session';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
@@ -19,6 +20,13 @@ Meteor.startup(() => {
   // }
 
 
+});
+
+Tracker.autorun(function(c) {
+  if(Session.get('sign-in')) {
+    $('.ui.dimmer.prepare').transition('fade');
+    c.stop();
+  }
 });
 
 Template.app.onCreated(function() {

@@ -74,13 +74,16 @@ Template.Navigator.events({
 let onButton = { SignOut: false };
 
 Tracker.autorun(function() {
-  if(Meteor.user()) {   
-    $('.user-menu > .item.nippon').hide();
-    $('.ui.dimmer.prepare').fadeOut(300); 
+  if(!Meteor.userId()) {
+    FlowRouter.go('sign');
+  } else if(Meteor.user()) {
+    Session.set('sign-in', true);
   }
 });
 
-
+Template.Navigator.onCreated(() => {
+  Session.setDefault('sign-in', false);
+});
 Template.Navigator.onRendered(function() {
 	var self = this;
    // $('.user-menu > .item.profile').avatar(null, 64);
