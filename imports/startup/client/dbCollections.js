@@ -1,5 +1,8 @@
 dbListCollectionName = new Mongo.Collection("list.collection-name");
 dbListCollectionUser = new Mongo.Collection("list.collection-user");
-dbListRepository = new Mongo.Collection("list.repository");
+dbReposList = new Mongo.Collection("list.repository");
+dbReposLogs = new Mongo.Collection("logs.repository");
+dbReposSummary = new Mongo.Collection("summary.repository");
+
 
 

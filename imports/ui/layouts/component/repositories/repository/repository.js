@@ -4,18 +4,38 @@ import { Template } from 'meteor/templating';
 import { Session } from 'meteor/session';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-const config = require('$custom/config');
+const config    = require('$custom/config');
 const Clipboard = require('clipboard');
+const moment    = require('moment');
+const md5       = require('md5');
 
 require('/imports/language')('Repository');
 import './repository.html';
 
 Template.Repository.helpers({
+  Subject: function(subject, comment){
+    return (!comment ?  'pushed ' : '')+subject;
+  },
+  isTrue: function(comment){
+    return comment ? true : false;
+  },
   DomainName: function() {
     return `${config.domain+FlowRouter.getParam('collection')}/${FlowRouter.getParam('repository')}`;
   },
   RepositoryName: function() {
     return `${FlowRouter.getParam('collection')}/${FlowRouter.getParam('repository')}`;
+  },
+  HistoryLogs: function() {
+    return dbReposLogs.find({ 
+      collection: FlowRouter.getParam('collection'), 
+      repository: FlowRouter.getParam('repository') 
+    }, { sort: { since: -1 }, limit: 10 });
+  },
+  Avatar: function(email){
+    return `//www.gravatar.com/avatar/${md5(email)}?d=mm`;
+  },
+  OnDate: function(date){
+    return date ? moment(date).fromNow(true) : '';
   },
 });
 

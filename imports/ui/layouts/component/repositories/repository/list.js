@@ -31,7 +31,7 @@ Template.RepositoryList.helpers({
     return arg1 == 'YES' || arg2 == 'YES' ? true : false;
   },
   atDate: function(date){
-    return date ? 'Updated on '+moment(date).fromNow(true) : '';
+    return date ? moment(date).fromNow(true)+' ago' : '';
   },
   isReady: function() {
     return Session.get('repository');
@@ -45,11 +45,11 @@ Template.RepositoryList.helpers({
       $(`.collection > .ui.menu a.item[data-item="${collection.collection_name}"]`).addClass('selected');
 
       if(self.collection_id) {
-        return dbListRepository.find({ collection_id: self.collection_id, project_id: project_id || null }, {sort:{order_repository:1}});
+        return dbReposList.find({ collection_id: self.collection_id, project_id: project_id || null }, {sort:{order_repository:1}});
       } else if(self.user_id) {
-        return dbListRepository.find({ user_id: self.user_id, collection_id: null, project_id: project_id || null }, {sort:{order_repository:1}});
+        return dbReposList.find({ user_id: self.user_id, collection_id: null, project_id: project_id || null }, {sort:{order_repository:1}});
       } else {
-        return dbListRepository.find({ user_id: 1, collection_id: null, project_id: null }, {sort:{order_repository:1}});
+        return dbReposList.find({ user_id: 1, collection_id: null, project_id: null }, {sort:{order_repository:1}});
       }
     }
     
@@ -60,11 +60,11 @@ Template.RepositoryList.helpers({
 
     let data = [], index = [], unqiue = [];
     if(self.collection_id) {
-      data = dbListRepository.find({ collection_id: self.collection_id }, {sort:{order_project:1}}).fetch();
+      data = dbReposList.find({ collection_id: self.collection_id }, {sort:{order_project:1}}).fetch();
     } else if(self.user_id) {
-      data = dbListRepository.find({ user_id: self.user_id, collection_id: null }, {sort:{order_project:1}}).fetch();
+      data = dbReposList.find({ user_id: self.user_id, collection_id: null }, {sort:{order_project:1}}).fetch();
     } else {
-      data = dbListRepository.find({ user_id: 1, collection_id: null }, {sort:{order_project:1}}).fetch();
+      data = dbReposList.find({ user_id: 1, collection_id: null }, {sort:{order_project:1}}).fetch();
     }
     unqiue.push(null)
     data.forEach(function(item){

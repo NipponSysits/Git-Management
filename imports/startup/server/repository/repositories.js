@@ -2,6 +2,7 @@ import { Meteor } 	from 'meteor/meteor';
 
 const config 		= require('$custom/config');
 const mongo     = require('$custom/schema');
+const Q         = require('q');
 const db        = Mysql.connect(config.mysql);
 
 
@@ -147,11 +148,58 @@ Meteor.publish('repository-list', function() {
 
 // const liveDbs 	s	= new LiveMysql(config.mysql);
 
-Meteor.publish('getDashboardProfile', function(username){
-  // return liveDb.select(`SELECT * FROM users WHERE username='`+username+`'`, [{ 
-  // 	table: 'user' 
-  // }]);
-  this.ready();
+Meteor.publish('repository-loaded', function(param){
+  let self = this;
+  // db.collection_name, db.repository_name
+  // console.log(param.collection, param.repository.replace(/\.git$/g,''));
+
+  let query_loaded = `
+  SELECT r.repository_id
+  FROM repository r
+  LEFT JOIN user u ON u.user_id = r.user_id
+  LEFT JOIN repository_collection c ON c.collection_id = r.collection_id
+  WHERE (c.name = '${param.collection}' OR u.username = '${param.collection}')
+    AND r.name = '${param.repository.replace(/\.git$/g,'')}'
+  `;
+
+  db.query(query_loaded, function(err, data){
+    if(err || data.length == 0) {
+      console.log(err, data);
+      self.stop();
+    }
+
+    let commits = mongo.Commit.find(data[0]).sort({since : -1}).limit(10);
+    commits.exec(function(err, logs){
+      if(err) {
+        console.log(err);
+        self.stop();
+      }
+
+      logs.forEach(function(log){
+        self.added('logs.repository', `${log.repository_id}_${log.commit_id}`, {
+          logs: log.logs,
+          collection: param.collection,
+          repository: param.repository,
+          author: log.author,
+          email: log.email,
+          since: log.since,
+          subject: log.subject,
+          comment: log.comment,
+        });
+      });
+
+      // self.added('summary.repository', data[0], {
+
+      // });
+
+      self.ready();
+    });
+  });
+
+
+
+
+
 });
 
 
