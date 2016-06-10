@@ -104,8 +104,8 @@ Meteor.publish('repository-list', function() {
   let query = `
   SELECT 
     r.repository_id, r.collection_id, r.user_id, r.project_id, p.name project_name, LOWER(p.name) order_project,
-    co.name collection_name, u.username, 
-    (CASE WHEN r.fullname IS NULL THEN r.name ELSE r.fullname END) repository_name, 
+    co.name collection_name, u.username, r.name repository_name,
+    (CASE WHEN r.fullname IS NULL THEN r.name ELSE r.fullname END) title_name, 
     LOWER(CASE WHEN r.fullname IS NULL THEN r.name ELSE r.fullname END) order_repository,
     r.description, r.private, r.anonymous, r.logo,    
     ua.username admin, r.updated_at

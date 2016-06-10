@@ -74,9 +74,7 @@ Template.Navigator.events({
 let onButton = { SignOut: false };
 
 Tracker.autorun(function() {
-  if(!Meteor.userId()) {
-    FlowRouter.go('sign');
-  } else if(Meteor.user()) {
+  if(Meteor.user()) {
     Session.set('sign-in', true);
   }
 });

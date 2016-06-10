@@ -15,11 +15,15 @@ import './routes-source.js';
 
 BlazeLayout.setRoot('body');
 
+const SignAccess = function(context, redirect) {
+  if(!Meteor.userId()) {
+    redirect('sign');
+  }
+}
+
 FlowRouter.route('/', {
   name: 'home',
-  triggersEnter: function(context, redirect) {
-    if(!Meteor.userId()) redirect('sign');
-  },
+  triggersEnter: [SignAccess],
   action:function() {
     BlazeLayout.render('app', { 
       main: 'Dashboard', 
@@ -31,6 +35,7 @@ FlowRouter.route('/', {
 
 FlowRouter.route('/:username?', {
   name: 'dashboard',
+  triggersEnter: [SignAccess],
   action:function() {
     BlazeLayout.render('app', { 
       main: 'Dashboard', 
