@@ -184,5 +184,18 @@
         padding: 6px;
       }
     }
+    .ui.feed.history {
+      .event {
+        
+        &.empty {
+          font-size: 1.2em;
+          color: #D8D8D8;
+          font-style: italic;
+          span {
+            margin: auto;
+          }
+        }
+      }
+    }
   }
 }

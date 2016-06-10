@@ -25,6 +25,12 @@ Template.Repository.helpers({
   RepositoryName: function() {
     return `${FlowRouter.getParam('collection')}/${FlowRouter.getParam('repository')}`;
   },
+  isLogsEmpty: function() {
+    return dbReposLogs.find({ 
+      collection: FlowRouter.getParam('collection'), 
+      repository: FlowRouter.getParam('repository') 
+    }).count() > 0 ? false : true;
+  },
   HistoryLogs: function() {
     return dbReposLogs.find({ 
       collection: FlowRouter.getParam('collection'), 
