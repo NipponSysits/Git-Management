@@ -76,6 +76,7 @@ FlowRouter.route('/Fork', {
 
 FlowRouter.route('/:collection/:repository', {
   name: 'repository.detail',
+  triggersEnter: [SignAccess],
   subscriptions: function(param){
     this.register('repository-loaded', Meteor.subscribe('repository-loaded', param));
   },

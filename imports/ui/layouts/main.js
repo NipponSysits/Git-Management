@@ -23,10 +23,7 @@ Meteor.startup(() => {
 });
 
 Tracker.autorun(function(c) {
-  if(Session.get('sign-in')) {
-    $('.ui.dimmer.prepare').transition('fade');
-    c.stop();
-  }
+  if(Session.get('sign-in')) $('.ui.dimmer.prepare').fadeOut(300);
 });
 
 Template.app.onCreated(function() {

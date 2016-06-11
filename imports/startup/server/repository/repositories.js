@@ -108,7 +108,7 @@ Meteor.publish('repository-list', function() {
     (CASE WHEN r.fullname IS NULL THEN r.name ELSE r.fullname END) title_name, 
     LOWER(CASE WHEN r.fullname IS NULL THEN r.name ELSE r.fullname END) order_repository,
     r.description, r.private, r.anonymous, r.logo,    
-    ua.username admin, r.updated_at${ !level?`, ad.user_id`:`, c.user_id`}
+    ua.username admin, r.updated_at
   FROM repository r
   LEFT JOIN user u ON u.user_id = r.user_id
   LEFT JOIN repository_project p ON r.project_id = p.project_id
