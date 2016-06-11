@@ -13,6 +13,9 @@ require('/imports/language')('Repository');
 import './repository.html';
 
 Template.Repository.helpers({
+  isReady: function(){
+    return FlowRouter.subsReady();
+  },
   Subject: function(subject, comment){
     return (!comment ?  'pushed ' : '')+subject;
   },
@@ -24,6 +27,12 @@ Template.Repository.helpers({
   },
   RepositoryName: function() {
     return `${FlowRouter.getParam('collection')}/${FlowRouter.getParam('repository')}`;
+  },
+  Summary: function() {
+    return dbReposSummary.findOne({ 
+      collection: FlowRouter.getParam('collection'), 
+      repository: FlowRouter.getParam('repository') 
+    });
   },
   isLogsEmpty: function() {
     return dbReposLogs.find({ 

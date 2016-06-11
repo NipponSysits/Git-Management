@@ -4,7 +4,7 @@ const config 		= require('$custom/config');
 const mongo     = require('$custom/schema');
 const Q         = require('q');
 const db        = Mysql.connect(config.mysql);
-
+const socket    = require('$custom/sentinel').clent;
 
 Meteor.publish('collection-add', function(data) {
   let self = this;
@@ -108,7 +108,7 @@ Meteor.publish('repository-list', function() {
     (CASE WHEN r.fullname IS NULL THEN r.name ELSE r.fullname END) title_name, 
     LOWER(CASE WHEN r.fullname IS NULL THEN r.name ELSE r.fullname END) order_repository,
     r.description, r.private, r.anonymous, r.logo,    
-    ua.username admin, r.updated_at${ !level?`, ad.user_id`:`, c.user_id`}
+    ua.username admin, r.updated_at
   FROM repository r
   LEFT JOIN user u ON u.user_id = r.user_id
   LEFT JOIN repository_project p ON r.project_id = p.project_id
@@ -147,60 +147,126 @@ Meteor.publish('repository-list', function() {
 });
 
 // const liveDbs 	s	= new LiveMysql(config.mysql);
-
 Meteor.publish('repository-loaded', function(param){
+  let summary = {
+    collection: param.collection,
+    repository: param.repository
+  };
+  let thread = [];
   let self = this;
   // db.collection_name, db.repository_name
   // console.log(param.collection, param.repository.replace(/\.git$/g,''));
 
-  let query_loaded = `
-  SELECT r.repository_id
-  FROM repository r
-  LEFT JOIN user u ON u.user_id = r.user_id
-  LEFT JOIN repository_collection c ON c.collection_id = r.collection_id
-  WHERE (c.name = '${param.collection}' OR u.username = '${param.collection}')
-    AND r.name = '${param.repository.replace(/\.git$/g,'')}'
-  `;
+  if(!self.userId) return [];
 
-  db.query(query_loaded, function(err, data){
-    if(err || data.length == 0) {
-      console.log(err, data);
-      self.stop();
-    }
+  let UserProfile = Meteor.users.findOne({ _id: self.userId }).profile;
 
-    let commits = mongo.Commit.find(data[0]).sort({since : -1}).limit(10);
+  let getRepository = function(){
+    let def = Q.defer();
+    let query_loaded = `
+    SELECT r.repository_id
+    FROM repository r
+    LEFT JOIN user u ON u.user_id = r.user_id
+    LEFT JOIN repository_collection c ON c.collection_id = r.collection_id
+    WHERE (c.name = '${summary.collection}' OR u.username = '${summary.collection}')
+      AND r.name = '${summary.repository.replace(/\.git$/g,'')}'
+    `;
+
+    db.query(query_loaded, function(err, data){
+      if(err || data.length == 0) {
+        def.reject(err);
+      } else {
+        def.resolve(data[0]);
+      }
+    });
+    return def.promise;
+  }
+
+  getRepository().then(function(data){
+    // data.email = UserProfile.email;
+    // console.log('getRepository', data);
+
+    let def = Q.defer();
+    let commits = mongo.Commit.find(data).count();
     commits.exec(function(err, logs){
       if(err) {
-        console.log(err);
-        self.stop();
+        def.reject(err);
+      } else {
+        summary.commits = logs;
+        def.resolve(data);
       }
-
-      logs.forEach(function(log){
-        self.added('logs.repository', `${log.repository_id}_${log.commit_id}`, {
-          logs: log.logs,
-          collection: param.collection,
-          repository: param.repository,
-          author: log.author,
-          email: log.email,
-          since: log.since,
-          subject: log.subject,
-          comment: log.comment,
-        });
-      });
-
-      // self.added('summary.repository', data[0], {
-
-      // });
-
-      self.ready();
     });
+    return def.promise;
+  }).then(function(data){
+    let def = Q.defer();
+    let query_loaded = `
+      SELECT COUNT(*) person 
+      FROM repository_contributor 
+      WHERE repository_id = ${data.repository_id}
+    `;
+
+    db.query(query_loaded, function(err, person){
+      if(err || person.length == 0) {
+        def.reject(err);
+      } else {
+        summary.contributor = person[0].person;
+        def.resolve(data);
+      }
+    });
+    return def.promise;
+  }).then(function(data){
+    let def = Q.defer();
+    if(socket.connected) {
+      socket.emit('repository-file', data);
+      socket.on('repository-file', function(files){
+        console.log('repository-file', files);
+        summary.files = files;
+        def.resolve(data);
+      });
+    } else {
+      summary.files = 0;
+      def.resolve(data);
+    }
+    return def.promise;
+  }).then(function(data){
+    self.added('summary.repository', data.repository_id, summary);
+    self.ready();
+  }).catch(function(err){
+    console.log('err', err);
+    self.stop();
   });
 
 
-
-
-
 });
+
+    // let commits = mongo.Commit.find(data[0]).sort({since : -1}).limit(10);
+    // commits.exec(function(err, logs){
+    //   if(err) {
+    //     console.log(err);
+        
+    //   }
+
+    //   logs.forEach(function(log){
+    //     self.added('logs.repository', `${log.repository_id}_${log.commit_id}`, {
+    //       logs: log.logs,
+    //       collection: param.collection,
+    //       repository: param.repository,
+    //       author: log.author,
+    //       email: log.email,
+    //       since: log.since,
+    //       subject: log.subject,
+    //       comment: log.comment,
+    //     });
+    //   });
+
+    //   // self.added('summary.repository', data[0], {
+
+    //   // });
+
+    //   self.ready();
+    // });
+
+
 
 
 // db.end(function(err) {
