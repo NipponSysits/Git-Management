@@ -69,40 +69,70 @@
 		<h5>Repository</h5>
 		<div class="content">
       <h4 class="ui dividing header">{{RepositoryName}}</h4>
-			<div class="ui stackable two column grid">
-				<div class="column">
-					<div class="ui fluid label">
-					  <i class="history icon"></i>
-					  <span class="text">258</span>
-					  <a class="detail">commits</a>
-					</div>
-				</div>
-				<div class="column">
-					<div class="ui fluid label">
-					  <i class="users icon"></i>
-					  <span class="text">1</span>
-					  <a class="detail">contributor</a>
-					</div>	
-				</div>
-			</div>
-			<div class="ui grid">
-				<div class="sixteen wide column" style="padding-top:0px;">
-					<div class="ui fluid small action input clipboard">
-					  <input id="git" type="text" readonly value="{{DomainName}}">
+      <div class="ui stackable two column grid">
+        <div class="column">
+          <div class="ui fluid label">
+            <i class="history icon"></i>
+            <span class="text">
+              {{#if isReady}}
+                {{Summary.commits}}
+              {{else}}
+                0
+              {{/if}}
+            </span>
+            <a class="detail">commits</a>
+          </div>
+        </div>
+        <div class="column">
+          <div class="ui fluid label">
+            <i class="users icon"></i>
+            <span class="text">
+              {{#if isReady}}
+                {{Summary.contributor}}
+              {{else}}
+                0
+              {{/if}}
+            </span>
+            <a class="detail">contributor</a>
+          </div>  
+        </div>
+      </div>
+      <div class="ui grid">
+        <div class="sixteen wide column" style="padding-top:0px;">
+          <div class="ui fluid small action input clipboard">
+            <input id="git" type="text" readonly value="{{DomainName}}">
             <button class="ui icon button copy" data-clipboard-target="#git">
               <i class="copy icon"></i>
             </button>
             <button class="ui icon button download">
               <i class="download icon"></i>
             </button>
-					</div>
-				</div>
-			</div>
+          </div>
+        </div>
+      </div>
+      <div class="ui divided selection list">
+        <a class="item">
+          <div class="ui red horizontal label">Adminstrator</div>
+          Kananek T.
+        </a>
+        <a class="item">
+          <div class="ui purple horizontal label">Programmer</div>
+          Jes
+        </a>
+        <a class="item">
+          <div class="ui red horizontal label">Programmer</div>
+          Mick
+        </a>
+        <a class="item">
+          <div class="ui horizontal label">Project</div>
+          Kingkan
+        </a>
+      </div>
       <h4 class="ui dividing header">History logs</h4>
         <div class="ui feed history">
           {{#if isLogsEmpty}}
             <div class="event empty">
-              <span>logs not found.</span>
+              <span>History log is empty.</span>
             </div>
           {{else}}
             {{#each HistoryLogs}}

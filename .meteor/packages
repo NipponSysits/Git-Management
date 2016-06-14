@@ -18,8 +18,8 @@ es5-shim                # ECMAScript 5 compatibility for older browsers.
 ecmascript              # Enable ECMAScript2015+ syntax in app code
 
 insecure                # Allow all DB writes from clients (for prototyping)
-# semantic:ui
-# semantic:ui-css
+semantic:ui
+semantic:ui-css
 fourseven:scss
 kadira:flow-router
 kadira:blaze-layout

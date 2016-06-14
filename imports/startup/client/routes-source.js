@@ -3,9 +3,7 @@ import '../../ui/layouts/component';
 import '../../ui/layouts/menu/navigator.js';
 
 const SignAccess = function(context, redirect) {
-  if(!Meteor.userId()) {
-    redirect('sign');
-  }
+  if(!Meteor.userId()) redirect('sign');
 }
 
 FlowRouter.route('/Repository.New', {
@@ -36,7 +34,7 @@ FlowRouter.route('/Repositories', {
 
 FlowRouter.route('/Repositories/:collection', {
   name: 'repository.list',
-  // triggersEnter: [SignAccess],
+  triggersEnter: [SignAccess],
   action:function() {
     BlazeLayout.render('app', { 
       navigator: 'Navigator',
