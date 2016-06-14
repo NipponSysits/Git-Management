@@ -159,11 +159,14 @@
                 {{/if}}
               </div>
             {{/each}}
-            <div class="event more">
-              <div class="content">
-                <a>Load more...</a>
+            {{#if HistoryMore}}
+              <div class="event more">
+                <div class="content">
+                  <a>Load more...</a>
+                </div>
               </div>
-            </div>
+            {{/if}}
+
           {{/if}}
         </div>
 		</div>

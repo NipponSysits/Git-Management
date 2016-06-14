@@ -40,11 +40,17 @@ Template.Repository.helpers({
       repository: FlowRouter.getParam('repository') 
     }).count() > 0 ? false : true;
   },
+  HistoryMore: function(){
+    return dbReposLogs.find({ 
+      collection: FlowRouter.getParam('collection'), 
+      repository: FlowRouter.getParam('repository') 
+    }).count() > 12 ? true : false;
+  },
   HistoryLogs: function() {
     return dbReposLogs.find({ 
       collection: FlowRouter.getParam('collection'), 
       repository: FlowRouter.getParam('repository') 
-    }, { sort: { since: -1 }, limit: 10 });
+    }, { sort: { since: -1 }, limit: 12 });
   },
   Avatar: function(email){
     return `//www.gravatar.com/avatar/${md5(email)}?d=mm`;

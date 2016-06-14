@@ -230,7 +230,26 @@ Meteor.publish('repository-loaded', function(param){
     return def.promise;
   }).then(function(data){
     self.added('summary.repository', data.repository_id, summary);
-    self.ready();
+
+    let commits = mongo.Commit.find(data).sort({since : -1}).limit(13);
+    commits.exec(function(err, logs){
+      if(err) def.reject(err);
+
+      logs.forEach(function(log){
+        self.added('logs.repository', `${log.repository_id}_${log.commit_id}`, {
+          logs: log.logs,
+          collection: param.collection,
+          repository: param.repository,
+          author: log.author,
+          email: log.email,
+          since: log.since,
+          subject: log.subject,
+          comment: log.comment,
+        });
+      });
+      self.ready();
+    });
+
   }).catch(function(err){
     console.log('err', err);
     self.stop();
@@ -239,25 +258,7 @@ Meteor.publish('repository-loaded', function(param){
 
 });
 
-    // let commits = mongo.Commit.find(data[0]).sort({since : -1}).limit(10);
-    // commits.exec(function(err, logs){
-    //   if(err) {
-    //     console.log(err);
-        
-    //   }
 
-    //   logs.forEach(function(log){
-    //     self.added('logs.repository', `${log.repository_id}_${log.commit_id}`, {
-    //       logs: log.logs,
-    //       collection: param.collection,
-    //       repository: param.repository,
-    //       author: log.author,
-    //       email: log.email,
-    //       since: log.since,
-    //       subject: log.subject,
-    //       comment: log.comment,
-    //     });
-    //   });
 
     //   // self.added('summary.repository', data[0], {
 
