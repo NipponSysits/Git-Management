@@ -1,7 +1,9 @@
+import './forgot.html';
+
 import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import './forgot.html';
+
 
 Template.Forgot.onRendered(function() {
   $(window).resize();

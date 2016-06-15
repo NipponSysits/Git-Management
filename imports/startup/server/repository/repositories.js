@@ -236,6 +236,7 @@ Meteor.publish('repository-loaded', function(param){
       if(err) def.reject(err);
 
       logs.forEach(function(log){
+        
         self.added('logs.repository', `${log.repository_id}_${log.commit_id}`, {
           logs: log.logs,
           collection: param.collection,

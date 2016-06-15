@@ -1,3 +1,5 @@
+import './collection.html';
+
 import { Meteor } from 'meteor/meteor';
 import { Tracker } from 'meteor/tracker';
 import { Template } from 'meteor/templating';
@@ -8,7 +10,6 @@ require('/imports/language')('RepositoryCollection');
 
 const moment = require('moment');
 
-import './collection.html';
 
 
 Template.RepositoryCollection.helpers({

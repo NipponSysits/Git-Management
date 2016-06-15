@@ -1,3 +1,5 @@
+import './navigator.html';
+
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { Tracker } from 'meteor/tracker';
@@ -6,7 +8,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 require('/imports/language')('Navigator');
 
-import './navigator.html';
+
 
 const md5 = require('md5');
 

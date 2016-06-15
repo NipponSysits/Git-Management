@@ -1,3 +1,5 @@
+import './list.html';
+
 import { Meteor } from 'meteor/meteor';
 import { Tracker } from 'meteor/tracker';
 import { Template } from 'meteor/templating';
@@ -8,7 +10,7 @@ require('/imports/language')('RepositoryList');
 
 const moment = require('moment');
 
-import './list.html';
+
 
 
 // Tracker.autorun(function() {

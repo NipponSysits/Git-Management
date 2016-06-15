@@ -1,3 +1,5 @@
+import './content.html';
+
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { Session } from 'meteor/session';
@@ -5,7 +7,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 require('/imports/language')('Content');
 
-import './content.html';
+
 
 // Template.Content.helpers({
 //   // the collection cursor

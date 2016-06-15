@@ -1,10 +1,12 @@
+import './sign-in.html';
+
 import { Meteor }   from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { Session }  from 'meteor/session';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
 
-import './sign-in.html';
+
 
 let md5       = require('md5');
 let moment    = require('moment');

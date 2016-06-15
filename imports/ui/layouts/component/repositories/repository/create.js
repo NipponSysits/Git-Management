@@ -1,14 +1,15 @@
+import './create.html';
+
 import { Meteor } from 'meteor/meteor';
 import { Tracker } from 'meteor/tracker'
 import { Template } from 'meteor/templating';
 import { Session } from 'meteor/session';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-require('/imports/language')('RepositoryCreate');
 
 const moment = require('moment');
 
-import './create.html';
+require('/imports/language')('RepositoryCreate');
 
 Template.RepositoryCreate.helpers({
   CollectionReady: function() {

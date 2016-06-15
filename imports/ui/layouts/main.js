@@ -1,3 +1,5 @@
+import './main.html';
+
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { Tracker } from 'meteor/tracker';
@@ -9,7 +11,7 @@ const $ = require('jquery');
 require('malihu-custom-scrollbar-plugin')($);
 require('/imports/language')('app');
 
-import './main.html';
+
 
 Meteor.startup(() => {
 	$(window).resize(function(){ $('.login-image').height($(window).height() - 118); });

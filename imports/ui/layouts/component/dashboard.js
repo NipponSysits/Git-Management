@@ -1,3 +1,5 @@
+import './dashboard.html';
+
 import { Meteor } from 'meteor/meteor';
 import { Tracker } from 'meteor/tracker';
 import { Template } from 'meteor/templating';
@@ -8,7 +10,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 require('/imports/language')('Dashboard');
 
-import './dashboard.html';
+
 
 
 // Tracker.autorun(function(c) {

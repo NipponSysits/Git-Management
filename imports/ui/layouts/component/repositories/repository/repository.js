@@ -1,3 +1,5 @@
+import './repository.html';
+
 import { Meteor } from 'meteor/meteor';
 import { Tracker } from 'meteor/tracker'
 import { Template } from 'meteor/templating';
@@ -9,8 +11,9 @@ const Clipboard = require('clipboard');
 const moment    = require('moment');
 const md5       = require('md5');
 
+
+
 require('/imports/language')('Repository');
-import './repository.html';
 
 Template.Repository.helpers({
   isReady: function(){

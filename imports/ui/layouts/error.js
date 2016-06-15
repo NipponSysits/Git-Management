@@ -1,3 +1,5 @@
+import './error.html';
+
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { Session } from 'meteor/session';
@@ -5,7 +7,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 require('/imports/language')('error');
 
-import './error.html';
+
 
 Template.error.onRendered(() => {
   $('.ui.dimmer.prepare').fadeOut(300);

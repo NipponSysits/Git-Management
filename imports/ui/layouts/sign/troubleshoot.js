@@ -1,6 +1,8 @@
+import './troubleshoot.html';
+
 import { Template } from 'meteor/templating';
 
-import './troubleshoot.html';
+
 
 Template.Troubleshoot.onRendered(function() {
   $(window).resize();

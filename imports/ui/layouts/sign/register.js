@@ -1,6 +1,8 @@
+import './register.html';
+
 import { Template } from 'meteor/templating';
 
-import './register.html';
+
 
 Template.Register.onRendered(function() {
   $(window).resize();
