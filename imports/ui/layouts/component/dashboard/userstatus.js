@@ -7,9 +7,6 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 require('/imports/language')('UserStatus');
 
-
-
-
 // Template.UserStatus.events({
 //   'click .header.avatar #url a': function(event){
 //   	// $('.form.sign-in').transition('fade right', function(){
@@ -19,6 +16,14 @@ require('/imports/language')('UserStatus');
 // });
 
 Template.UserStatus.helpers({
+  isReady: function(){
+    return FlowRouter.subsReady();
+  },
+  user: function() {
+    return  dbExp.findOne({ 
+      userId: Meteor.userId(), 
+    });
+  },
   getProfile: function(){
     let usr = (Meteor.user() || { profile: {} })
     return usr.profile;

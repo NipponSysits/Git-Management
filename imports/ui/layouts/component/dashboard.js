@@ -11,8 +11,6 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 require('/imports/language')('Dashboard');
 
 
-
-
 // Tracker.autorun(function(c) {
 //   if(Session.get('sign-in')) {
 //     console.log('Dashboard');

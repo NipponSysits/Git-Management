@@ -24,6 +24,9 @@ const SignAccess = function(context, redirect) {
 FlowRouter.route('/', {
   name: 'home',
   triggersEnter: [SignAccess],
+  subscriptions: function(param){
+    this.register('dashboard', Meteor.subscribe('dashboard', param.username));
+  },
   action:function() {
     BlazeLayout.render('app', { 
       main: 'Dashboard', 
@@ -33,9 +36,12 @@ FlowRouter.route('/', {
   }
 });
 
-FlowRouter.route('/:username?', {
+FlowRouter.route('/:username', {
   name: 'dashboard',
   triggersEnter: [SignAccess],
+  subscriptions: function(param){
+    this.register('dashboard', Meteor.subscribe('dashboard', param.username));
+  },
   action:function() {
     BlazeLayout.render('app', { 
       main: 'Dashboard', 
