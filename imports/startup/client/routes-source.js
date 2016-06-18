@@ -22,6 +22,10 @@ FlowRouter.route('/Repository.New', {
 FlowRouter.route('/Repositories', {
   name: 'repository',
   triggersEnter: [SignAccess],
+  subscriptions: function(param){
+    this.register('rcollection-list', Meteor.subscribe('collection-list', { username: 'dvgamer' } ));
+    // this.register('repository-list', Meteor.subscribe('repository-list'));
+  },
   action:function() {
     BlazeLayout.render('app', { 
       navigator: 'Navigator',
@@ -35,6 +39,10 @@ FlowRouter.route('/Repositories', {
 FlowRouter.route('/Repositories/:collection', {
   name: 'repository.list',
   triggersEnter: [SignAccess],
+  subscriptions: function(param){
+    this.register('rcollection-list', Meteor.subscribe('collection-list', param));
+    // this.register('repository-list', Meteor.subscribe('repository-list', param));
+  },
   action:function() {
     BlazeLayout.render('app', { 
       navigator: 'Navigator',

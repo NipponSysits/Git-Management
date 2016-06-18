@@ -89,22 +89,21 @@ Meteor.publish('collection-list', function() {
   });
 });
 
-Meteor.publish('repository-list', function() {
+Meteor.publish('repository-list', function(collection) {
   // Meteor._sleepForMs(1000);
-
+  console.log('collection', collection);
   let self = this;
   if(!self.userId) return [];
 
   let UserProfile = Meteor.users.findOne({ _id: self.userId }).profile;
-  // if(!collection_id && !user_id) {
-  //   user_id = UserProfile.user_id
-  // }
+  let collection_name = collection || UserProfile.username;
   let level = UserProfile.role.level > 1;
 
   let query = `
   SELECT 
     r.repository_id, r.collection_id, r.user_id, r.project_id, p.name project_name, LOWER(p.name) order_project,
-    co.name collection_name, u.username, r.name repository_name,
+    (CASE WHEN r.collection_id IS NOT NULL THEN co.name ELSE u.username END) collection_name, 
+    u.username, r.name repository_name,
     (CASE WHEN r.fullname IS NULL THEN r.name ELSE r.fullname END) title_name, 
     LOWER(CASE WHEN r.fullname IS NULL THEN r.name ELSE r.fullname END) order_repository,
     r.description, r.private, r.anonymous, r.logo,    
@@ -127,6 +126,7 @@ Meteor.publish('repository-list', function() {
   AND (c.user_id IS NULL OR (c.user_id IS NOT NULL AND c.user_id = ${UserProfile.user_id}))
   AND (c.user_id = ${UserProfile.user_id} OR r.anonymous = 'YES')
   AND (r.private = 'NO' OR (r.private = 'YES' AND r.user_id = ${UserProfile.user_id}))
+  AND (r.name = '${collection_name}' OR u.username = '${collection_name}')
   `}
   `;
 
@@ -137,7 +137,6 @@ Meteor.publish('repository-list', function() {
       var findCommits = mongo.Commit.findOne({ repository_id: item.repository_id }).sort({since : -1});
       findCommits.exec(function(err, result){
         if(err) console.log(err);
-
         item.updated_at = (result || {}).since || item.updated_at;        
         self.added('list.repository', item.repository_id, item);
       });

@@ -76,8 +76,8 @@ Template.Repository.onCreated(() => {
 
 
 Template.Repository.onRendered(() => {
-  $('.ui.panel.sign-in').hide();
-  $('.ui.panel.main').show();
+  $('.ui.dimmer.prepare').fadeOut(300);
+
   $('.ui.branch.dropdown').dropdown();
 
   $('.user-menu > .item').removeClass('selected');
@@ -91,7 +91,6 @@ Template.Repository.onRendered(() => {
 	    console.info('Trigger:', e.trigger);
 	    e.clearSelection();
 	});
-	 
 	clipboard.on('error', function(e) {
 	    console.error('Action:', e.action);
 	    console.error('Trigger:', e.trigger);

@@ -106,10 +106,10 @@ h2.ui.header.avatar {
 			background-color: #1d9a87;
 			height: 8px;
 			width:0px;
-	    transition: all 1s linear;
-	    -webkit-transition: all 1s linear;
-	    -moz-transition: all 1s linear;
-	    -o-transition: all 1s linear;
+	    transition: all 0.2s linear;
+	    -webkit-transition: all 0.2s linear;
+	    -moz-transition: all 0.2s linear;
+	    -o-transition: all 0.2s linear;
 		}
 		&.text {
 			min-height: 20px;

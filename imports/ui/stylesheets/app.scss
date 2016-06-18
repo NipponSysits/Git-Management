@@ -1,3 +1,4 @@
+
 body {
   padding: 0px;
   background-color: #ececec;
@@ -27,6 +28,8 @@ div.logo-pgm {
   margin: 8px 10px;
 }
 div.login-image {
+  position: absolute !important;
+  height: calc(100% - 90px);
   background-image: url('/images/login.jpg'); 
   background-position: 0px 0px; 
   background-repeat: no-repeat; 

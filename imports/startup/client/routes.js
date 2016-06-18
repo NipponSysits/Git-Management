@@ -25,7 +25,7 @@ FlowRouter.route('/', {
   name: 'home',
   triggersEnter: [SignAccess],
   subscriptions: function(param){
-    this.register('dashboard', Meteor.subscribe('dashboard', param.username));
+    // this.register('dashboard', );
   },
   action:function() {
     BlazeLayout.render('app', { 

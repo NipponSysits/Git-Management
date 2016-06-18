@@ -14,22 +14,12 @@ require('/imports/language')('app');
 
 
 Meteor.startup(() => {
-	$(window).resize(function(){ $('.login-image').height($(window).height() - 118); });
-  // if (true) {
-  //   FlowRouter.go('sign');
-  // } else {
-    // FlowRouter.go('dashboard', { username: 'dvgamer' });
-  // }
 
-
-});
-
-Tracker.autorun(function(c) {
-  if(Session.get('sign-in')) $('.ui.dimmer.prepare').fadeOut(300);
 });
 
 Template.app.onCreated(function() {
-	
+  Session.setDefault('sign-in', false);
+  Session.setDefault('prepare', false);
 });
 
 Template.app.onRendered(function() {

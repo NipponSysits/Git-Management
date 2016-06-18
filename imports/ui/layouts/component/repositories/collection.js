@@ -36,8 +36,6 @@ Template.RepositoryCollection.helpers({
 
 Template.RepositoryCollection.events({
   'click .collection > .ui.menu a.item': function(e) {
-    // $('.collection > .ui.menu a.item').removeClass('selected');
-    // $(e.currentTarget).addClass('selected');
     $('.filter.input input').val('');
     FlowRouter.go('repository.list', { collection: this.collection_name });
   }
@@ -53,40 +51,7 @@ Tracker.autorun(function() {
 });
 
 Template.RepositoryCollection.onCreated(() => {
-  // Session.set('ready-collection', false);
-  // Session.set('ready-repository', false);
-
-  // Meteor.subscribe('collection-list', function(){
-  //   let collection_name = FlowRouter.getParam('collection');
-  //   let self = dbListCollectionUser.findOne({collection_name:collection_name}) || dbListCollectionName.findOne({collection_name:collection_name}) || {};
-  //   if(collection_name) {
-  //     $(`.collection > .ui.menu a.item[data-item="${collection_name}"]`).addClass('selected');
-  //     Session.set('click-collection', self);
-  //     Meteor.subscribe('repository-list', self.collection_id, self.user_id, function(){
-  //       Session.set('ready-repository', true);
-  //     });
-  //   } else if(Meteor.userId()) {
-  //     let usr = (Meteor.user() || {});
-  //     $(`.collection > .ui.menu a.item[data-item="${usr.username}"]`).addClass('selected');
-  //     Meteor.subscribe('repository-list', self.collection_id, self.user_id, function(){
-  //       Session.set('ready-repository', true);
-  //     });
-  //   }
-
-  //   Session.set('ready-collection', true);
-  // });
-
-
- //  Tracker.autorun(function(c) {
- //    var collection = monCollection.findOne({ collection_name: collection_name });
- //    if(collection) {
- //      Meteor.subscribe('repository-list', collection.collection_id, collection.user_id);
- //      c.stop();
- //    }
- //  });
-	// var a = Meteor.subscribe('collection', 1, function(data){
-	// 	console.log(Reposs.find().fetch());
-	// });
+  
 });
 
 

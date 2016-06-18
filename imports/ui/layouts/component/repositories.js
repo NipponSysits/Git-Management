@@ -1,6 +1,7 @@
 import './repositories.html';
 
 import { Meteor } from 'meteor/meteor';
+import { Tracker } from 'meteor/tracker';
 import { Template } from 'meteor/templating';
 import { Session } from 'meteor/session';
 import { FlowRouter } from 'meteor/kadira:flow-router';
@@ -31,8 +32,11 @@ Template.Repositories.events({
   }
 });
 
+Template.Repositories.onCreated(function(){
+
+});
+
 Template.Repositories.onRendered(() => {
-  // $('.ui.dimmer.prepare').fadeOut(300);
   $('.ui.panel.sign-in').hide();
   $('.ui.panel.main').show();
   

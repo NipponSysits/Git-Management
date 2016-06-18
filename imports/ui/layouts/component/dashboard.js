@@ -11,17 +11,24 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 require('/imports/language')('Dashboard');
 
 
-// Tracker.autorun(function(c) {
-//   if(Session.get('sign-in')) {
-//     console.log('Dashboard');
-//     if(!$('.ui.dimmer.prepare').hasClass('hidden')) { $('.ui.dimmer.prepare').transition('fade'); }
-//     c.stop();
-//   }
-// });
+
+Tracker.autorun(function(c) {
+  if(Session.get('sign-in') && Session.get('prepare')) {
+    $('.ui.dimmer.prepare').fadeOut(300);
+  }
+});
 
 
 Template.Dashboard.onCreated(function(){
-  $('.ui.panel.main, .ui.panel.board').hide();
+  Meteor.subscribe('dashboard', null, function(){
+  	Session.set('prepare', true);
+  })
+	// this.autorun(function(c) {
+	// 	console.log('autorun');
+	//   if(Session.get('sign-in') && Session.get('sign-user')) {
+	//     $('.ui.dimmer.prepare').fadeOut(300);
+	//   }
+	// });
 });
 
 
