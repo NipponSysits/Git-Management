@@ -9,6 +9,7 @@ const socket    = require('$custom/sentinel').clent;
 const exp 			= require('/imports/api/experience');
 
 Meteor.publish('dashboard', function(username) {
+  Meteor._sleepForMs(2000);
   let self = this;
   let getUser = {}, calc = {};
   if(username) {
@@ -69,7 +70,7 @@ Meteor.publish('dashboard', function(username) {
     });
     return def.promise;
   }).then(function(){
-    let dashboard = exp(calc.logs + (calc.fork * 2) + (calc.created * 3) + (calc.assist * 4) + (calc.own * 5));
+    let dashboard = exp(calc.logs + (calc.fork * 2) + (calc.assist * 3) + (calc.own * 4) + (calc.created * 5));
     dashboard.userId = getUser._id;
     dashboard.contributions = calc.logs;
     dashboard.fork = calc.fork;
