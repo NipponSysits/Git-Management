@@ -101,5 +101,10 @@ Template.RepositoryList.onCreated(() => {
 });
 
 Template.RepositoryList.onRendered(() => {
+  if(FlowRouter.subsReady()) {
+    Session.set('repository', true);
+    Session.set('prepare', true);
+  }
+  console.log('collection', FlowRouter.getParam('collection'));
   Meteor.subscribe('repository-list', FlowRouter.getParam('collection'));
 });

@@ -102,7 +102,7 @@ Template.Navigator.onRendered(function() {
             $('.signout.modal .actions .negative.button').removeClass('loading');
             if(!err) {
               $('.signout.modal').modal('hide');
-              $('.ui.panel.main').fadeOut(0);
+              $('.ui.panel.main, .ui.panel.board').fadeOut(0);
               $('.ui.panel.sign-in').fadeIn(300, function(){
                 onButton.SignOut = false;
                 FlowRouter.go('sign');

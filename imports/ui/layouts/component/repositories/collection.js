@@ -37,6 +37,7 @@ Template.RepositoryCollection.helpers({
 Template.RepositoryCollection.events({
   'click .collection > .ui.menu a.item': function(e) {
     $('.filter.input input').val('');
+    Meteor.subscribe('repository-list', this.collection_name);
     FlowRouter.go('repository.list', { collection: this.collection_name });
   }
 });

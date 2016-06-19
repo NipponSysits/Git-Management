@@ -33,7 +33,7 @@ Template.Repositories.events({
 });
 
 Template.Repositories.onCreated(function(){
-
+	Session.set('prepare', false);
 });
 
 Template.Repositories.onRendered(() => {

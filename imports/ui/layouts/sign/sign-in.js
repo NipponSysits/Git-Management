@@ -91,13 +91,12 @@ Template.SignIn.helpers({
 });
 
 Template.SignIn.onRendered(function() {
-  $(window).resize();
   $('.ui.dimmer.prepare').fadeOut(300);
   $('.ui.panel.sign-in').fadeIn(300);
   $('.ui.panel.main').hide();
   $('.ui.remember-id').checkbox(T.Storage('signin-remember-id') || 'uncheck');  // 
 
-  console.log(T.Storage('signin-username'));
+  Session.set('prepare', false);
   if(T.Storage('signin-remember-id') == 'check' && T.Storage('signin-username')) {
     let user = T.Storage('signin-username');
     toPanelSignImage(user.fullname, user.email, user.status);

@@ -91,14 +91,14 @@ Meteor.publish('collection-list', function() {
 
 Meteor.publish('repository-list', function(collection) {
   // Meteor._sleepForMs(1000);
-  console.log('collection', collection);
   let self = this;
   if(!self.userId) return [];
 
-  let UserProfile = Meteor.users.findOne({ _id: self.userId }).profile;
-  let collection_name = collection || UserProfile.username;
-  let level = UserProfile.role.level > 1;
+  let User = Meteor.users.findOne({ _id: self.userId });
+  let collection_name = collection || User.username;
+  let level = User.profile.role.level > 1;
 
+  console.log('collection_name', collection_name, 'level:', level);
   let query = `
   SELECT 
     r.repository_id, r.collection_id, r.user_id, r.project_id, p.name project_name, LOWER(p.name) order_project,
@@ -115,19 +115,17 @@ Meteor.publish('repository-list', function(collection) {
   LEFT JOIN repository_contributor ad 
     ON ad.repository_id = r.repository_id AND ad.permission in ('Administrators')
   LEFT JOIN user ua ON ua.user_id = ad.user_id
-  ${ !level?`
-
-  `:`
+  ${ !level?``:`
   LEFT JOIN repository_contributor c 
     ON c.repository_id = r.repository_id AND c.permission in ('Contributors','Administrators')
   `}
   WHERE content_id IS NULL AND fork_id IS NULL
   ${ !level?``:`
-  AND (c.user_id IS NULL OR (c.user_id IS NOT NULL AND c.user_id = ${UserProfile.user_id}))
-  AND (c.user_id = ${UserProfile.user_id} OR r.anonymous = 'YES')
-  AND (r.private = 'NO' OR (r.private = 'YES' AND r.user_id = ${UserProfile.user_id}))
-  AND (r.name = '${collection_name}' OR u.username = '${collection_name}')
+  AND (c.user_id IS NULL OR (c.user_id IS NOT NULL AND c.user_id = ${User.profile.user_id}))
+  AND (c.user_id = ${User.profile.user_id} OR r.anonymous = 'YES')
+  AND (r.private = 'NO' OR (r.private = 'YES' AND r.user_id = ${User.profile.user_id}))
   `}
+  AND (co.name = '${collection_name}' OR u.username = '${collection_name}')
   `;
 
   db.query(query, function(err, data){
