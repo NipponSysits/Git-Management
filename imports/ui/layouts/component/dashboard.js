@@ -16,6 +16,9 @@ Tracker.autorun(function(c) {
   if(Session.get('sign-in') && Session.get('prepare')) {
     $('.ui.dimmer.prepare').fadeOut(300);
   }
+  // if(!Session.get('prepare')) {
+  //   $('.ui.dimmer.prepare').fadeIn(300);
+  // }
 });
 
 

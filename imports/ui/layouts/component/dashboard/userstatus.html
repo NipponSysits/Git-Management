@@ -10,45 +10,47 @@
 				  </div>
 				</h2>
 			</div>
-			<div class="computer only six column row" style="padding-bottom:0px;height: 150px;">
-				<div class="column stats level" style="margin-left: -6px; margin-bottom: -2px;">
-					<div class="name">level</div>
-					<div class="exp">{{user.level}}</div>
+			{{#if isReady}}
+				<div class="computer only six column row" style="padding-bottom:0px;height: 150px;">
+					<div class="column stats level" style="margin-left: -6px; margin-bottom: -2px;">
+						<div class="name">level</div>
+						<div class="exp">{{user.level}}</div>
+					</div>
+					<div class="column stats icon contributions">
+						<div class="name">contributions</div>
+						<div class="exp">{{user.contributions}}</div>
+					</div>
+					<div class="column stats icon fork">
+						<div class="name">fork</div>
+						<div class="exp">{{user.fork}}</div>
+					</div>
+					<div class="column stats icon repositories">
+						<div class="name">repositories</div>
+						<div class="exp">{{user.repositories}}</div>
+					</div>
+					<div class="column stats icon assistant">
+						<div class="name">assistant</div>
+						<div class="exp">{{user.assistant}}</div>
+					</div>
+					<div class="column stats icon owner" style="margin-right: -6px;">
+						<div class="name">owner</div>
+						<div class="exp">{{user.owner}}</div>
+					</div>
 				</div>
-				<div class="column stats icon contributions">
-					<div class="name">contributions</div>
-					<div class="exp">{{user.contributions}}</div>
-				</div>
-				<div class="column stats icon fork">
-					<div class="name">fork</div>
-					<div class="exp">{{user.fork}}</div>
-				</div>
-				<div class="column stats icon repositories">
-					<div class="name">repositories</div>
-					<div class="exp">{{user.repositories}}</div>
-				</div>
-				<div class="column stats icon assistant">
-					<div class="name">assistant</div>
-					<div class="exp">{{user.assistant}}</div>
-				</div>
-				<div class="column stats icon owner" style="margin-right: -6px;">
-					<div class="name">owner</div>
-					<div class="exp">{{user.owner}}</div>
-				</div>
-			</div>
-			<div class="computer only one column row" style="padding-top:0px;">
-				<div class="column stats progress" style="height: 60px;">
-					<div class="ui grid">
-						<div class="fifteen wide column">
-							<div class="exp text">EXP {{user.exp}} / {{user.next}}</div>
-							<div class="exp background"><div class="exp forground" style="width:{{user.percent}}"></div></div>
-						</div>
-						<div class="one wide column" style="padding-left:0em;">
-							<div class="exp percent">{{user.percent}}</div>
+				<div class="computer only one column row" style="padding-top:0px;">
+					<div class="column stats progress" style="height: 60px;">
+						<div class="ui grid">
+							<div class="fifteen wide column">
+								<div class="exp text">EXP {{user.exp}} / {{user.next}}</div>
+								<div class="exp background"><div class="exp forground" style="width:{{user.percent}}"></div></div>
+							</div>
+							<div class="one wide column" style="padding-left:0em;">
+								<div class="exp percent">{{user.percent}}</div>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
+			{{/if}}
     </div>
 	</div>
 </template>

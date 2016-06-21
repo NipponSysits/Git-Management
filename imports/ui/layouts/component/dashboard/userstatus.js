@@ -31,10 +31,26 @@ Template.UserStatus.helpers({
   user: function() {
     return  dbExp.findOne({ 
       userId: Meteor.userId(), 
-    });
+    }) || {
+      userId: 0,
+      contributions: 0,
+      fork: 0,
+      repositories: 0,
+      assistant: 0,
+      owner: 0,
+      level: 1,
+      exp: 0,
+      next: 0,
+      percent: '0.00%'
+    };
   },
   getProfile: function(){
-    let usr = (Meteor.user() || { profile: {} })
+    let usr = (Meteor.user() || { 
+      profile: {
+        fullname: 'Signing...',
+        email: ''
+      } 
+    })
     return usr.profile;
   },
   getAvatar: function(){

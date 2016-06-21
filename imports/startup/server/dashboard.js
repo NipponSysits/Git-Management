@@ -9,7 +9,6 @@ const socket    = require('$custom/sentinel').clent;
 const exp 			= require('/imports/api/experience');
 
 Meteor.publish('dashboard', function(username) {
-  Meteor._sleepForMs(2000);
   let self = this;
   let getUser = {}, calc = {};
   if(username) {

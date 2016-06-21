@@ -15,12 +15,25 @@ const md5       = require('md5');
 
 require('/imports/language')('Repository');
 
+
+// Tracker.autorun(function(c) {
+//   if(FlowRouter.subsReady()) {
+//     Session.set('prepare', true);
+//   } else {
+//     Session.set('prepare', false);
+//   }
+// });
+
+
 Template.Repository.helpers({
   isReady: function(){
     return FlowRouter.subsReady();
   },
   Subject: function(subject, comment){
     return (!comment ?  'pushed ' : '')+subject;
+  },
+  htmlComment: function(comment){
+    return comment.replace(/\n/ig, '<br>');
   },
   isTrue: function(comment){
     return comment ? true : false;
@@ -76,7 +89,8 @@ Template.Repository.onCreated(() => {
 
 
 Template.Repository.onRendered(() => {
-  $('.ui.dimmer.prepare').fadeOut(300);
+  $('.ui.panel.main').fadeIn(300);
+  $('.ui.dimmer.prepare').fadeOut(0);
 
   $('.ui.branch.dropdown').dropdown();
 

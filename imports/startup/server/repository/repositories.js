@@ -1,8 +1,10 @@
 import { Meteor } 	from 'meteor/meteor';
+import { HTTP }     from 'meteor/http'
 
 const config 		= require('$custom/config');
 const mongo     = require('$custom/schema');
 const Q         = require('q');
+const $         = require('jquery');
 const db        = Mysql.connect(config.mysql);
 const socket    = require('$custom/sentinel').clent;
 
@@ -158,6 +160,11 @@ Meteor.publish('repository-loaded', function(param){
 
   let UserProfile = Meteor.users.findOne({ _id: self.userId }).profile;
 
+  let api = `http://${config.socket}:${config.api}/api/repository/files/${summary.collection}/${summary.repository}`;
+  var response = HTTP.get(api);
+  console.log('HTTP', response.content);
+
+
   let getRepository = function(){
     let def = Q.defer();
     let query_loaded = `
@@ -213,17 +220,27 @@ Meteor.publish('repository-loaded', function(param){
     return def.promise;
   }).then(function(data){
     let def = Q.defer();
-    if(socket.connected) {
-      socket.emit('repository-file', data);
-      socket.on('repository-file', function(files){
-        console.log('repository-file', files);
-        summary.files = files;
-        def.resolve(data);
-      });
-    } else {
-      summary.files = 0;
-      def.resolve(data);
-    }
+
+    let api = `${config.socket}:${config.api}/api/repository/files`;
+
+    // http.get(api, function (error, res) {
+    //   console.log(res.code, res.headers, res.buffer.toString());
+    // });
+    // $.ajax({
+    //   url: api,
+    //   success: function(data){
+    //     console.log(data);
+    //     def.resolve(data);
+    //   }
+    // });
+    // var response = HTTP.get(api, data);
+    def.resolve(data);
+    // if(socket.connected) {
+    //   socket.emit('repository-get', data);
+    // } else {
+    //   summary.files = 0;
+    //   def.resolve(data);
+    // }
     return def.promise;
   }).then(function(data){
     self.added('summary.repository', data.repository_id, summary);
@@ -256,6 +273,11 @@ Meteor.publish('repository-loaded', function(param){
 
 });
 
+socket.on('repository-file', function(files){
+  console.log('repository-file', files);
+  summary.files = files;
+  def.resolve(data);
+});
 
 
     //   // self.added('summary.repository', data[0], {

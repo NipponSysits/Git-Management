@@ -29,5 +29,5 @@ accounts-password
 accounts-google
 nodets:mysql
 vue:vue
-http
 dburles:mongo-collection-instances
+http
