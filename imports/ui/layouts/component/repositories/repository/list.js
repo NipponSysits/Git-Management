@@ -87,20 +87,10 @@ var funcFilter = function(e) {
     Session.set('filter-name', $(e.currentTarget).val().trim());
     $('.repository>.list.filter').show();
     $('.repository>.list.view').hide();
-    // $('h2.ui:has(>div.content)').hide();
-    // $('.repository .ui.list > .item').each(function(i, list){
-    //   if((new RegExp($(e.currentTarget).val().trim(), 'ig')).exec($(list).find('.header').html())) {
-    //     $(list).removeClass('hidden').addClass('visible');
-    //   } else {
-    //     $(list).removeClass('visible').addClass('hidden');
-    //   }
-    // });
   } else {
     Session.set('filter-name', null);
     $('.repository>.list.filter').hide();
     $('.repository>.list.view').show();
-    // $('h2.ui:has(>div.content)').show();
-    // $('.repository .ui.list > .item.hidden').removeClass('hidden');
   }
 }
 
