@@ -159,7 +159,7 @@ Meteor.publish('repository-loaded', function(param){
   if(!self.userId) return [];
 
   let UserProfile = Meteor.users.findOne({ _id: self.userId }).profile;
-  let api = `http://${config.socket}:${config.api}/api/repository/files/${summary.collection}/${summary.repository}`;
+  let api = `http://${config.socket}:${config.api}/api/repository/files/${summary.collection}/${summary.repository}/master`;
 
   var response = HTTP.get(api);
   try { response = JSON.parse(response.content); } catch (e) { response = {} }
