@@ -36,7 +36,11 @@ Template.RepositoryCollection.helpers({
 
 Template.RepositoryCollection.events({
   'click .collection > .ui.menu a.item': function(e) {
+    Session.set('filter-name', null);
     $('.filter.input input').val('');
+    $('.repository>.list.filter').hide();
+    $('.repository>.list.view').show();
+
     Meteor.subscribe('repository-list', this.collection_name);
     FlowRouter.go('repository.list', { collection: this.collection_name });
   }

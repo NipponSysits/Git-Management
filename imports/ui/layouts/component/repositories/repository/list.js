@@ -48,8 +48,23 @@ Template.RepositoryList.helpers({
     $('.collection > .ui.menu a.item').removeClass('selected');
     $(`.collection > .ui.menu a.item[data-item="${collection.collection_name}"]`).addClass('selected');
 
-    return dbReposList.find(collection, { sort: { order_repository: 1 } });
+    return dbReposList.find(collection, { sort: { order_repository: 1 }, limit: 20 });
     
+  },
+  filter_name: function(){
+    return Session.get('filter-name') || '';
+  },
+  FilterRepository: function() {
+    let collection = {};
+    if(Session.get('filter-name')) {
+      let regex = (Session.get('filter-name').length === 1 ? '^' : '')+Session.get('filter-name');
+      return dbReposList.find({ 
+        collection_name: FlowRouter.getParam('collection') || (Meteor.user() || {}).username,
+        order_repository: {'$regex': regex, '$options': 'i' }
+      }, { sort: { order_repository: 1 }, limit: 20 });
+    } else {
+      return [];
+    }
   },
   PrejectItems: function() {
     let collection = { 
@@ -69,15 +84,23 @@ Template.RepositoryList.helpers({
 
 var funcFilter = function(e) {
   if($(e.currentTarget).val().trim() !== "") {
-    $('.repository .ui.list > .item').each(function(i, list){
-      if((new RegExp($(e.currentTarget).val().trim(), 'ig')).exec($(list).find('.header').html())) {
-        $(list).removeClass('hidden').addClass('visible');
-      } else {
-        $(list).removeClass('visible').addClass('hidden');
-      }
-    });
+    Session.set('filter-name', $(e.currentTarget).val().trim());
+    $('.repository>.list.filter').show();
+    $('.repository>.list.view').hide();
+    // $('h2.ui:has(>div.content)').hide();
+    // $('.repository .ui.list > .item').each(function(i, list){
+    //   if((new RegExp($(e.currentTarget).val().trim(), 'ig')).exec($(list).find('.header').html())) {
+    //     $(list).removeClass('hidden').addClass('visible');
+    //   } else {
+    //     $(list).removeClass('visible').addClass('hidden');
+    //   }
+    // });
   } else {
-    $('.repository .ui.list > .item.hidden').removeClass('hidden');
+    Session.set('filter-name', null);
+    $('.repository>.list.filter').hide();
+    $('.repository>.list.view').show();
+    // $('h2.ui:has(>div.content)').show();
+    // $('.repository .ui.list > .item.hidden').removeClass('hidden');
   }
 }
 
@@ -96,7 +119,7 @@ Template.RepositoryList.events({
 
 
 Template.RepositoryList.onCreated(() => {
-
+  Session.setDefault('filter-name', null);
 
 });
 

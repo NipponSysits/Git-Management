@@ -1,9 +1,10 @@
 <template name="RepositoryList">
 	<div class="thirteen wide column repository">
 		<div class="ui grid">
-			<div class="four wide column left floated middle aligned" style="margin-left:10px;">
-				<div class="ui transparent icon fluid filter input">
-				  <input type="text" placeholder="fillter repository...">
+			<div class="six wide column left floated middle aligned" style="margin-left:10px;">
+				<div class="ui icon fluid filter input">
+					<label>filters:</label>
+				  <input type="text" placeholder="repository name">
 				  <i class="search icon"></i>
 				</div>
 			</div>
@@ -11,17 +12,45 @@
 				<button class="ui fluid primary button repository_new">Create</button>
 			</div>
 		</div>
-	  {{#each PrejectItems}}
-	  	{{#if isTrue project_id}}
-				<h2 class="ui">
-				  <div class="content">{{project_name}}</div>
-				</h2>
-			{{/if}}
+		<div class="list view">
+		  {{#each PrejectItems}}
+		  	{{#if isTrue project_id}}
+					<h2 class="ui">
+					  <div class="content">{{project_name}}</div>
+					</h2>
+				{{/if}}
+				<div class="ui relaxed divided list">
+				  {{#each Repository project_id}}
+				  <div class="item">
+				  	<div class="created right floated">{{atDate updated_at}}</div>
+				    <i class="large github middle aligned icon"></i>
+				    <div class="content">
+			      	<a class="header">{{title_name}}</a>
+							{{#if isYes private anonymous}}
+					      <div class="icon">
+					      	{{#if isYes private}}<i class="large lock icon"></i>{{/if}}
+					      	{{#if isYes anonymous}}<i class="large world icon"></i>{{/if}}
+					      </div>
+							{{/if}}
+				      <div class="description">
+					      <span class="admin">{{admin}}</span>
+					      {{#if isTrue description}}<span class="desc">{{description}}</span>{{/if}}
+				      </div>
+				    </div>
+				  </div>
+				  {{/each}}
+				</div>
+		  {{/each}}
+		</div>
+		<div class="list filter" style="display:none;">
+			<h2 class="ui">
+			  <div class="content">Filter name '{{filter_name}}'</div>
+			</h2>
 			<div class="ui relaxed divided list">
-		  {{#each Repository project_id}}
-		  <div class="item">
-		  	<div class="created right floated">{{atDate updated_at}}</div>
-		    <i class="large github middle aligned icon"></i>
+			  {{#each FilterRepository}}
+			  <div class="item">
+			  	<div class="created right floated">{{atDate updated_at}}</div>
+			    <i class="large github middle aligned icon"></i>
 			    <div class="content">
 		      	<a class="header">{{title_name}}</a>
 						{{#if isYes private anonymous}}
@@ -38,6 +67,6 @@
 			  </div>
 			  {{/each}}
 			</div>
-	  {{/each}}
+		</div>
 	</div>
 </template>	

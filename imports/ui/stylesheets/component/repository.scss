@@ -25,6 +25,7 @@
     }
   }
   &.grid-repository {
+    margin-top: 1.1rem !important;
   	min-height: 720px;
     > .collection {
       background-color: #161c2b;
@@ -66,6 +67,19 @@
 
     }
     > .repository {
+      >.list.view, .list.filter {
+        margin-top: 2rem;
+      }
+      .filter.input {
+        >label {
+          font-weight: bold;
+          line-height: 36px;
+          padding-right: 6px;
+        }
+        >input {
+          border-radius: 0px;
+        }
+      }
       > .active.dimmer {
         background-color: #F7F7F7;
         > .ui.loader {
