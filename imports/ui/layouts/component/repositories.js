@@ -15,7 +15,11 @@ Template.Repositories.events({
 		$('.grid-head>div>h3').html('Repositories');
 		$('.grid-menu .item').removeClass('active');
 		$('.grid-menu .item#repositories').addClass('active');
- 		
+
+    Session.set('filter-name', null);
+    $('.repository>.list.filter').hide();
+    $('.repository>.list.view').show();
+    
 		FlowRouter.go('repository');
 	},
   'click .grid-menu .item#content': function(event){

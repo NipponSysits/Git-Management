@@ -53,7 +53,11 @@ Template.Navigator.events({
   'click .user-menu .item.repository': function(event){
   	$('.user-menu > .item').removeClass('selected');
   	$('.user-menu > .item.repository').addClass('selected');
-  	// $('.form.sign-in').transition('fade right', function(){
+
+    Session.set('filter-name', null);
+    $('.repository>.list.filter').hide();
+    $('.repository>.list.view').show();
+    
 		FlowRouter.go('repository');
   	// });
   },
