@@ -6,8 +6,8 @@ const db 				= Mysql.connect(config.mysql);
 
 console.log('config', config.arg);
 
-var dbUser = db.meteorCollection("user", "mysql.user");
-var dbRole = db.meteorCollection("role", "mysql.role");
+var dbUser  = db.meteorCollection("user", "mysql.user");
+var dbRole  = db.meteorCollection("role", "mysql.role");
 
 Meteor.startup(function () {
 

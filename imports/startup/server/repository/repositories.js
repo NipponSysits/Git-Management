@@ -22,18 +22,19 @@ Meteor.publish('collection-list', function() {
   if(!self.userId) return [];
   let getUser = Meteor.users.findOne({ _id: self.userId });
   let UserProfile = getUser.profile;
-  let level = UserProfile.role.level > 1;
+  let programmer = UserProfile.role.level > 1 && UserProfile.role.level < 5;
+  let project = UserProfile.role.level < 5;
 
   let query_collection = `
   SELECT p.name collection_name, LOWER(p.name) order_name, COUNT(p.collection_id) list, p.collection_id, NULL user_id
   FROM repository r
   LEFT JOIN repository_collection p ON r.collection_id = p.collection_id
-  ${ !level?``:`
+  ${ !programmer?``:`
   LEFT JOIN repository_contributor c 
     ON c.repository_id = r.repository_id and c.permission in ('Contributors','Administrators')
   `}
   WHERE r.collection_id IS NOT NULL AND content_id IS NULL AND fork_id IS NULL
-    ${ !level?``:`
+    ${ !programmer?``:`
     AND (c.user_id IS NULL OR (c.user_id IS NOT NULL AND c.user_id = ${UserProfile.user_id}))
     AND (c.user_id = ${UserProfile.user_id} OR r.anonymous = 'YES')
     AND (r.private = 'NO' OR (r.private = 'YES' AND r.user_id = ${UserProfile.user_id}))
@@ -44,20 +45,20 @@ Meteor.publish('collection-list', function() {
   let query_user = `
   SELECT u.username collection_name, LOWER(u.username) order_name, count(r.user_id) list, NULL collection_id, r.user_id 
   FROM repository r
-  ${ !level?``:`
+  ${ !programmer?``:`
   LEFT JOIN repository_contributor c 
     ON c.repository_id = r.repository_id and c.permission in ('Contributors','Administrators')
     `}
   LEFT JOIN user u ON u.user_id = r.user_id
   WHERE r.collection_id IS NULL 
     AND content_id IS NULL AND fork_id IS NULL
-    ${ !level?``:`
+    ${ !programmer?``:`
     AND (c.user_id IS NULL OR (c.user_id IS NOT NULL AND c.user_id = ${UserProfile.user_id}))
     AND (c.user_id = ${UserProfile.user_id} OR r.anonymous = 'YES')
     AND (r.private = 'NO' OR (r.private = 'YES' AND r.user_id = ${UserProfile.user_id}))
     `}
   GROUP BY u.username, r.user_id 
-  `; // ${ !level?``:`OR p.collection_id IS NOT NULLs `  }
+  `; // ${ !programmer?``:`OR p.collection_id IS NOT NULLs `  }
 
 
   db.query(query_collection, function(err, data){
@@ -77,7 +78,7 @@ Meteor.publish('collection-list', function() {
           ownerCreated = true;
         }
       });
-      if(!ownerCreated) {
+      if(!ownerCreated && UserProfile.role.level < 4) {
         ownerCreated = { 
           collection_name: getUser.username, 
           list: 0, 
@@ -92,7 +93,6 @@ Meteor.publish('collection-list', function() {
 });
 
 Meteor.publish('repository-list', function(collection) {
-  // Meteor._sleepForMs(1000);
   let self = this;
   if(!self.userId) return [];
 
