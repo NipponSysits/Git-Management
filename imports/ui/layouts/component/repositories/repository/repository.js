@@ -50,6 +50,12 @@ Template.Repository.helpers({
       repository: FlowRouter.getParam('repository') 
     });
   },
+  Files: function() {
+    return dbReposFile.find({ 
+      collection: FlowRouter.getParam('collection'), 
+      repository: FlowRouter.getParam('repository') 
+    });
+  },
   isLogsEmpty: function() {
     return dbReposLogs.find({ 
       collection: FlowRouter.getParam('collection'), 

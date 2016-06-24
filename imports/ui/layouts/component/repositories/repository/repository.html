@@ -25,41 +25,13 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td class="collapsing">
-                <a href=""><i class="folder icon"></i> node_modules</a>
-              </td>
-              <td>Initial commit</td>
-              <td class="right aligned collapsing">10 hours ago</td>
-            </tr>
-            <tr>
-              <td>
-                <a href=""><i class="folder icon"></i> test</a>
-              </td>
-              <td>Initial commit</td>
-              <td class="right aligned">10 hours ago</td>
-            </tr>
-            <tr>
-              <td>
-                <a href=""><i class="folder icon"></i> build</a>
-              </td>
-              <td>Initial commit</td>
-              <td class="right aligned">10 hours ago</td>
-            </tr>
-            <tr>
-              <td>
-                <a href=""><i class="file outline icon"></i> package.json</a>
-              </td>
-              <td>Initial commit</td>
-              <td class="right aligned">10 hours ago</td>
-            </tr>
-            <tr>
-              <td>
-                <a href=""><i class="file outline icon"></i> Gruntfile.js</a>
-              </td>
-              <td>Initial commit</td>
-              <td class="right aligned">10 hours ago</td>
-            </tr>
+            {{#each Files}}
+              <tr>
+                <td class="collapsing"><a href=""><i class="folder icon"></i> {{filename}}</a></td>
+                <td>{{comment}}</td>
+                <td class="right aligned collapsing">{{OnDate since}} ago</td>
+              </tr>
+            {{/each}}
           </tbody>
         </table>
 			</form>

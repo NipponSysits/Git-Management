@@ -168,41 +168,21 @@ Meteor.publish('repository-loaded', function(param){
   
   let getRepository = function(){
     let def = Q.defer();
-    let query_loaded = `
-    SELECT r.repository_id
-    FROM repository r
-    LEFT JOIN user u ON u.user_id = r.user_id
-    LEFT JOIN repository_collection c ON c.collection_id = r.collection_id
-    WHERE (c.name = '${summary.collection}' OR u.username = '${summary.collection}')
-      AND r.name = '${summary.repository.replace(/\.git$/g,'')}'
-    `;
-
-    db.query(query_loaded, function(err, data){
+    let sql = `SELECT repository_id FROM repositories WHERE dir_name = '${param.collection}/${param.repository}'`;
+    db.query(sql, function(err, data){
       if(err || data.length == 0) {
         def.reject(err);
       } else {
-        def.resolve(data[0]);
+        let commits = mongo.Commit.find(data[0]).count();
+        commits.exec(function(err, logs){
+          if(err) { def.reject(err); } else { summary.commits = logs; def.resolve(data[0]); }
+        });
       }
     });
     return def.promise;
   }
 
   getRepository().then(function(data){
-    // data.email = UserProfile.email;
-    // console.log('getRepository', data);
-
-    let def = Q.defer();
-    let commits = mongo.Commit.find(data).count();
-    commits.exec(function(err, logs){
-      if(err) {
-        def.reject(err);
-      } else {
-        summary.commits = logs;
-        def.resolve(data);
-      }
-    });
-    return def.promise;
-  }).then(function(data){
     let def = Q.defer();
     let query_loaded = `
       SELECT COUNT(*) person 
@@ -221,27 +201,29 @@ Meteor.publish('repository-loaded', function(param){
     return def.promise;
   }).then(function(data){
     let def = Q.defer();
+    let commits = mongo.Repository.findOne(data, function(err, repo){
+      if(err && !repo) {
+        def.reject(err);
+      } else {
+        summary.title = repo.title;
+        summary.description = repo.description;
+        summary.master = repo.master;
+        summary.branch = repo.branch;
 
-    let api = `${config.socket}:${config.api}/api/repository/files`;
-
-    // http.get(api, function (error, res) {
-    //   console.log(res.code, res.headers, res.buffer.toString());
-    // });
-    // $.ajax({
-    //   url: api,
-    //   success: function(data){
-    //     console.log(data);
-    //     def.resolve(data);ss
-    //   }
-    // });
-    // var response = HTTP.get(api, data);
-    def.resolve(data);
-    // if(socket.connected) {
-    //   socket.emit('repository-get', data);
-    // } else {
-    //   summary.files = 0;
-    //   def.resolve(data);
-    // }
+        repo.files.forEach(function(file){
+          self.added('file.repository', file.filename, {
+            collection: param.collection,
+            repository: param.repository,
+            filename: file.filename,
+            ext: file.ext,
+            size: file.size,
+            since: file.since,
+            comment: file.comment
+          });
+        });
+        def.resolve(data);
+      }
+    });
     return def.promise;
   }).then(function(data){
     self.added('summary.repository', data.repository_id, summary);
