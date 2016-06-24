@@ -97,7 +97,8 @@ var funcFilter = function(e) {
 
 Template.RepositoryList.events({
   'click .column.repository .list > div.item': function(){
-    $('.ui.dimmer.prepare').fadeIn(0);
+    // $('.ui.dimmer.prepare').fadeIn(0);
+    $('.ui.panel.main').fadeOut(0);
     FlowRouter.go('repository.detail', { collection: this.collection_name || this.username, repository: this.repository_name+'.git' })
   },
   'click .repository .button.repository_new': function(e){

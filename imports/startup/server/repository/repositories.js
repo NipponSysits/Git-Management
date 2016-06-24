@@ -202,8 +202,10 @@ Meteor.publish('repository-loaded', function(param){
   }).then(function(data){
     let def = Q.defer();
     let commits = mongo.Repository.findOne(data, function(err, repo){
-      if(err && !repo) {
+      if(err) {
         def.reject(err);
+      } else if(!repo) {
+        def.resolve(data);
       } else {
         summary.title = repo.title;
         summary.description = repo.description;

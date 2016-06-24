@@ -24,6 +24,7 @@
               </th>
             </tr>
           </thead>
+          {{#if isReady}}
           <tbody>
             {{#each Files}}
               <tr>
@@ -33,6 +34,13 @@
               </tr>
             {{/each}}
           </tbody>
+          {{else}}
+          <tbody>
+            <tr>
+              <td>loading</td>
+            </tr>
+          </tbody>
+          {{/if}}
         </table>
 			</form>
 		</div>
@@ -45,26 +53,14 @@
         <div class="column">
           <div class="ui fluid label">
             <i class="history icon"></i>
-            <span class="text">
-              {{#if isReady}}
-                {{Summary.commits}}
-              {{else}}
-                0
-              {{/if}}
-            </span>
+            <span class="text">{{Summary.commits}}</span>
             <a class="detail">commits</a>
           </div>
         </div>
         <div class="column">
           <div class="ui fluid label">
             <i class="users icon"></i>
-            <span class="text">
-              {{#if isReady}}
-                {{Summary.contributor}}
-              {{else}}
-                0
-              {{/if}}
-            </span>
+            <span class="text">{{Summary.contributor}}</span>
             <a class="detail">contributor</a>
           </div>  
         </div>

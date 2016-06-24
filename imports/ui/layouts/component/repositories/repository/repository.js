@@ -16,13 +16,14 @@ const md5       = require('md5');
 require('/imports/language')('Repository');
 
 
-// Tracker.autorun(function(c) {
-//   if(FlowRouter.subsReady()) {
-//     Session.set('prepare', true);
-//   } else {
-//     Session.set('prepare', false);
-//   }
-// });
+Tracker.autorun(function(c) {
+  if(FlowRouter.subsReady()) {
+    $('.ui.panel.main').fadeIn(300);
+    // Session.set('prepare', true);
+  } else {
+    // Session.set('prepare', false);
+  }
+});
 
 
 Template.Repository.helpers({
@@ -48,7 +49,10 @@ Template.Repository.helpers({
     return dbReposSummary.findOne({ 
       collection: FlowRouter.getParam('collection'), 
       repository: FlowRouter.getParam('repository') 
-    });
+    }) || {
+      commits: 0,
+      contributor: 0
+    };
   },
   Files: function() {
     return dbReposFile.find({ 
@@ -89,13 +93,20 @@ Template.Repository.events({
 });
 
 
-Template.Repository.onCreated(() => {
 
+Template.Repository.onCreated(() => {
+  // let param = {
+  //   collection: FlowRouter.getParam('collection'),
+  //   repository: FlowRouter.getParam('repository')
+  // }
+  // Meteor.subscribe('repository-loaded', param, function(){
+    
+  // });
 });
 
 
 Template.Repository.onRendered(() => {
-  $('.ui.panel.main').fadeIn(300);
+  //$('.ui.panel.main').fadeIn(300);
   $('.ui.dimmer.prepare').fadeOut(0);
 
   $('.ui.branch.dropdown').dropdown();
