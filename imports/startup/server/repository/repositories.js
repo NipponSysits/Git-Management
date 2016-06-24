@@ -159,12 +159,12 @@ Meteor.publish('repository-loaded', function(param){
   if(!self.userId) return [];
 
   let UserProfile = Meteor.users.findOne({ _id: self.userId }).profile;
-  let api = `http://${config.socket}:${config.api}/api/repository/files/${summary.collection}/${summary.repository}/master`;
+  // let api = `http://${config.socket}:${config.api}/api/repository/files/${summary.collection}/${summary.repository}/master`;
 
-  var response = HTTP.get(api);
-  try { response = JSON.parse(response.content); } catch (e) { response = {} }
+  // var response = HTTP.get(api);
+  // try { response = JSON.parse(response.content); } catch (e) { response = {} }
 
-  console.log(response);
+  // console.log(response);
   
   let getRepository = function(){
     let def = Q.defer();
@@ -231,7 +231,7 @@ Meteor.publish('repository-loaded', function(param){
     //   url: api,
     //   success: function(data){
     //     console.log(data);
-    //     def.resolve(data);
+    //     def.resolve(data);ss
     //   }
     // });
     // var response = HTTP.get(api, data);

@@ -21,10 +21,23 @@ Meteor.publish('dashboard', function(username) {
   }
 
   let user_id = getUser.profile.user_id;
-  let getDashboard = function(){
+  let getEmail = function(){
+    let def = Q.defer();
+    db.query(`SELECT email FROM user_email WHERE user_id = ${user_id}`, function(err, data){
+      if(err || data.length == 0) { 
+        def.reject(err); 
+      } else { 
+        let email = data.map(function(user){ return user.email; });
+        def.resolve(email);
+      }
+    });
+    return def.promise;
+  }
 
-    let def = Q.defer();    
-    let commits = mongo.Commit.find({ email: getUser.profile.email }).count();
+  getEmail().then(function(email){
+    console.log('email' , email);
+    let def = Q.defer();
+    let commits = mongo.Commit.find({ email: { '$in': email } }).count();
     commits.exec(function(err, logs){
       if(err) {
         def.reject(err);
@@ -35,9 +48,8 @@ Meteor.publish('dashboard', function(username) {
     });
 
     return def.promise;
-  }
+  }).then(function(){
 
-  getDashboard().then(function(){
     let def = Q.defer();
     let query = `
       SELECT SUM(fork) fork, SUM(created) created, SUM(assist) assist, SUM(own) own 
