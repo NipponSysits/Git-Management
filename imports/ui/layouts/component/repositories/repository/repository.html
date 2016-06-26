@@ -1,47 +1,42 @@
 <template name="Repository">
 <div class="ui stackable two column grid component repository-detail">
 	<div class="eleven wide column">
-		<h5>Repository</h5>
+		<h5>{{Summary.title}}</h5>
 		<div class="content">
 			<form class="ui form">
-				<div class="fields">
-					deBugger‬ -- Management Source Control Web Project http://pgm.ns.co.th/ — 
-				</div>
-			  <div class="ui section divider"></div>
-        <table class="ui single line striped list-tree table">
-          <thead>
-            <tr>
-              <th colspan="3">
-                <div class="ui floating labeled icon branch dropdown button">
-                  <i class="dropdown icon"></i>
-                  <span class="text">master</span>
-                  <div class="menu">
-                    <div class="item">1</div>
-                    <div class="item">2</div>
-                    <div class="item">3</div>
-                  </div>
-                </div>
-              </th>
-            </tr>
-          </thead>
-          {{#if isReady}}
-          <tbody>
-            {{#each Files}}
-              <tr>
-                <td class="collapsing"><a href=""><i class="folder icon"></i> {{filename}}</a></td>
-                <td>{{comment}}</td>
-                <td class="right aligned collapsing">{{OnDate since}} ago</td>
-              </tr>
-            {{/each}}
-          </tbody>
+        {{#if isTrue Summary.description}}
+  				<div class="fields">
+  					{{Summary.description}}
+  				</div>
+  			  <div class="ui section divider"></div>
+        {{else}}
+
+        {{/if}}
+        {{#if isReady}}
+          {{#if isFileEmpty}}            
+            <div class="ui markdown-body">{{{Markdown EmptyRepository}}}</div>
           {{else}}
-          <tbody>
-            <tr>
-              <td>loading</td>
-            </tr>
-          </tbody>
+            <table class="ui single line striped list-tree table">
+              <thead>
+                <tr>
+                  <th>Filename</th>
+                  <th>Comment</th>
+                  <th class="right aligned">Since date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each Files}}
+                  <tr>
+                    <td class="collapsing"><a href=""><i class="{{IconFile ext}}"></i> {{filename}}</a></td>
+                    <td>{{comment}}</td>
+                    <td class="right aligned collapsing">{{OnDate since}} ago</td>
+                  </tr>
+                {{/each}}
+              </tbody>
+            </table>
+            <div class="ui section list divider"></div>
           {{/if}}
-        </table>
+        {{/if}}
 			</form>
 		</div>
 	</div>
@@ -90,7 +85,7 @@
                   <div class="label">
                     <img src="{{Avatar email}}">
                   </div>
-                {{#if logs}}
+                <!-- {{#if logs}} -->
                   <div class="content">
                     <div class="date">
                       {{OnDate since}} ago
@@ -102,11 +97,11 @@
                       <div class="extra text">{{{htmlComment comment}}}</div>
                     {{/if}}
                   </div>
-                {{else}}
+<!--                 {{else}}
                   <div class="content">
 
                   </div>
-                {{/if}}
+                {{/if}} -->
               </div>
             {{/each}}
             {{#if HistoryMore}}
@@ -125,9 +120,15 @@
 <div class="ui stackable one column grid component">
   <div class="column">
   	<h5>README.md</h5>
-  	<div class="content">
-      Help people interested in this repository understand your project by adding a README.
-  	</div>
+    {{#if isTrue Summary.readme}}
+      <div class="content markdown-body">
+        {{{Markdown Summary.readme}}}
+      </div>
+    {{else}}
+      <div class="content">
+        Help people interested in this repository understand your project by adding a README.
+      </div>
+    {{/if}}
   </div>
 </div>
 </template>

@@ -100,7 +100,6 @@ Meteor.publish('repository-list', function(collection) {
   let collection_name = collection || User.username;
   let level = User.profile.role.level > 1;
 
-  console.log('collection_name', collection_name, 'level:', level);
   let query = `
   SELECT 
     r.repository_id, r.collection_id, r.user_id, r.project_id, p.name project_name, LOWER(p.name) order_project,
@@ -173,7 +172,7 @@ Meteor.publish('repository-loaded', function(param){
       if(err || data.length == 0) {
         def.reject(err);
       } else {
-        let commits = mongo.Commit.find(data[0]).count();
+        let commits = mongo.Commit.find({ repository_id: data[0].repository_id, logs: true }).count();
         commits.exec(function(err, logs){
           if(err) { def.reject(err); } else { summary.commits = logs; def.resolve(data[0]); }
         });
@@ -183,73 +182,84 @@ Meteor.publish('repository-loaded', function(param){
   }
 
   getRepository().then(function(data){
-    let def = Q.defer();
-    let query_loaded = `
-      SELECT COUNT(*) person 
-      FROM repository_contributor 
-      WHERE repository_id = ${data.repository_id}
-    `;
+    let all = []
+    all.push((function(){
+      let def = Q.defer();
+      let query_loaded = `
+        SELECT COUNT(*) person 
+        FROM repository_contributor 
+        WHERE repository_id = ${data.repository_id}
+      `;
 
-    db.query(query_loaded, function(err, person){
-      if(err || person.length == 0) {
-        def.reject(err);
-      } else {
-        summary.contributor = person[0].person;
-        def.resolve(data);
-      }
-    });
-    return def.promise;
-  }).then(function(data){
-    let def = Q.defer();
-    let commits = mongo.Repository.findOne(data, function(err, repo){
-      if(err) {
-        def.reject(err);
-      } else if(!repo) {
-        def.resolve(data);
-      } else {
-        summary.title = repo.title;
-        summary.description = repo.description;
-        summary.master = repo.master;
-        summary.branch = repo.branch;
+      db.query(query_loaded, function(err, person){
+        if(err || person.length == 0) {
+          def.reject(err);
+        } else {
+          summary.contributor = person[0].person;
+          def.resolve();
+        }
+      });
+      return def.promise;      
+    })());
 
-        repo.files.forEach(function(file){
-          self.added('file.repository', file.filename, {
+    all.push((function(){
+      let def = Q.defer();
+      let commits = mongo.Repository.findOne(data, function(err, repo){
+        if(err) {
+          def.reject(err);
+        } else if(!repo) {
+          def.resolve();
+        } else {
+          summary.title = repo.title;
+          summary.description = repo.description;
+          summary.master = repo.master;
+          summary.branch = repo.branch;
+          summary.readme = (repo.readme || '').toString();
+          self.added('summary.repository', data.repository_id, summary);
+
+          repo.files.forEach(function(file){
+            self.added('file.repository', file.filename, {
+              collection: param.collection,
+              repository: param.repository,
+              filename: file.filename,
+              ext: file.ext,
+              size: file.size,
+              since: file.since,
+              comment: file.comment
+            });
+          });
+          def.resolve();
+        }
+      });
+      return def.promise; 
+    })());
+    
+    all.push((function(){
+      let def = Q.defer();
+      let commits = mongo.Commit.find(data).sort({since : -1}).limit(13);
+      commits.exec(function(err, logs){
+        if(err) def.reject(err);
+
+        logs.forEach(function(log){
+          self.added('logs.repository', `${log.repository_id}_${log.commit_id}`, {
+            logs: log.logs,
             collection: param.collection,
             repository: param.repository,
-            filename: file.filename,
-            ext: file.ext,
-            size: file.size,
-            since: file.since,
-            comment: file.comment
+            author: log.author,
+            email: log.email,
+            since: log.since,
+            subject: log.subject,
+            comment: log.comment,
           });
         });
-        def.resolve(data);
-      }
-    });
-    return def.promise;
-  }).then(function(data){
-    self.added('summary.repository', data.repository_id, summary);
-
-    let commits = mongo.Commit.find(data).sort({since : -1}).limit(13);
-    commits.exec(function(err, logs){
-      if(err) def.reject(err);
-
-      logs.forEach(function(log){
-        
-        self.added('logs.repository', `${log.repository_id}_${log.commit_id}`, {
-          logs: log.logs,
-          collection: param.collection,
-          repository: param.repository,
-          author: log.author,
-          email: log.email,
-          since: log.since,
-          subject: log.subject,
-          comment: log.comment,
-        });
+        def.resolve();
       });
-      self.ready();
-    });
+      return def.promise;      
+    })());
 
+    return Q.all(all);
+  }).then(function(){
+    self.ready();
   }).catch(function(err){
     console.log('err', err);
     self.stop();
@@ -259,7 +269,6 @@ Meteor.publish('repository-loaded', function(param){
 });
 
 socket.on('repository-file', function(files){
-  console.log('repository-file', files);
   summary.files = files;
   def.resolve(data);
 });

@@ -10,7 +10,7 @@ const config    = require('$custom/config');
 const Clipboard = require('clipboard');
 const moment    = require('moment');
 const md5       = require('md5');
-
+const marked        = require("marked");
 
 
 require('/imports/language')('Repository');
@@ -18,8 +18,8 @@ require('/imports/language')('Repository');
 
 Tracker.autorun(function(c) {
   if(FlowRouter.subsReady()) {
-    $('.ui.panel.main').fadeIn(300);
-    // Session.set('prepare', true);
+    $('.ui.panel.main').fadeIn(0);
+    // Session.set('prepare', true);s
   } else {
     // Session.set('prepare', false);
   }
@@ -50,15 +50,49 @@ Template.Repository.helpers({
       collection: FlowRouter.getParam('collection'), 
       repository: FlowRouter.getParam('repository') 
     }) || {
+      title: 'Repository Name',
+      description: '',
+      master: 'master',
+      branch: [ 'master' ],
+      readme: null,
       commits: 0,
-      contributor: 0
+      contributor: 0,
     };
+  },
+  EmptyRepository: function(){
+    return `
+##### clone repository on the command line
+
+    git clone ${config.domain+FlowRouter.getParam('collection')}/${FlowRouter.getParam('repository')}
+
+##### …or create a new repository on the command line
+
+    echo "# deBUGerr" >> README.md
+    git init
+    git add README.md
+    git commit -m "first commit"
+    git remote add origin ${config.domain+FlowRouter.getParam('collection')}/${FlowRouter.getParam('repository')}
+    git push -u origin master
+`;
+
+  },
+  Markdown: function(text){
+    return marked(text);
+  },
+  isFileEmpty: function() {
+    return dbReposFile.find({ 
+      collection: FlowRouter.getParam('collection'), 
+      repository: FlowRouter.getParam('repository') 
+    }).count() > 0 ? false : true;
   },
   Files: function() {
     return dbReposFile.find({ 
       collection: FlowRouter.getParam('collection'), 
       repository: FlowRouter.getParam('repository') 
-    });
+    }, { sort: { size: 1, filename: 1 } });
+  },
+  IconFile: function(ext){
+    return (ext ? 'file outline' : 'folder')+' icon';
   },
   isLogsEmpty: function() {
     return dbReposLogs.find({ 

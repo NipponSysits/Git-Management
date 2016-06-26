@@ -35,7 +35,6 @@ Meteor.publish('dashboard', function(username) {
   }
 
   getEmail().then(function(email){
-    console.log('email' , email);
     let def = Q.defer();
     let commits = mongo.Commit.find({ email: { '$in': email } }).count();
     commits.exec(function(err, logs){
