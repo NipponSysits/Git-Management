@@ -36,12 +36,22 @@ Meteor.publish('dashboard', function(username) {
 
   getEmail().then(function(email){
     let def = Q.defer();
-    let commits = mongo.Commit.find({ email: { '$in': email } }).count();
+    let commits = mongo.Commit.aggregate( [
+      { $match : { email : { '$in': email }, logs: true } },
+      { $group : { 
+        _id : { commit_id : "$commit_id", email: "$email" }, 
+        alike: { $push: "$repository_id" }, 
+        count: { $sum: 1 } } 
+      }
+    ]);
+
+
+
     commits.exec(function(err, logs){
       if(err) {
         def.reject(err);
       } else {
-        calc.logs = logs;
+        calc.logs = logs.length;
         def.resolve();
       }
     });
