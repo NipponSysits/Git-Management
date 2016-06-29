@@ -21,23 +21,28 @@ Meteor.publish('collection-list', function() {
   let self = this;
   if(!self.userId) return [];
   let getUser = Meteor.users.findOne({ _id: self.userId });
-  let UserProfile = getUser.profile;
-  let programmer = UserProfile.role.level > 1 && UserProfile.role.level < 5;
-  let project = UserProfile.role.level < 5;
+  let getProfile = getUser.profile, role = getProfile.role;
+
+  let pgmView = role.level > 1 && role.level < 5;
+  let otherPrivate = role.level < 1;
+  let forProject = role.level >= 5;
 
   let query_collection = `
   SELECT p.name collection_name, LOWER(p.name) order_name, COUNT(p.collection_id) list, p.collection_id, NULL user_id
   FROM repository r
   LEFT JOIN repository_collection p ON r.collection_id = p.collection_id
-  ${ !programmer?``:`
+  ${!pgmView?``:`
   LEFT JOIN repository_contributor c 
     ON c.repository_id = r.repository_id and c.permission in ('Contributors','Administrators')
   `}
   WHERE r.collection_id IS NOT NULL AND content_id IS NULL AND fork_id IS NULL
-    ${ !programmer?``:`
-    AND (c.user_id IS NULL OR (c.user_id IS NOT NULL AND c.user_id = ${UserProfile.user_id}))
-    AND (c.user_id = ${UserProfile.user_id} OR r.anonymous = 'YES')
-    AND (r.private = 'NO' OR (r.private = 'YES' AND r.user_id = ${UserProfile.user_id}))
+    ${otherPrivate?``:`
+    AND (r.private = 'NO' OR (r.private = 'YES' AND r.user_id = ${getProfile.user_id}))
+    `}
+    ${!pgmView?`
+    `:`
+    AND (c.user_id IS NULL OR (c.user_id IS NOT NULL AND c.user_id = ${getProfile.user_id}))
+    AND (c.user_id = ${getProfile.user_id} OR r.anonymous = 'YES')
     `}
   GROUP BY p.name, p.collection_id;
   `;
@@ -45,21 +50,22 @@ Meteor.publish('collection-list', function() {
   let query_user = `
   SELECT u.username collection_name, LOWER(u.username) order_name, count(r.user_id) list, NULL collection_id, r.user_id 
   FROM repository r
-  ${ !programmer?``:`
+  ${!pgmView?``:`
   LEFT JOIN repository_contributor c 
     ON c.repository_id = r.repository_id and c.permission in ('Contributors','Administrators')
     `}
   LEFT JOIN user u ON u.user_id = r.user_id
   WHERE r.collection_id IS NULL 
     AND content_id IS NULL AND fork_id IS NULL
-    ${ !programmer?``:`
-    AND (c.user_id IS NULL OR (c.user_id IS NOT NULL AND c.user_id = ${UserProfile.user_id}))
-    AND (c.user_id = ${UserProfile.user_id} OR r.anonymous = 'YES')
-    AND (r.private = 'NO' OR (r.private = 'YES' AND r.user_id = ${UserProfile.user_id}))
+    ${otherPrivate?``:`
+    AND (r.private = 'NO' OR (r.private = 'YES' AND r.user_id = ${getProfile.user_id}))
+    `}
+    ${!pgmView?``:`
+    AND (c.user_id IS NULL OR (c.user_id IS NOT NULL AND c.user_id = ${getProfile.user_id}))
+    AND (c.user_id = ${getProfile.user_id} OR r.anonymous = 'YES')
     `}
   GROUP BY u.username, r.user_id 
   `; // ${ !programmer?``:`OR p.collection_id IS NOT NULLs `  }
-
 
   db.query(query_collection, function(err, data){
   	if(err) self.error(err);
@@ -78,14 +84,14 @@ Meteor.publish('collection-list', function() {
           ownerCreated = true;
         }
       });
-      if(!ownerCreated && UserProfile.role.level < 4) {
+      if(!ownerCreated && role.level < 4) {
         ownerCreated = { 
           collection_name: getUser.username, 
           list: 0, 
           collection_id: null, 
-          user_id: UserProfile.user_id 
+          user_id: getProfile.user_id 
         }
-        self.added('list.collection-user', UserProfile.user_id, ownerCreated);
+        self.added('list.collection-user', getProfile.user_id, ownerCreated);
       }
   		self.ready();
     });
@@ -96,9 +102,13 @@ Meteor.publish('repository-list', function(collection) {
   let self = this;
   if(!self.userId) return [];
 
-  let User = Meteor.users.findOne({ _id: self.userId });
-  let collection_name = collection || User.username;
-  let level = User.profile.role.level > 1;
+  let getUser = Meteor.users.findOne({ _id: self.userId });
+  let collection_name = collection || getUser.username;
+  let getProfile = getUser.profile, role = getProfile.role;
+
+  let pgmView = role.level > 1 && role.level < 5;
+  let otherPrivate = role.level < 1;
+  let forProject = role.level >= 5;
 
   let query = `
   SELECT 
@@ -116,16 +126,19 @@ Meteor.publish('repository-list', function(collection) {
   LEFT JOIN repository_contributor ad 
     ON ad.repository_id = r.repository_id AND ad.permission in ('Administrators')
   LEFT JOIN user ua ON ua.user_id = ad.user_id
-  ${ !level?``:`
+  ${ !pgmView?``:`
   LEFT JOIN repository_contributor c 
     ON c.repository_id = r.repository_id AND c.permission in ('Contributors','Administrators')
   `}
   WHERE content_id IS NULL AND fork_id IS NULL
-  ${ !level?``:`
-  AND (c.user_id IS NULL OR (c.user_id IS NOT NULL AND c.user_id = ${User.profile.user_id}))
-  AND (c.user_id = ${User.profile.user_id} OR r.anonymous = 'YES')
-  AND (r.private = 'NO' OR (r.private = 'YES' AND r.user_id = ${User.profile.user_id}))
-  `}
+    ${otherPrivate?``:`
+    AND (r.private = 'NO' OR (r.private = 'YES' AND r.user_id = ${getProfile.user_id}))
+    `}
+    ${ !pgmView?`
+    `:`
+    AND (c.user_id IS NULL OR (c.user_id IS NOT NULL AND c.user_id = ${getProfile.user_id}))
+    AND (c.user_id = ${getProfile.user_id} OR r.anonymous = 'YES')
+    `}
   AND (co.name = '${collection_name}' OR u.username = '${collection_name}')
   `;
 
