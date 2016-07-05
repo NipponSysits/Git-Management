@@ -142,6 +142,15 @@ h2.ui.header.avatar {
 	    background-color: #171D2C;
 	    padding: 10px;
 	    color: #FFFFFF;
+	    > i {
+		    width: 30px;
+		    height: 26px;
+		    padding-top: 6px;
+		    padding-left: 1px;
+		    float: right;
+		    margin-top: -5px;
+		    background-color: #2d3341;
+	    }
 		}
 		> .content {
 			padding-left: 1em;
