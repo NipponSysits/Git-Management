@@ -14,7 +14,9 @@ require('/imports/language')('app');
 
 
 Meteor.startup(() => {
-
+	window.onbeforeunload = function(e) {
+	  socket.disconnect();
+	};
 });
 
 Template.app.onCreated(function() {
