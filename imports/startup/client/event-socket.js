@@ -7,11 +7,11 @@ import Response from 'meteor-node-stubs/node_modules/http-browserify/lib/respons
 if(!Response.prototype.setEncoding) { Response.prototype.setEncoding = function(encoding){} }
 
 socket.on('connect', function(){
-	client.connected = true;
+	// client.connected = true;
 	console.log('socket', client.connected)
 });
 socket.on('disconnect', function(){ 
-	client.connected = false;
+	// client.connected = false;
 	console.log('socket', client.connected)
 });
 
