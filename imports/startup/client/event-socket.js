@@ -1,11 +1,10 @@
 const Q         = require('q');
 const Push      = require('push.js');
+const socket  	= require('socket.io-client')('http://192.168.10.6:8200');
 
 import Response from 'meteor-node-stubs/node_modules/http-browserify/lib/response';
-if(!Response.prototype.setEncoding) { Response.prototype.setEncoding = function(encoding){} }
 
-socket    = require('socket.io-client')('http://192.168.10.6:8200');
-client 		= {}
+if(!Response.prototype.setEncoding) { Response.prototype.setEncoding = function(encoding){} }
 
 socket.on('connect', function(){
 	client.connected = true;

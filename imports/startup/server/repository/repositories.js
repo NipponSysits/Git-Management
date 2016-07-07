@@ -6,7 +6,6 @@ const mongo     = require('$custom/schema');
 const Q         = require('q');
 const $         = require('jquery');
 const db        = Mysql.connect(config.mysql);
-const socket    = require('$custom/sentinel').clent;
 
 Meteor.publish('collection-add', function(data) {
   let self = this;
@@ -279,11 +278,6 @@ Meteor.publish('repository-loaded', function(param){
   });
 
 
-});
-
-socket.on('repository-file', function(files){
-  summary.files = files;
-  def.resolve(data);
 });
 
 
