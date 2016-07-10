@@ -7,8 +7,6 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 
 
-
-let md5       = require('md5');
 let moment    = require('moment');
 let translate = require('/imports/language')('SignIn');
 
@@ -143,7 +141,7 @@ Template.SignIn.onRendered(function() {
         
         let auth = { 
           email: $('.field.username input').val(), 
-          password: md5($('.field.password input').val()) 
+          password: $('.field.password input').val() 
         }
 
         Meteor.loginWithPassword(auth.email, auth.password, function(err){
@@ -176,7 +174,7 @@ Template.SignIn.onRendered(function() {
                 });
               }
               Meteor.logout(function() {
-                toPanelSignImage(profile.fullname, profile.email, false, true);
+                toPanelSignImage(profile.fullname, auth.email, false, true);
               });
             }
 

@@ -31,6 +31,11 @@ $.fn.extend({
   }
 });
 
+
+Session.setDefault('ACCESS_TIME', 0);
+Session.setDefault('SESSION_CLIENT', null);
+
+
 window.T = {
 	Call : function(name, param){
 		let def = Q.defer();
@@ -52,6 +57,7 @@ window.T = {
 	    if(!T.Storage('SESSION_CLIENT')) {
 	      $.getScript("//l2.io/ip.js?var=myip", function() { 
 	      	T.Storage('SESSION_CLIENT', md5(myip).toUpperCase()); 
+	      	Session.set('SESSION_CLIENT', md5(myip).toUpperCase());
 	      	def.resolve(true); 
 	      });
 	    } else {

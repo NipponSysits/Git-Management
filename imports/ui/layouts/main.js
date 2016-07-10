@@ -12,12 +12,23 @@ require('malihu-custom-scrollbar-plugin')($);
 require('/imports/language')('app');
 
 
-
 Meteor.startup(() => {
+	if(T.Storage('SESSION_CLIENT')) {
+		Session.set('SESSION_CLIENT', T.Storage('SESSION_CLIENT'));
+	}
+
+	Tracker.autorun(function () {
+		if(!Session.set('SESSION_CLIENT')) {
+      console.log('logout:', Session.set('SESSION_CLIENT'))
+      // Meteor.logout();
+		}
+	});
 	window.onbeforeunload = function(e) {
 	  socket.disconnect();
 	};
 });
+
+
 
 Template.app.onCreated(function() {
   Session.setDefault('sign-in', false);
@@ -25,7 +36,7 @@ Template.app.onCreated(function() {
 });
 
 Template.app.onRendered(function() {
-	
+
 });
 
 Template.app.onDestroyed(function() {

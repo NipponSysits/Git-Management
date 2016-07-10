@@ -1,38 +1,166 @@
+
 import { Meteor } from 'meteor/meteor';
 import { HTTP } from 'meteor/http';
 
+const Q         = require('q');
+const md5       = require('md5');
+const request 	= require('request');
 const config 		= require('$custom/config');
+const mongo     = require('$custom/schema');
 const db 				= Mysql.connect(config.mysql);
 
-console.log('config', config.arg);
-
-var dbUser  = db.meteorCollection("user", "mysql.user");
-var dbRole  = db.meteorCollection("role", "mysql.role");
+console.log('meteor-config', config.arg);
 
 Meteor.startup(function () {
+  let UserItem = [], UserAccount = [], isSuccess = false;
+	(function(){
+    let def = Q.defer();
 
-  // Meteor.users.remove({}, function (error, result) {
-  //   if (error) { console.log("Error removing user: ", error); }
+		let getProfile = function(user) {
+			let account = {
+				username: user.username,
+				email: null,
+				password: user.password,
+			}
+			let profile = {
+				status: user.status == 'ON' ? true : false,
+				user_id: user.user_id,
+				email: [],
+				fullname: user.name + (user.surname ? ' ' + user.surname:''),
+				position: user.position,
+				level: user.level,
+				role: {
+					name: user.role_name,
+					description: user.role_description
+				},
+				attended: user.attended,
+				quit: user.quit,
+			}
 
-		// dbUser.find().forEach(function(user){
-		// 	let role = dbRole.findOne({ roleId : user.roleId });
+			return (function(){
+  			let def = Q.defer();
+	    	db.query(`SELECT email, \`primary\` FROM user_email WHERE user_id = ${user.user_id} AND \`status\` = 'ACTIVE'`, function(err, data){
+		      if(err || data.length == 0) {
+		      	def.resolve([]);
+		      } else {
+		      	def.resolve(data);
+		      }
+		    });
+  			return def.promise;
+    	})().then(function(data){
+    		
+  			let url = function(size, email){ return `http://www.gravatar.com/avatar${email?`/${md5(email)}`:``}?d=mm&s=${size?size:256}` };
+      	data.forEach(function(item) {
+      		profile.email.push(item.email);
+      		if(item.primary === 'YES') {
+      			account.email = item.email;
 
-		// 	Accounts.createUser({ 
-		// 		username: user.username, 
-		// 		email: user.signId, 
-		// 		password: user.password,
-		// 		profile: {
-		// 			status: user.status == 'ON' ? true : false,
-		// 			user_id: user.userId,
-		// 			email: user.signId,
-		// 			fullname: user.name+(user.surname?' '+user.surname:''),
-		// 			position: user.position,
-		// 			role: role,
-		// 			attended: user.attended
-		// 		}
-		// 	});
-		// });
-  // });
+		  			mongo.Grid().then(function(grid){
+		  				let fs = grid.createWriteStream({ filename: account.username+'.jpg' })
+		    			request.head(url(256, account.email), function(err, res, body){
+				    		let req = request(url(256, account.email)).pipe(fs);
+								req.on('close', function(){
+				    			console.log('createWriteStream', account.username+'.jpg');
+				    		});
+							  req.on('finish', function() {
+							    console.log('all done!');
+							  });
+
+							  req.on('error', function(err) {
+							    console.error(err);
+							  });
+
+				  		});
+
+
+		  			}).catch(function(ex){
+		  				console.log('Grid', ex);
+		  			});
+
+      		}
+      	});
+      	account.profile = profile;
+      	UserAccount.push(account);
+      	// Created Account
+	     	// Accounts.createUser(account);
+    	});
+		}
+
+    let query = `
+      SELECT 
+      	r.name role_name, r.description role_description, r.level, 
+      	u.user_id, u.name, u.surname, u.username, 
+      	u.password, u.position, u.attended, u.quit, u.status
+      FROM user u
+      INNER JOIN role r ON u.role_id = r.role_id
+    `;	   
+    db.query(query, function(err, data){
+      if(err || data.length == 0) {
+      	def.reject(err);
+      } else {
+      	data.forEach(function(user) {
+      		UserItem.push(getProfile(user))
+      	});
+      	def.resolve();
+      }
+    });
+    return def.promise;
+  })().then(function(){
+    return Q.all(UserItem);
+  }).then(function(){
+  	console.log('Accounts.Created', true);
+  	isSuccess = true;
+  }).catch(function(ex){
+  	console.log('Accounts.Created', ex);
+  });
+
+
+  var idCreated = Meteor.setInterval(function(){
+  	// Meteor.clearInterval(id)
+  	if(isSuccess) {
+  		isSuccess = false;
+  		Meteor.clearInterval(idCreated);
+
+  		Meteor.users.remove({}, function (error, result) {
+		    if (error) { console.log("Error removing user: ", error); }
+
+		    // let url = function(size, email){ return `http://www.gravatar.com/avatar${email?`/${md5(email)}`:``}?d=mm&s=${size?size:256}` };
+	  		UserAccount.forEach(function(account) {
+	  			Accounts.createUser(account);
+
+
+				  // request.head(url(256, account.email), function(err, res, body){
+				  // 	// console.log(body);
+				  //   // request(url(256, account.email)).pipe(fs.createWriteStream(filename)).on('close', callback);
+				  // });
+	  			// HTTP.get(url(256, account.email), {}, function(argument) {
+	  			// 	console.log(argument);
+	  			// })
+	  		});
+				// Meteor.users.find().fetch();
+
+	  	});
+
+  	}
+  }, 500);
+			// UserAccount.forEach(function(user){
+			// 	let role = dbRole.findOne({ roleId : user.roleId });
+
+			// 	Accounts.createUser({ 
+			// 		username: user.username, 
+			// 		email: user.signId, 
+			// 		password: user.password,
+			// 		profile: {
+			// 			status: user.status == 'ON' ? true : false,
+			// 			user_id: user.userId,
+			// 			email: user.signId,
+			// 			fullname: user.name+(user.surname?' '+user.surname:''),
+			// 			position: user.position,
+			// 			role: role,
+			// 			attended: user.attended
+			// 		}
+			// 	});
+			// });
 
 });
 
