@@ -1,10 +1,13 @@
 const Q         = require('q');
+const md5      	= require('md5');
 const Push      = require('push.js');
-const socket  	= require('socket.io-client')('http://192.168.10.6:8200');
+const config		= process.env.METEOR_CONFIG == 'default' ? 'http://local-sentinel:811' : 'http://localhost:8200';
+const socket  	= require('socket.io-client')(config);
 
+// Fixed bug repository for other socket.
 import Response from 'meteor-node-stubs/node_modules/http-browserify/lib/response';
-
 if(!Response.prototype.setEncoding) { Response.prototype.setEncoding = function(encoding){} }
+
 
 socket.on('connect', function(){
 	socket.emit('web-client', {});
@@ -21,10 +24,10 @@ socket.on('push-notification', function(noti) {
 
 	Push.create(`${noti.fullname} ${noti.event}`, {
 	    body: noti.body,
-	    // icon: {
-	    //     x16: 'images/icon-x16.png',
-	    //     x32: 'images/icon-x32.png'
-	    // }, 
+	    icon: {
+	        x16: `/16/${md5(noti.email)}`,
+	        x32: `/32/${md5(noti.email)}`
+	    }, 
 	    timeout: 5000
 	});
 });
