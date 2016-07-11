@@ -32,7 +32,8 @@ $.fn.extend({
 });
 
 
-Session.setDefault('ACCESS_TIME', 0);
+Session.setDefault('SESSION_TIME', 0);
+Session.setDefault('SESSION_ID', null);
 Session.setDefault('SESSION_CLIENT', null);
 
 
@@ -53,7 +54,6 @@ window.T = {
 	Init:function(timestamp){
 		let def = Q.defer();
   	if(timestamp != undefined) {
-  		Session.set('ACCESS_TIME', timestamp); 
 	    if(!T.Storage('SESSION_CLIENT')) {
 	      $.getScript("//l2.io/ip.js?var=myip", function() { 
 	      	T.Storage('SESSION_CLIENT', md5(myip).toUpperCase()); 

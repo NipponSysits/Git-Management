@@ -3,13 +3,23 @@ import { Meteor } from 'meteor/meteor';
 import { HTTP } from 'meteor/http';
 
 const Q         = require('q');
+const fs 				= require('fs');
 const md5       = require('md5');
 const request 	= require('request');
 const config 		= require('$custom/config');
 const mongo     = require('$custom/schema');
 const db 				= Mysql.connect(config.mysql);
 
+
 console.log('meteor-config', config.arg);
+
+
+
+Meteor.methods({
+  reqGravatar: function (size, id) {
+
+  }
+});
 
 Meteor.startup(function () {
   let UserItem = [], UserAccount = [], isSuccess = false;
@@ -40,49 +50,20 @@ Meteor.startup(function () {
 			return (function(){
   			let def = Q.defer();
 	    	db.query(`SELECT email, \`primary\` FROM user_email WHERE user_id = ${user.user_id} AND \`status\` = 'ACTIVE'`, function(err, data){
-		      if(err || data.length == 0) {
-		      	def.resolve([]);
-		      } else {
-		      	def.resolve(data);
-		      }
+		      if(err || data.length == 0) { def.resolve([]); } else { def.resolve(data); }
 		    });
   			return def.promise;
-    	})().then(function(data){
-    		
-  			let url = function(size, email){ return `http://www.gravatar.com/avatar${email?`/${md5(email)}`:``}?d=mm&s=${size?size:256}` };
+    	})().then(function(data){ 
+    		// let download = []
       	data.forEach(function(item) {
       		profile.email.push(item.email);
       		if(item.primary === 'YES') {
       			account.email = item.email;
-
-		  			mongo.Grid().then(function(grid){
-		  				let fs = grid.createWriteStream({ filename: account.username+'.jpg' })
-		    			request.head(url(256, account.email), function(err, res, body){
-				    		let req = request(url(256, account.email)).pipe(fs);
-								req.on('close', function(){
-				    			console.log('createWriteStream', account.username+'.jpg');
-				    		});
-							  req.on('finish', function() {
-							    console.log('all done!');
-							  });
-
-							  req.on('error', function(err) {
-							    console.error(err);
-							  });
-
-				  		});
-
-
-		  			}).catch(function(ex){
-		  				console.log('Grid', ex);
-		  			});
-
+      			profile.gravatar = `${md5(item.email)}.png`;
       		}
       	});
       	account.profile = profile;
       	UserAccount.push(account);
-      	// Created Account
-	     	// Accounts.createUser(account);
     	});
 		}
 
@@ -124,20 +105,9 @@ Meteor.startup(function () {
   		Meteor.users.remove({}, function (error, result) {
 		    if (error) { console.log("Error removing user: ", error); }
 
-		    // let url = function(size, email){ return `http://www.gravatar.com/avatar${email?`/${md5(email)}`:``}?d=mm&s=${size?size:256}` };
 	  		UserAccount.forEach(function(account) {
 	  			Accounts.createUser(account);
-
-
-				  // request.head(url(256, account.email), function(err, res, body){
-				  // 	// console.log(body);
-				  //   // request(url(256, account.email)).pipe(fs.createWriteStream(filename)).on('close', callback);
-				  // });
-	  			// HTTP.get(url(256, account.email), {}, function(argument) {
-	  			// 	console.log(argument);
-	  			// })
 	  		});
-				// Meteor.users.find().fetch();
 
 	  	});
 
