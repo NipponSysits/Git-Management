@@ -152,6 +152,9 @@ Template.SignIn.onRendered(function() {
               $('.ui.dimmer.prepare').fadeIn(300);
               $('.ui.panel.sign-in').fadeOut(300, function(){
                 toPanelSignImage(profile.fullname, auth.email, true, true);
+                Session.set('SESSION_ID', Meteor.userId()); 
+                Session.set('SESSION_TIME', T.Timestamp); 
+
                 T.Init(T.Timestamp).then(function(){
                   $('.ui.panel.main').fadeIn();
                   FlowRouter.go('repository');

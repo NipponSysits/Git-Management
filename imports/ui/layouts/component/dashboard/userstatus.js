@@ -54,8 +54,8 @@ Template.UserStatus.helpers({
     return usr.profile;
   },
   getAvatar: function(){
-    let email = (Meteor.user() || { profile: {} }).profile.email;
-    return `url('//www.gravatar.com/avatar${email?`/${md5(email)}`:``}?d=mm&s=128')`;
+    let gravater = (Meteor.user() || { profile: { gravater: 'none.png' } }).profile.gravater;
+    return `url('//dev.ns.co.th:810/gravater/128/${gravater}')`;
   },
 });
 Template.UserStatus.onCreated(function() {

@@ -13,19 +13,7 @@ require('/imports/language')('app');
 
 
 Meteor.startup(() => {
-	if(T.Storage('SESSION_CLIENT')) {
-		Session.set('SESSION_CLIENT', T.Storage('SESSION_CLIENT'));
-	}
 
-	Tracker.autorun(function () {
-		if(!Session.set('SESSION_CLIENT')) {
-      console.log('logout:', Session.set('SESSION_CLIENT'))
-      // Meteor.logout();
-		}
-	});
-	window.onbeforeunload = function(e) {
-	  socket.disconnect();
-	};
 });
 
 
@@ -36,7 +24,18 @@ Template.app.onCreated(function() {
 });
 
 Template.app.onRendered(function() {
+	if(T.Storage('SESSION_CLIENT')) {
+		Session.set('SESSION_TIME', T.Timestamp); 
+		Session.set('SESSION_ID', Meteor.userId()); 
+		Session.set('SESSION_CLIENT', T.Storage('SESSION_CLIENT'));
+	}
 
+	Tracker.autorun(function () {
+		if(!Session.get('SESSION_CLIENT')) {
+      console.log('logout:', Session.get('SESSION_CLIENT'))
+      // Meteor.logout(); 
+		}
+	});
 });
 
 Template.app.onDestroyed(function() {
