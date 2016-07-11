@@ -24,10 +24,8 @@ const IdSignal = Meteor.setInterval(function(){
 
 $.fn.extend({
   avatar: function(email, size) {
-
     size = size || 256;
-    var url = '//www.gravatar.com/avatar'+(email ? '/'+md5(email) : '')+'?d=mm&s='+size;
-    return $(this).css('background-image',"url('"+url+"')");
+    return $(this).css('background-image',"url('/"+size+'/'+md5(email)+"')");
   }
 });
 

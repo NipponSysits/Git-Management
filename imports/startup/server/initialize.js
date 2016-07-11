@@ -102,36 +102,17 @@ Meteor.startup(function () {
   		isSuccess = false;
   		Meteor.clearInterval(idCreated);
 
-  		Meteor.users.remove({}, function (error, result) {
-		    if (error) { console.log("Error removing user: ", error); }
+  		// Meteor.users.remove({}, function (error, result) {
+		  //   if (error) { console.log("Error removing user: ", error); }
 
-	  		UserAccount.forEach(function(account) {
-	  			Accounts.createUser(account);
-	  		});
+	  	// 	UserAccount.forEach(function(account) {
+	  	// 		Accounts.createUser(account);
+	  	// 	});
 
-	  	});
+	  	// });
 
   	}
   }, 500);
-			// UserAccount.forEach(function(user){
-			// 	let role = dbRole.findOne({ roleId : user.roleId });
-
-			// 	Accounts.createUser({ 
-			// 		username: user.username, 
-			// 		email: user.signId, 
-			// 		password: user.password,
-			// 		profile: {
-			// 			status: user.status == 'ON' ? true : false,
-			// 			user_id: user.userId,
-			// 			email: user.signId,
-			// 			fullname: user.name+(user.surname?' '+user.surname:''),
-			// 			position: user.position,
-			// 			role: role,
-			// 			attended: user.attended
-			// 		}
-			// 	});
-			// });
-
 });
 
 process.on("SIGTERM", function() {

@@ -40,7 +40,7 @@ Template.Repository.helpers({
     return comment ? true : false;
   },
   DomainName: function() {
-    return `${config.domain+FlowRouter.getParam('collection')}/${FlowRouter.getParam('repository')}`;
+    return `${location.protocol+config.domain+FlowRouter.getParam('collection')}/${FlowRouter.getParam('repository')}`;
   },
   RepositoryName: function() {
     return `${FlowRouter.getParam('collection')}/${FlowRouter.getParam('repository')}`;

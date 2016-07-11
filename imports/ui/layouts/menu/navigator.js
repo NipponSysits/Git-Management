@@ -27,7 +27,8 @@ Template.Navigator.helpers({
 	  return (Meteor.user() || { profile: { fullname: 'Signing...' } }).profile.fullname;
 	},
   getAvatar: function(){
-    return `url('/none.png')`;
+    let gravatar = (Meteor.user() || { profile: { gravatar: '00000000000000000000000000000000' } }).profile.gravatar;
+    return `url('/64/${gravatar}')`;
   },
 	getPosition: function(){
 	  return (Meteor.user() || { profile: { position: 'none' } }).profile.position;
