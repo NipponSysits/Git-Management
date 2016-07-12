@@ -29,13 +29,41 @@ Template.app.onRendered(function() {
 		Session.set('SESSION_ID', Meteor.userId()); 
 		Session.set('SESSION_CLIENT', T.Storage('SESSION_CLIENT'));
 	}
+  let checkNotify = Meteor.setInterval(function() {
+	  if (!("Notification" in window)) {
 
-	Tracker.autorun(function () {
+	  } else if (Notification.permission === "granted") {
+	    Meteor.clearInterval(checkNotify);
+	  } else if (Notification.permission !== 'denied') {
+	    Notification.requestPermission(function (permission) {
+	      if(!('permission' in Notification)) Notification.permission = permission;
+	      if (permission !== "granted") {
+	      	
+	      } else {
+	      	Meteor.clearInterval(checkNotify);
+	      }
+	    });
+	  }
+
+  }, 500);
+
+
+  var notification = function(){
+  	let noti = new Notification("Hi there!");
+  }
+
+	Tracker.autorun(function() {
 		if(!Session.get('SESSION_CLIENT')) {
       console.log('logout:', Session.get('SESSION_CLIENT'))
       // Meteor.logout(); 
 		}
 	});
+
+
+
+
+
+
 });
 
 Template.app.onDestroyed(function() {
