@@ -58,8 +58,9 @@ Meteor.startup(function () {
       	data.forEach(function(item) {
       		profile.email.push(item.email);
       		if(item.primary === 'YES') {
-      			account.email = item.email;
-      			profile.gravatar = `${md5(item.email)}.png`;
+            account.email = item.email;
+            profile.primary = item.email;
+      			profile.gravatar = `${md5(item.email)}.jpg`;
       		}
       	});
       	account.profile = profile;
