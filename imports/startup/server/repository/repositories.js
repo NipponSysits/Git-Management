@@ -20,11 +20,11 @@ Meteor.publish('collection-list', function() {
   let self = this;
   if(!self.userId) return [];
   let getUser = Meteor.users.findOne({ _id: self.userId });
-  let getProfile = getUser.profile, role = getProfile.role;
+  let getProfile = getUser.profile;
 
-  let pgmView = role.level > 1 && role.level < 5;
-  let otherPrivate = role.level < 1;
-  let forProject = role.level >= 5;
+  let pgmView = getProfile.level > 1 && getProfile.level < 5;
+  let otherPrivate = getProfile.level < 1;
+  let forProject = getProfile.level >= 5;
 
   let query_collection = `
   SELECT p.name collection_name, LOWER(p.name) order_name, COUNT(p.collection_id) list, p.collection_id, NULL user_id
@@ -70,7 +70,7 @@ Meteor.publish('collection-list', function() {
   	if(err) self.error(err);
 		(data || []).forEach(function(item){
       if(item.list > 0) {
-        self.added('list.collection-name', item.collection_id, item);
+        self.added('list.collection-name', 'c'+item.collection_id, item);
       }
 		});
 
@@ -78,20 +78,21 @@ Meteor.publish('collection-list', function() {
       if(err) self.error(err);
       let ownerCreated = false;
       (data || []).forEach(function(item){
-        if(item.list > 0) self.added('list.collection-user', item.user_id, item);
-        if(item.collection_name == getUser.username) {
-          ownerCreated = true;
+        if(item.collection_name === getUser.username && getProfile.level < 4) {
+          self.added('list.collection-user', item.user_id, item);
+        } else if(item.list > 0) {
+          self.added('list.collection-name', 'u'+item.user_id, item);
         }
       });
-      if(!ownerCreated && role.level < 4) {
-        ownerCreated = { 
-          collection_name: getUser.username, 
-          list: 0, 
-          collection_id: null, 
-          user_id: getProfile.user_id 
-        }
-        self.added('list.collection-user', getProfile.user_id, ownerCreated);
-      }
+      // if(!ownerCreated && getProfile.level < 4) {
+      //   ownerCreated = { 
+      //     collection_name: getUser.username, 
+      //     list: 0, 
+      //     collection_id: null, 
+      //     user_id: getProfile.user_id 
+      //   }
+      //   self.added('list.collection-user', getProfile.user_id, ownerCreated);
+      // }
   		self.ready();
     });
   });
@@ -103,11 +104,11 @@ Meteor.publish('repository-list', function(collection) {
 
   let getUser = Meteor.users.findOne({ _id: self.userId });
   let collection_name = collection || getUser.username;
-  let getProfile = getUser.profile, role = getProfile.role;
+  let getProfile = getUser.profile;
 
-  let pgmView = role.level > 1 && role.level < 5;
-  let otherPrivate = role.level < 1;
-  let forProject = role.level >= 5;
+  let pgmView = getProfile.level > 1 && getProfile.level < 5;
+  let otherPrivate = getProfile.level < 1;
+  let forProject = getProfile.level >= 5;
 
   let query = `
   SELECT 

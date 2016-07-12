@@ -63,7 +63,7 @@ Template.Repository.helpers({
     return `
 ##### clone repository on the command line
 
-    git clone ${config.domain+FlowRouter.getParam('collection')}/${FlowRouter.getParam('repository')}
+    git clone ${location.protocol+config.domain+FlowRouter.getParam('collection')}/${FlowRouter.getParam('repository')}
 
 ##### …or create a new repository on the command line
 
@@ -71,10 +71,9 @@ Template.Repository.helpers({
     git init
     git add README.md
     git commit -m "first commit"
-    git remote add origin ${config.domain+FlowRouter.getParam('collection')}/${FlowRouter.getParam('repository')}
+    git remote add origin ${location.protocol+config.domain+FlowRouter.getParam('collection')}/${FlowRouter.getParam('repository')}
     git push -u origin master
 `;
-
   },
   Markdown: function(text){
     return marked(text);
