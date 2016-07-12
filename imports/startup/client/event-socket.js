@@ -11,11 +11,6 @@ if(!Response.prototype.setEncoding) { Response.prototype.setEncoding = function(
 
 socket.on('connect', function(){
 	socket.emit('web-client', {});
-
-	// check notification allow permission
-	
-	// client.connected = true;
-	// console.log('socket', client.connected)
 });
 socket.on('disconnect', function(){ 
 	// client.connected = false;
@@ -23,14 +18,22 @@ socket.on('disconnect', function(){
 });
 
 socket.on('push-notification', function(noti) {
-	console.log('notification', noti);
+	let profile = (Meteor.user() || { profile: {} }).profile;
+	console.log(Meteor.userId(), profile.user_id, noti.permission, noti.permission.indexOf(profile.user_id), noti.anonymous);
+	if(Meteor.userId() && (noti.notify || profile.level <= 1) && (noti.permission.indexOf(profile.user_id) || noti.anonymous)) {
+		let subject = ``, message = ``;
+		let xIcon = {
+      x16: `/32/${md5(noti.email)}`,
+      x32: `/64/${md5(noti.email)}`
+		}
+		switch(noti.event) {
+			case 'pushed': 
+				subject = `${noti.fullname} ${noti.event} (${noti.branch})`
+				message = `${noti.body.substr(0, 100)}`;
+				break;
+		}
 
-	Push.create(`${noti.fullname} ${noti.event}`, {
-	    body: noti.body.substr(0, 100),
-	    icon: {
-	        x16: `/16/${md5(noti.email)}`,
-	        x32: `/32/${md5(noti.email)}`
-	    }, 
-	    timeout: 5000
-	});
+		// Notification show.
+		Push.create(subject, { body: message, icon: xIcon, timeout: 5000 });
+	}
 });
