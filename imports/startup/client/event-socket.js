@@ -26,14 +26,12 @@ socket.on('push-notification', function(noti) {
       x16: `/64/${md5(noti.email)}`,
       x32: `/128/${md5(noti.email)}`
 		}
+		let admin = profile.level <= 1;
 		
-		if(noti.notify && (noti.permission.indexOf(profile.user_id) > -1 || noti.anonymous) || profile.level <= 1) {
-			switch(noti.event) {
-				case 'pushed': 
-					subject = `${noti.fullname} ${noti.event} (${noti.branch})`
-					message = noti.title+'\n'+noti.body;
-					break;
-			}
+		if(noti.event == 'pushed' && noti.notify && (noti.permission.indexOf(profile.user_id) > -1 || noti.anonymous) || admin) {
+			subject = `${noti.fullname} ${noti.event} (${noti.branch})`
+			message = (noti.body || '').trim();
+
 			// Notification show.
 			Push.create(subject, { body: message, icon: xIcon, timeout: 8000 });
 		}
