@@ -1,7 +1,7 @@
 const Q         = require('q');
 const md5      	= require('md5');
 const Push      = require('push.js');
-const config		= process.env.METEOR_CONFIG == 'default' ? 'http://local-sentinel:811' : 'http://localhost:8200';
+const config		= location.hostname == 'dev.ns.co.th' ? 'http://dev.ns.co.th:811' : 'http://localhost:8200';
 const socket  	= require('socket.io-client')(config);
 
 // Fixed bug repository for other socket.
@@ -20,7 +20,8 @@ socket.on('disconnect', function(){
 socket.on('push-notification', function(noti) {
 	let profile = (Meteor.user() || { profile: {} }).profile;
 	console.log(Meteor.userId(), profile.user_id, noti.permission, noti.permission.indexOf(profile.user_id), noti.anonymous);
-	if(Meteor.userId() && (noti.notify || profile.level <= 1) && (noti.permission.indexOf(profile.user_id) || noti.anonymous)) {
+	
+	if((Meteor.userId() && noti.notify && (noti.permission.indexOf(profile.user_id) || noti.anonymous)) || profile.level <= 1) {
 		let subject = ``, message = ``;
 		let xIcon = {
       x16: `/64/${md5(noti.email)}`,
