@@ -18,22 +18,25 @@ socket.on('disconnect', function(){
 });
 
 socket.on('push-notification', function(noti) {
-	let profile = (Meteor.user() || { profile: {} }).profile;
-	
-	if((Meteor.userId() && noti.notify && (noti.permission.indexOf(profile.user_id) || noti.anonymous)) || profile.level <= 1) {
+
+	if(Meteor.userId()) {
+		let profile = Meteor.user().profile;
 		let subject = ``, message = ``;
 		let xIcon = {
       x16: `/64/${md5(noti.email)}`,
       x32: `/128/${md5(noti.email)}`
 		}
-		switch(noti.event) {
-			case 'pushed': 
-				subject = `${noti.fullname} ${noti.event} (${noti.branch})`
-				message = `${noti.body.substr(0, 100)}`;
-				break;
+		
+		if(noti.notify && (noti.permission.indexOf(profile.user_id) > -1 || noti.anonymous) || profile.level <= 1) {
+			switch(noti.event) {
+				case 'pushed': 
+					subject = `${noti.fullname} ${noti.event} (${noti.branch})`
+					message = noti.title+'\n'+noti.body;
+					break;
+			}
+			// Notification show.
+			Push.create(subject, { body: message, icon: xIcon, timeout: 8000 });
 		}
 
-		// Notification show.
-		Push.create(subject, { body: message, icon: xIcon, timeout: 5000 });
 	}
 });
