@@ -23,8 +23,8 @@ socket.on('push-notification', function(noti) {
 	if(Meteor.userId() && (noti.notify || profile.level <= 1) && (noti.permission.indexOf(profile.user_id) || noti.anonymous)) {
 		let subject = ``, message = ``;
 		let xIcon = {
-      x16: `/32/${md5(noti.email)}`,
-      x32: `/64/${md5(noti.email)}`
+      x16: `/64/${md5(noti.email)}`,
+      x32: `/128/${md5(noti.email)}`
 		}
 		switch(noti.event) {
 			case 'pushed': 

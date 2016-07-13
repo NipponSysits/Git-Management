@@ -79,20 +79,20 @@ Meteor.publish('collection-list', function() {
       let ownerCreated = false;
       (data || []).forEach(function(item){
         if(item.collection_name === getUser.username && getProfile.level < 4) {
+          ownerCreated = true;
           self.added('list.collection-user', item.user_id, item);
         } else if(item.list > 0) {
           self.added('list.collection-name', 'u'+item.user_id, item);
         }
       });
-      // if(!ownerCreated && getProfile.level < 4) {
-      //   ownerCreated = { 
-      //     collection_name: getUser.username, 
-      //     list: 0, 
-      //     collection_id: null, 
-      //     user_id: getProfile.user_id 
-      //   }
-      //   self.added('list.collection-user', getProfile.user_id, ownerCreated);
-      // }
+      if(!ownerCreated && getProfile.level < 4) {
+        self.added('list.collection-user', getProfile.user_id, { 
+          collection_name: getUser.username, 
+          list: 0, 
+          collection_id: null, 
+          user_id: getProfile.user_id 
+        });
+      }
   		self.ready();
     });
   });
