@@ -19,7 +19,6 @@ socket.on('disconnect', function(){
 
 socket.on('push-notification', function(noti) {
 	let profile = (Meteor.user() || { profile: {} }).profile;
-	console.log(Meteor.userId(), profile.user_id, noti.permission, noti.permission.indexOf(profile.user_id), noti.anonymous);
 	
 	if((Meteor.userId() && noti.notify && (noti.permission.indexOf(profile.user_id) || noti.anonymous)) || profile.level <= 1) {
 		let subject = ``, message = ``;
