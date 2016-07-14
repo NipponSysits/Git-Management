@@ -50,6 +50,11 @@ div.ui.main.container {
     }
   }
 }
+div.nowarp {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
 .ui.grid {
   .ui.button {
