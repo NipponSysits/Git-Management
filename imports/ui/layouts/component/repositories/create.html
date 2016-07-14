@@ -1,13 +1,19 @@
-<template name="RepositoryCreate">
+ <template name="RepositoryCreate">
 	<div class="sixteen wide column">
 		<div class="ui stackable one column grid component">
 		  <div class="column">
-		  	<h5>Repository</h5>
+		  	<h5>Create a new repository</h5>
 		  	<div class="content">
-					<div class="ui grid">
-						<div class="seven wide column">
-							<form class="ui form repository_new">
-							  <h4 class="ui dividing header">Create a new repository</h4>
+					<form class="ui form repository_new">
+						<div class="ui grid">
+							<div class="sixteen wide column right aligned">
+								<button class="ui button cancel">Cancel</button>
+								<button class="ui primary button save" style="width: 180px;">Save</button>
+							</div>
+						</div>
+					  <div class="ui section divider"></div>
+						<div class="ui grid">
+							<div class="ten wide column">
 	  						<div class="fields">
 						      <div class="six wide field">
 							    	<label>Collection</label>
@@ -89,11 +95,19 @@
 							      </label>
 							    </div>
 						    </div>
-
-							</form>	
+							</div>
+							<div class="six wide column">
+							  <div class="field">
+							    <label>Administartor</label>
+					        <input type="text" name="repository[admin]" placeholder="Optional">
+							  </div>
+							  <div class="field">
+							    <label>Contributions</label>
+							    <textarea name="repository[contribution]" placeholder="Optional" rows="2"></textarea>
+							  </div>
+							</div>
 						</div>
-
-					</div>
+					</form>	
 		  	</div>
 		  </div>
 		</div>
