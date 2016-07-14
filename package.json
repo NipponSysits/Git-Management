@@ -26,6 +26,14 @@
     "socket.io-client": "^1.4.6",
     "utf-8-validate": "^1.2.1"
   },
+  "devDependencies": {
+    "autoprefixer": "^6.3.1"
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {"browsers": ["last 2 versions"]}
+    }
+  },
   "scripts": {
     "start": "meteor --port 8220 --settings local.json"
   },
