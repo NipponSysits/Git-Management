@@ -55,7 +55,7 @@ Template.UserStatus.helpers({
   },
   getAvatar: function(){
     let gravatar = (Meteor.user() || { profile: { gravatar: '00000000000000000000000000000000' } }).profile.gravatar;
-    return `url('/128/${gravatar}')`;
+    return `u/256/${gravatar}`;
   },
 });
 Template.UserStatus.onCreated(function() {
