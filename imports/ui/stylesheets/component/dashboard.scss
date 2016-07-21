@@ -8,9 +8,7 @@ h2.ui.header.avatar {
 			&.avatar {
 				background-size: cover;
 				background-color: #ECECEC;
-				border: #1A3B46 solid 6px;
-				width: 236px !important;
-				height: 236px !important;
+				border: #171D2C solid 5px;
 				margin-left: 8px;
 			}
 		}
@@ -26,7 +24,7 @@ h2.ui.header.avatar {
 		background-image: url('/images/dashboard.png');
 		background-position: top center;
 		margin: 0em !important;
-    border-bottom:#1A3B46 solid 64px
+    border-bottom:#171D2C solid 60px
 	}
 	&.column  {
 		background-color: rgba(255, 255, 255,0.75);
@@ -223,14 +221,77 @@ h2.ui.header.avatar {
 
 // computer
 @media only screen and (min-width: 992px) {
-  .stats.dashboard {
-		height: 460px;
-		background-size: cover;
+	.stats {
+		&.dashboard {
+			height: 430px;
+			background-size: cover;
+		}
+		.avatar {
+			>.image {
+				&.avatar {
+					width: 200px !important;
+					height: 200px !important;
+				}
+			}
+			>.content {
+				margin-top: -4rem;
+			}
+		}
 	}
+
 }
 
 
+@media print {
 
+	.stats {
+		&.dashboard {
+			>.container {
+				.exp_level {
+					
+				}
+				.exp_percent { display: none !important; }
+			}
+			.avatar {
+				>.image {
+					&.avatar {
+						width: 128px !important;
+						height: 128px !important;
+						border-radius: 0.3rem;
+						border: none;
+					}
+				}
+			}
+			height: 305px;
+			border-bottom: #171D2C solid 2px;
+		}
+		.avatar {
+			>.content {
+
+				margin: 2rem 0rem 0rem 1rem;
+			}
+		}
+	}
+
+  .stats.dashboard {
+		height: 305px;
+		border-bottom: #171D2C solid 2px;
+	}
+
+	.user-menu {
+		>.item {
+			&.home { display: none !important; }
+			&.repository { display: none !important; }
+			&.nippon { display: none !important; }
+			&.content {
+				margin-right: 10px !important;
+			}
+			&.profile {
+				width: 0px;
+			}
+		}
+	}
+}
 // .stats.column > .name{
 
 // }
