@@ -19,7 +19,8 @@ FlowRouter.route('/Repository.New', {
   },
 });
 
-FlowRouter.route('/Repositories', {
+
+FlowRouter.route('/', {
   name: 'repository',
   triggersEnter: [SignAccess],
   subscriptions: function(param){
@@ -28,6 +29,7 @@ FlowRouter.route('/Repositories', {
   },
   action:function() {
     BlazeLayout.render('app', { 
+      board: 'UserStatus',
       navigator: 'Navigator',
       component: 'RepositoryCollection',
       main: 'Repositories', 
@@ -36,7 +38,7 @@ FlowRouter.route('/Repositories', {
   },
 });
 
-FlowRouter.route('/Repositories/:collection', {
+FlowRouter.route('/:collection', {
   name: 'repository.list',
   triggersEnter: [SignAccess],
   subscriptions: function(param){
@@ -45,6 +47,7 @@ FlowRouter.route('/Repositories/:collection', {
   },
   action:function() {
     BlazeLayout.render('app', { 
+      board: 'UserStatus',
       navigator: 'Navigator',
       component: 'RepositoryCollection',
       main: 'Repositories', 
@@ -53,31 +56,31 @@ FlowRouter.route('/Repositories/:collection', {
   },
 });
 
-FlowRouter.route('/Contents/:name?', {
-  name: 'content',
-  triggersEnter: [SignAccess],
-  action:function() {
-    BlazeLayout.render('app', { 
-      navigator: 'Navigator',
-      component: 'Content',
-      main: 'Repositories', 
-    }); 
+// FlowRouter.route('/Contents/:name?', {
+//   name: 'content',
+//   triggersEnter: [SignAccess],
+//   action:function() {
+//     BlazeLayout.render('app', { 
+//       navigator: 'Navigator',
+//       component: 'Content',
+//       main: 'Repositories', 
+//     }); 
      
-  },
-});
+//   },
+// });
 
-FlowRouter.route('/Fork', {
-  name: 'fork',
-  triggersEnter: [SignAccess],
-  action:function() {
-    BlazeLayout.render('app', { 
-      navigator: 'Navigator',
-      component: 'Fork',
-      main: 'Repositories', 
-    }); 
+// FlowRouter.route('/Fork', {
+//   name: 'fork',
+//   triggersEnter: [SignAccess],
+//   action:function() {
+//     BlazeLayout.render('app', { 
+//       navigator: 'Navigator',
+//       component: 'Fork',
+//       main: 'Repositories', 
+//     }); 
      
-  },
-});
+//   },
+// });
 
 
 FlowRouter.route('/:collection/:repository', {

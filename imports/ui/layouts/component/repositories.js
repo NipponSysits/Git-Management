@@ -38,11 +38,15 @@ Template.Repositories.events({
 
 Template.Repositories.onCreated(function(){
 	Session.set('prepare', false);
+  Meteor.subscribe('dashboard', null, function(){
+  	Session.set('prepare', true);
+  })
 });
 
 Template.Repositories.onRendered(() => {
   $('.ui.panel.sign-in').hide();
   $('.ui.panel.main').show();
+  $('.ui.panel.main, .ui.panel.board').show();
   
   $('.user-menu > .item').removeClass('selected');
   $('.user-menu > .item.repository').addClass('selected');

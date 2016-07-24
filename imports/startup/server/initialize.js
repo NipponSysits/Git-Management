@@ -49,7 +49,7 @@ Meteor.startup(function () {
 
 			return (function(){
   			let def = Q.defer();
-	    	db.query(`SELECT email, \`primary\` FROM user_email WHERE user_id = ${user.user_id} AND \`status\` = 'ACTIVE'`, function(err, data){
+	    	db.query(`SELECT email, \`primary\` FROM user_email WHERE user_id = ${user.user_id}`, function(err, data){
 		      if(err || data.length == 0) { def.resolve([]); } else { def.resolve(data); }
 		    });
   			return def.promise;
