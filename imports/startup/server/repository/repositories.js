@@ -5,7 +5,7 @@ const config 		= require('$custom/config');
 const mongo     = require('$custom/schema');
 const Q         = require('q');
 
-//or ES6 syndax: import live from "mysql-live";
+// or ES6 syndax: import live from "mysql-live";
 
 // const db        = Mysql.connect(config.mysql);
 
@@ -282,15 +282,6 @@ const Q         = require('q');
 
 
 // });
-
-
-    //   // self.added('summary.repository', data[0], {
-
-    //   // });
-
-    //   self.ready();
-    // });
-
 
 
 
