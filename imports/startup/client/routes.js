@@ -17,22 +17,26 @@ BlazeLayout.setRoot('body');
 
 const SignAccess = function(context, redirect) {
   if(!Meteor.userId()) {
-    redirect('sign');
+    redirect('home');
   }
 }
 
 FlowRouter.route('/', {
   name: 'home',
-  triggersEnter: [SignAccess],
+  // triggersEnter: [SignAccess],
   subscriptions: function(param){
     // this.register('dashboard', );
   },
   action:function() {
-    BlazeLayout.render('app', { 
-      main: 'Dashboard', 
-      board: 'UserStatus',
-      navigator: 'Navigator'
-    });
+    if(Meteor.userId()) {
+      BlazeLayout.render('app', { 
+        main: 'Dashboard', 
+        board: 'UserStatus',
+        navigator: 'Navigator'
+      });
+    } else {
+      BlazeLayout.render('welcome', { });
+    }
   }
 });
 
