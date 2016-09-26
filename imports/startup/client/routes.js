@@ -23,7 +23,6 @@ const SignAccess = function(context, redirect) {
 
 FlowRouter.route('/', {
   name: 'home',
-  // triggersEnter: [SignAccess],
   subscriptions: function(param){
     // this.register('dashboard', );
   },
@@ -35,7 +34,7 @@ FlowRouter.route('/', {
         navigator: 'Navigator'
       });
     } else {
-      BlazeLayout.render('welcome', { });
+      BlazeLayout.render('app', { sign: 'SignIn' });
     }
   }
 });

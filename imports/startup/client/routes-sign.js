@@ -20,13 +20,6 @@ var signRoutes = FlowRouter.group({
   }
 });
 
-signRoutes.route('/SignIn', {
-  name: 'sign',
-  action: function() {
-    BlazeLayout.render('app', { sign: 'SignIn' });
-  }
-});
-
 signRoutes.route('/Troubleshoot', {
   name: 'trouble',
   action: function() {

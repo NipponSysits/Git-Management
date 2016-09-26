@@ -114,7 +114,7 @@ Template.SignIn.onRendered(function() {
         identifier: 'email',
         rules: [
           { type: 'empty', prompt: translate('valid.email.empty') },
-          { type: 'email', prompt: translate('valid.email.invalid') }
+          // { type: 'email', prompt: translate('valid.email.invalid') }
         ]
       },
       password: {

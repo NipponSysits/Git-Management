@@ -1,12 +1,12 @@
 module.exports = {
 	'app': {
-		'copyright'		:'Touno-K.com Copyright. ',
+		'copyright'		:'deBUGerr.com Copyright. ',
 		'author'			:'Mr.Kananek Thongkam'
 	},
 	'SignIn': {
 		signin			:'Sign In',
 		signid			:'Sign-In ID',
-		email				:'E-mail address',
+		email				:'Username',
 		remember		:'Remember My Sign-In ID',
 		password		:'Password',
 		back				:'Back',
@@ -16,8 +16,8 @@ module.exports = {
 		or					:'or',
 		valid: {
 			email: {
-				empty		:'Please enter your e-mail again',
-				invalid	:'Please enter a valid e-mail'
+				empty		:'Please enter your username again',
+				invalid	:'Please enter a valid username'
 			},
 			password: {
 				empty		:'Please enter your password again',

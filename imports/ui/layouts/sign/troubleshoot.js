@@ -24,7 +24,7 @@ Template.Troubleshoot.events({
   },
   'click .trouble-menu.back': function(event){
   	// $('.form.sign-in').transition('fade right', function(){
-  		FlowRouter.go('sign');
+  		FlowRouter.go('home');
   	// });
   }
 });
