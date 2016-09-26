@@ -1,4 +1,4 @@
-import '../imports/startup/server/';
+import '../imports/server/';
 
 // WebApp.connectHandlers.use("/hello", function(req, res, next) {
 //   res.writeHead(200);

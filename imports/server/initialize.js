@@ -31,7 +31,7 @@ var removeAllUser = Meteor.wrapAsync(function(callback) {
 // 	let profile = {
 // 		status: user.status == 'ON' ? true : false,
 // 		user_id: user.user_id,
-// 		email: [],
+// 		email: null,
 // 		fullname: user.name + (user.surname ? ' ' + user.surname:''),
 // 		position: user.position,
 // 		level: user.level,
@@ -44,7 +44,8 @@ var removeAllUser = Meteor.wrapAsync(function(callback) {
 // 	}
 // 	var getEmail = getOneMysql({ '_table':'user_email', '_get.primary':'YES', '_get.user_id': user.user_id });
 
-// 	profile.email.push(getEmail._get.email);
+// 	profile.email = getEmail._get.email;
+// 	profile.gravatar = md5(getEmail._get.email);
 // 	Accounts.createUser({
 // 		username: user.username,
 // 		email: getEmail._get.email,

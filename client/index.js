@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Session }  from 'meteor/session';
 
 
-import '../imports/startup/client';
+import '../imports/router';
 
 const md5 		= require('md5');
 const Q 			= require('q');

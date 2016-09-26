@@ -3,28 +3,15 @@ h2.ui.header.avatar {
 }
 
 .stats {
-	.avatar {
-		.image {
-			&.avatar {
-				background-size: cover;
-				background-color: #ECECEC;
-				border: #171D2C solid 5px;
-				margin-left: 8px;
-			}
-		}
-		#fullname {
-			font-size: 1.6em;
-		}
-		#position {
-			font-size: 0.9em;
-			margin: 10px 0px;
-		}
+	&.avatar {
+		background-size: cover;
+		background-color: #ECECEC;
+		border: #FFF solid 3px;
 	}
 	&.dashboard {
 		background-image: url('/images/dashboard.png');
 		background-position: top center;
 		margin: 0em !important;
-    border-bottom:#171D2C solid 60px
 	}
 	&.column  {
 		background-color: rgba(255, 255, 255,0.75);
@@ -100,6 +87,7 @@ h2.ui.header.avatar {
 		    margin-left: -6px !important;
 		    width: calc(100% + 10px) !important;
 		    margin-right: -6px !important;
+		    margin-top: 2px !important;
 		    padding: 12px 32px 0px 30px !important;
 		    max-height: 60px;
 			}
@@ -221,77 +209,14 @@ h2.ui.header.avatar {
 
 // computer
 @media only screen and (min-width: 992px) {
-	.stats {
-		&.dashboard {
-			height: 430px;
-			background-size: cover;
-		}
-		.avatar {
-			>.image {
-				&.avatar {
-					width: 200px !important;
-					height: 200px !important;
-				}
-			}
-			>.content {
-				margin-top: -4rem;
-			}
-		}
-	}
-
-}
-
-
-@media print {
-
-	.stats {
-		&.dashboard {
-			>.container {
-				.exp_level {
-					
-				}
-				.exp_percent { display: none !important; }
-			}
-			.avatar {
-				>.image {
-					&.avatar {
-						width: 128px !important;
-						height: 128px !important;
-						border-radius: 0.3rem;
-						border: none;
-					}
-				}
-			}
-			height: 305px;
-			border-bottom: #171D2C solid 2px;
-		}
-		.avatar {
-			>.content {
-
-				margin: 2rem 0rem 0rem 1rem;
-			}
-		}
-	}
-
   .stats.dashboard {
-		height: 305px;
-		border-bottom: #171D2C solid 2px;
-	}
-
-	.user-menu {
-		>.item {
-			&.home { display: none !important; }
-			&.repository { display: none !important; }
-			&.nippon { display: none !important; }
-			&.content {
-				margin-right: 10px !important;
-			}
-			&.profile {
-				width: 0px;
-			}
-		}
+		height: 420px;
+		background-size: cover;
 	}
 }
+
+
+
 // .stats.column > .name{
 
 // }
