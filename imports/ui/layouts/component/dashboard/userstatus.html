@@ -1,9 +1,17 @@
 <template name="UserStatus">
 	<div class="ui grid stats dashboard">
-    <div class="ui stackable container grid" style="padding-left:6px; padding-right:4px;">
-			{{#if isReady}}
-				<div class="computer only six column row exp_level" style="padding-bottom:0px;height:150px;">
-					<div class="column stats level" style="margin-left:-6px; margin-bottom:-2px;">
+    <div class="ui stackable container grid" style="padding-left: 6px; padding-right: 4px;">
+			<div class="one column row" style="height: 208px;">
+				<h2 class="ui header avatar">
+				  <div class="ui circular image stats avatar" style="width: 96px;height: 96px; background-image: {{getAvatar}} "></div>
+				  <div class="content">
+				    <div id="fullname">{{getProfile.fullname}}</div>
+				    <div id="url" class="sub header">{{getProfile.primary}}</div>
+				  </div>
+				</h2>
+			</div>
+				<div class="computer only six column row" style="padding-bottom:0px;height: 150px;">
+					<div class="column stats level" style="margin-left: -6px; margin-bottom: -2px;">
 						<div class="name">level</div>
 						<div class="exp">{{user.level}}</div>
 					</div>
@@ -23,13 +31,13 @@
 						<div class="name">assistant</div>
 						<div class="exp">{{user.assistant}}</div>
 					</div>
-					<div class="column stats icon owner" style="margin-right:-6px;">
+					<div class="column stats icon owner" style="margin-right: -6px;">
 						<div class="name">owner</div>
 						<div class="exp">{{user.owner}}</div>
 					</div>
 				</div>
-				<div class="computer only one column row exp_percent" style="padding-top:2px;">
-					<div class="column stats progress" style="height:60px;">
+				<div class="computer only one column row" style="padding-top:0px;">
+					<div class="column stats progress" style="height: 60px;">
 						<div class="ui grid">
 							<div class="fifteen wide column">
 								<div class="exp text">EXP {{user.exp}} / {{user.next}}</div>
@@ -41,16 +49,6 @@
 						</div>
 					</div>
 				</div>
-			{{/if}}
-			<div class="one column row" style="height:208px;">
-				<h2 class="ui header avatar">
-			  	<img class="ui circular image avatar" src="{{getAvatar}}">
-				  <div class="content">
-				    <div id="fullname">{{getProfile.fullname}}</div>
-				    <div id="position" class="sub header">{{getProfile.position}}</div>
-				  </div>
-				</h2>
-			</div>
     </div>
 	</div>
 </template>
