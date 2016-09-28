@@ -7,6 +7,7 @@
   "dependencies": {
     "bufferutil": "^1.2.1",
     "clipboard": "^1.5.12",
+    "component-closest": "^1.0.1",
     "counterpart": "^0.17.2",
     "gridfs-stream": "^1.1.1",
     "jquery": "^3.1.0",
