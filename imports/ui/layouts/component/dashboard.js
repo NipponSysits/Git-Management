@@ -13,6 +13,7 @@ require('/imports/language')('Dashboard');
 
 
 Tracker.autorun(function(c) {
+  console.log(Session.get('sign-in'), Session.get('prepare'));
   if(Session.get('sign-in') && Session.get('prepare')) {
     $('.ui.dimmer.prepare').fadeOut(300);
   }

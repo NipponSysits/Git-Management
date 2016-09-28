@@ -13,6 +13,19 @@ import './routes-sign.js';
 import './routes-nippon.js';
 import './routes-source.js';
 
+dataReadyHold = null;
+
+// HomeController = RouteController.extend({
+//   onBeforeAction: function () {
+//     Meteor.subscribe('latestActivity', function () {
+//       dataReadyHold.release();
+//     });
+//   }
+// });
+
+
+
+
 BlazeLayout.setRoot('body');
 
 const SignAccess = function(context, redirect) {
@@ -23,12 +36,14 @@ const SignAccess = function(context, redirect) {
 
 FlowRouter.route('/', {
   name: 'home',
-  subscriptions: function(param){ 
-    this.register('dashboard', Meteor.subscribe('dashboard-exp'));
-  },
   action:function() {
     if(Meteor.userId()) {
       // Session.set("TITLE_PAGE", );
+      let dashboard = LaunchScreen.hold();
+      Meteor.subscribe('dashboard-exp', function(){
+        dashboard.release();
+        Session.set('prepare', true);
+      });
 
       BlazeLayout.render('app', { 
         main: 'Dashboard', 

@@ -10,40 +10,11 @@ const wrap 			= require('mysql-wrap');
 const request 	= require('request');
 const config 		= require('$custom/config');
 
-// const db 				= Mysql.connect(config.mysql);
+const db        = require("/imports/api/mysql");
 
 console.log('meteor-config', config.arg);
-console.log('meteor-mysql', config.mysql);
-
-let pool = mysql.createPool({
-    connectionLimit: 200,
-    host: config.mysql.hostname,
-    port: config.mysql.port,
-    user: config.mysql.username,
-    password: config.mysql.password,
-    database: config.mysql.dbname,
-    supportBigNumbers: true,
-    timezone: '+7:00',
-    dateStrings: true,
-});
- 
-let db = wrap(pool);
-
-db.query(`SELECT * FROM repository`, {}, function(err, result){
-	console.log(err, result);
-	callback(err, result);
-});
-
-// let repository = Meteor.wrapAsync(function(callback) {
-
-// });
 
 
-
-
-
-  // console.log('mysql', repository().length);
-// 
 // removeAllUser();
 // getMysql({ '_table':'user', '_get.status':'ON'}).forEach(function (user) {
 // 	user = user._get;

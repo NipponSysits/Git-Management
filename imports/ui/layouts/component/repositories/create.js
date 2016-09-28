@@ -33,7 +33,7 @@ Template.RepositoryCreate.onCreated(() => {
 
 
 Template.RepositoryCreate.onRendered(() => {
-	Session.set('prepare', true);
+	// Session.set('prepare', true);
 	$('.ui.collection.dropdown').dropdown({
     showOnFocus: false,
 		onNoResults:function(val){
