@@ -13,8 +13,6 @@ import './routes-sign.js';
 import './routes-nippon.js';
 import './routes-source.js';
 
-dataReadyHold = null;
-
 // HomeController = RouteController.extend({
 //   onBeforeAction: function () {
 //     Meteor.subscribe('latestActivity', function () {
@@ -22,9 +20,6 @@ dataReadyHold = null;
 //     });
 //   }
 // });
-
-
-
 
 BlazeLayout.setRoot('body');
 
@@ -39,9 +34,9 @@ FlowRouter.route('/', {
   action:function() {
     if(Meteor.userId()) {
       // Session.set("TITLE_PAGE", );
-      let dashboard = LaunchScreen.hold();
+      // let dashboard = LaunchScreen.hold();
       Meteor.subscribe('dashboard-exp', function(){
-        dashboard.release();
+        // dashboard.release();
         Session.set('prepare', true);
       });
 
