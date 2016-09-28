@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Session }  from 'meteor/session';
+import { Tracker } from 'meteor/tracker';
 
 
 import '../imports/router';
@@ -22,6 +23,11 @@ const IdSignal = Meteor.setInterval(function(){
 }, 3000);
 
 
+Tracker.autorun(function(){
+  document.title = Session.get("TITLE_PAGE");
+});
+
+
 $.fn.extend({
   avatar: function(email, size) {
     size = size || 256;
@@ -29,6 +35,8 @@ $.fn.extend({
   }
 });
 
+
+Session.setDefault('TITLE_PAGE', 'deBUGerr ™');
 
 Session.setDefault('SESSION_TIME', 0);
 Session.setDefault('SESSION_ID', null);

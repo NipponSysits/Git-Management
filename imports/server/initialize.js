@@ -7,7 +7,7 @@ const fs 				= require('fs');
 const md5       = require('md5');
 const request 	= require('request');
 const config 		= require('$custom/config');
-const mysql     = require('$custom/schema').DB();
+const mysql     = require('$custom/schema').DB;
 
 // const db 				= Mysql.connect(config.mysql);
 

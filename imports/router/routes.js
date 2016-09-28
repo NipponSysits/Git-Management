@@ -4,10 +4,10 @@ import { Session } from 'meteor/session';
 import { Meteor } from 'meteor/meteor';
 
 // Import to load these templates
-import '../../ui/layouts/component';
-import '../../ui/layouts/menu/navigator.js';
-import '../../ui/layouts/main.js';
-import '../../ui/layouts/error.js';
+import '../ui/layouts/component';
+import '../ui/layouts/menu/navigator.js';
+import '../ui/layouts/main.js';
+import '../ui/layouts/error.js';
 
 import './routes-sign.js';
 import './routes-nippon.js';
@@ -23,8 +23,9 @@ const SignAccess = function(context, redirect) {
 
 FlowRouter.route('/', {
   name: 'home',
-  subscriptions: function(param){
-    // this.register('dashboard', );
+  subscriptions: function(param){ 
+    
+    //this.register('dashboard', Meteor.subscribe('dashboard'));
   },
   action:function() {
     if(Meteor.userId()) {
@@ -43,7 +44,7 @@ FlowRouter.route('/:username', {
   name: 'dashboard',
   triggersEnter: [SignAccess],
   subscriptions: function(param){
-    this.register('dashboard', Meteor.subscribe('dashboard', param.username));
+    //this.register('dashboard', Meteor.subscribe('dashboard', param.username));
   },
   action:function() {
     BlazeLayout.render('app', { 

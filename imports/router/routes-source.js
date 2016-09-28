@@ -1,6 +1,6 @@
-import '../../ui/layouts/main.js';
-import '../../ui/layouts/component';
-import '../../ui/layouts/menu/navigator.js';
+import '../ui/layouts/main.js';
+import '../ui/layouts/component';
+import '../ui/layouts/menu/navigator.js';
 
 const SignAccess = function(context, redirect) {
   if(!Meteor.userId()) redirect('sign');

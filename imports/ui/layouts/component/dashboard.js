@@ -23,9 +23,7 @@ Tracker.autorun(function(c) {
 
 
 Template.Dashboard.onCreated(function(){
-  Meteor.subscribe('dashboard', null, function(){
-  	Session.set('prepare', true);
-  })
+
 	// this.autorun(function(c) {
 	// 	console.log('autorun');
 	//   if(Session.get('sign-in') && Session.get('sign-user')) {

@@ -32,6 +32,9 @@ socket.on('push-notification', function(noti) {
 			subject = `${noti.fullname} ${noti.event} (${noti.branch})`
 			message = (noti.body || '').trim();
 
+			// Update Dashboard
+			Meteor.subscribe('dashboard');
+
 			// Notification show.
 			Push.create(subject, { body: message, icon: xIcon, timeout: 8000 });
 		}
