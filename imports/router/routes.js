@@ -24,11 +24,12 @@ const SignAccess = function(context, redirect) {
 FlowRouter.route('/', {
   name: 'home',
   subscriptions: function(param){ 
-    
-    //this.register('dashboard', Meteor.subscribe('dashboard'));
+    this.register('dashboard', Meteor.subscribe('dashboard-exp'));
   },
   action:function() {
     if(Meteor.userId()) {
+      // Session.set("TITLE_PAGE", );
+
       BlazeLayout.render('app', { 
         main: 'Dashboard', 
         board: 'UserStatus',
@@ -44,7 +45,7 @@ FlowRouter.route('/:username', {
   name: 'dashboard',
   triggersEnter: [SignAccess],
   subscriptions: function(param){
-    //this.register('dashboard', Meteor.subscribe('dashboard', param.username));
+    //this.register('dashboard', Meteor.subscribe('dashboard-exp'));
   },
   action:function() {
     BlazeLayout.render('app', { 

@@ -60,7 +60,9 @@ Template.UserStatus.helpers({
 });
 Template.UserStatus.onCreated(function() {
   Session.setDefault('sign-user', false);
-
+  Meteor.subscribe('dashboard-exp', null, function(){
+    Session.set('prepare', true);
+  });
 });
 
 

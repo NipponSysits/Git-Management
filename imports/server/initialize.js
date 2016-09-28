@@ -5,26 +5,45 @@ import { HTTP } from 'meteor/http';
 const Q         = require('q');
 const fs 				= require('fs');
 const md5       = require('md5');
+const mysql 		= require('mysql');
+const wrap 			= require('mysql-wrap');
 const request 	= require('request');
 const config 		= require('$custom/config');
-const mysql     = require('$custom/schema').DB;
 
 // const db 				= Mysql.connect(config.mysql);
 
 console.log('meteor-config', config.arg);
+console.log('meteor-mysql', config.mysql);
 
-var getMysql = Meteor.wrapAsync(function(where, callback) {
-	mysql.find(where, function(err, result){ callback(err, result) });
+let pool = mysql.createPool({
+    connectionLimit: 200,
+    host: config.mysql.hostname,
+    port: config.mysql.port,
+    user: config.mysql.username,
+    password: config.mysql.password,
+    database: config.mysql.dbname,
+    supportBigNumbers: true,
+    timezone: '+7:00',
+    dateStrings: true,
+});
+ 
+let db = wrap(pool);
+
+db.query(`SELECT * FROM repository`, {}, function(err, result){
+	console.log(err, result);
+	callback(err, result);
 });
 
-var getOneMysql = Meteor.wrapAsync(function(where, callback) {
-	mysql.findOne(where, function(err, result){ callback(err, result) });
-});
+// let repository = Meteor.wrapAsync(function(callback) {
 
-var removeAllUser = Meteor.wrapAsync(function(callback) {
-	Meteor.users.remove({}, function (err, result) { callback(err, result) });
-});
+// });
 
+
+
+
+
+  // console.log('mysql', repository().length);
+// 
 // removeAllUser();
 // getMysql({ '_table':'user', '_get.status':'ON'}).forEach(function (user) {
 // 	user = user._get;
