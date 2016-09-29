@@ -3,6 +3,14 @@ module.exports = {
 		'copyright'		:'deBUGerr.com Copyright. ',
 		'author'			:'Mr.Kananek Thongkam'
 	},
+	'sign': {
+		'copyright'		:'deBUGerr.com Copyright. ',
+		'author'			:'Mr.Kananek Thongkam'
+	},
+	'loading': {
+		'copyright'		:'deBUGerr.com Copyright. ',
+		'author'			:'Mr.Kananek Thongkam'
+	},
 	'SignIn': {
 		signin			:'Sign In',
 		signid			:'Sign-In ID',
