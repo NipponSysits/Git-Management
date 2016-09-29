@@ -5,9 +5,7 @@ const config 		= require('$custom/config');
 const mongo     = require('$custom/schema');
 const Q         = require('q');
 
-// or ES6 syndax: import live from "mysql-live";
-
-// const db        = Mysql.connect(config.mysql);
+const db        = require("/imports/api/mysql");
 
 // Meteor.publish('collection-add', function(data) {
 //   let self = this;
@@ -17,271 +15,217 @@ const Q         = require('q');
 // });
 
 
-// Meteor.publish('collection-list', function() {
+Meteor.publish('collection-list', function() {
 //   // Meteor._sleepForMs(2000);
-//   let self = this;
-//   if(!self.userId) return [];
-//   let getUser = Meteor.users.findOne({ _id: self.userId });
-//   let getProfile = getUser.profile;
+  let self = this;
+  if(!self.userId) return [];
+  let getUser = Meteor.users.findOne({ _id: self.userId });
+  let getProfile = getUser.profile;
 
-//   let pgmView = getProfile.level > 1 && getProfile.level < 5;
-//   let otherPrivate = getProfile.level < 1;
-//   let forProject = getProfile.level >= 5;
+  let pgmView = getProfile.level > 1 && getProfile.level < 5;
+  let otherPrivate = getProfile.level < 1;
+  let forProject = getProfile.level >= 5;
 
-//   let query_collection = `
-//   SELECT p.name collection_name, LOWER(p.name) order_name, COUNT(p.collection_id) list, p.collection_id, NULL user_id
-//   FROM repository r
-//   LEFT JOIN repository_collection p ON r.collection_id = p.collection_id
-//   ${!pgmView?``:`
-//   LEFT JOIN repository_contributor c 
-//     ON c.repository_id = r.repository_id and c.permission in ('Contributors','Administrators')
-//   `}
-//   WHERE r.collection_id IS NOT NULL AND content_id IS NULL AND fork_id IS NULL
-//     ${otherPrivate?``:`
-//     AND (r.private = 'NO' OR (r.private = 'YES' AND r.user_id = ${getProfile.user_id}))
-//     `}
-//     ${!pgmView?`
-//     `:`
-//     AND (c.user_id IS NULL OR (c.user_id IS NOT NULL AND c.user_id = ${getProfile.user_id}))
-//     AND (c.user_id = ${getProfile.user_id} OR r.anonymous = 'YES')
-//     `}
-//   GROUP BY p.name, p.collection_id;
-//   `;
+  let query_collection = `
+  SELECT p.name collection_name, LOWER(p.name) order_name, COUNT(p.collection_id) list, p.collection_id, NULL user_id
+  FROM repository r
+  LEFT JOIN repository_collection p ON r.collection_id = p.collection_id
+  ${!pgmView?``:`
+  LEFT JOIN repository_contributor c 
+    ON c.repository_id = r.repository_id and c.permission in ('Contributors','Administrators')
+  `}
+  WHERE r.collection_id IS NOT NULL AND content_id IS NULL AND fork_id IS NULL
+    ${otherPrivate?``:`
+    AND (r.private = 'NO' OR (r.private = 'YES' AND r.user_id = ${getProfile.user_id}))
+    `}
+    ${!pgmView?`
+    `:`
+    AND (c.user_id IS NULL OR (c.user_id IS NOT NULL AND c.user_id = ${getProfile.user_id}))
+    AND (c.user_id = ${getProfile.user_id} OR r.anonymous = 'YES')
+    `}
+  GROUP BY p.name, p.collection_id;
+  `;
 
-//   let query_user = `
-//   SELECT u.username collection_name, LOWER(u.username) order_name, count(r.user_id) list, NULL collection_id, r.user_id 
-//   FROM repository r
-//   ${!pgmView?``:`
-//   LEFT JOIN repository_contributor c 
-//     ON c.repository_id = r.repository_id and c.permission in ('Contributors','Administrators')
-//     `}
-//   LEFT JOIN user u ON u.user_id = r.user_id
-//   WHERE r.collection_id IS NULL 
-//     AND content_id IS NULL AND fork_id IS NULL
-//     ${otherPrivate?``:`
-//     AND (r.private = 'NO' OR (r.private = 'YES' AND r.user_id = ${getProfile.user_id}))
-//     `}
-//     ${!pgmView?``:`
-//     AND (c.user_id IS NULL OR (c.user_id IS NOT NULL AND c.user_id = ${getProfile.user_id}))
-//     AND (c.user_id = ${getProfile.user_id} OR r.anonymous = 'YES')
-//     `}
-//   GROUP BY u.username, r.user_id 
-//   `; // ${ !programmer?``:`OR p.collection_id IS NOT NULLs `  }
+  let query_user = `
+  SELECT u.username collection_name, LOWER(u.username) order_name, count(r.user_id) list, NULL collection_id, r.user_id 
+  FROM repository r
+  ${!pgmView?``:`
+  LEFT JOIN repository_contributor c 
+    ON c.repository_id = r.repository_id and c.permission in ('Contributors','Administrators')
+    `}
+  LEFT JOIN user u ON u.user_id = r.user_id
+  WHERE r.collection_id IS NULL 
+    AND content_id IS NULL AND fork_id IS NULL
+    ${otherPrivate?``:`
+    AND (r.private = 'NO' OR (r.private = 'YES' AND r.user_id = ${getProfile.user_id}))
+    `}
+    ${!pgmView?``:`
+    AND (c.user_id IS NULL OR (c.user_id IS NOT NULL AND c.user_id = ${getProfile.user_id}))
+    AND (c.user_id = ${getProfile.user_id} OR r.anonymous = 'YES')
+    `}
+  GROUP BY u.username, r.user_id 
+  `; // ${ !programmer?``:`OR p.collection_id IS NOT NULLs `  }
 
-//   db.query(query_collection, function(err, data){
-//   	if(err) self.error(err);
-// 		(data || []).forEach(function(item){
-//       if(item.list > 0) {
-//         self.added('list.collection-name', 'c'+item.collection_id, item);
-//       }
-// 		});
+  db.query(query_collection).forEach(function(item){
+    if(item.list > 0) {
+      self.added('list.collection-name', 'c'+item.collection_id, item);
+    }
+	});
 
-//     db.query(query_user, function(err, data){
-//       if(err) self.error(err);
-//       let ownerCreated = false;
-//       (data || []).forEach(function(item){
-//         if(item.collection_name === getUser.username && getProfile.level < 4) {
-//           ownerCreated = true;
-//           self.added('list.collection-user', item.user_id, item);
-//         } else if(item.list > 0) {
-//           self.added('list.collection-name', 'u'+item.user_id, item);
-//         }
-//       });
-//       if(!ownerCreated && getProfile.level < 4) {
-//         self.added('list.collection-user', getProfile.user_id, { 
-//           collection_name: getUser.username, 
-//           list: 0, 
-//           collection_id: null, 
-//           user_id: getProfile.user_id 
-//         });
-//       }
-//   		self.ready();
-//     });
-//   });
-// });
+  let ownerCreated = false;
+  db.query(query_user).forEach(function(item){
+    if(item.collection_name === getUser.username && getProfile.level < 4) {
+      ownerCreated = true;
+      self.added('list.collection-user', item.user_id, item);
+    } else if(item.list > 0) {
+      self.added('list.collection-name', 'u'+item.user_id, item);
+    }
+  });
 
-// Meteor.publish('repository-list', function(collection) {
-//   let self = this;
-//   if(!self.userId) return [];
+  if(!ownerCreated && getProfile.level < 4) {
+    self.added('list.collection-user', getProfile.user_id, { 
+      collection_name: getUser.username, 
+      list: 0, 
+      collection_id: null, 
+      user_id: getProfile.user_id 
+    });
+  }
+	self.ready();
+});
 
-//   let getUser = Meteor.users.findOne({ _id: self.userId });
-//   let collection_name = collection || getUser.username;
-//   let getProfile = getUser.profile;
+Meteor.publish('repository-list', function(collection) {
+  let self = this;
+  if(!self.userId) return [];
 
-//   let pgmView = getProfile.level > 1 && getProfile.level < 5;
-//   let otherPrivate = getProfile.level < 1;
-//   let forProject = getProfile.level >= 5;
+  let getUser = Meteor.users.findOne({ _id: self.userId });
+  let collection_name = collection || getUser.username;
+  let getProfile = getUser.profile;
 
-//   let query = `
-//   SELECT 
-//     r.repository_id, r.collection_id, r.user_id, r.project_id, p.name project_name, LOWER(p.name) order_project,
-//     (CASE WHEN r.collection_id IS NOT NULL THEN co.name ELSE u.username END) collection_name, 
-//     u.username, r.name repository_name,
-//     (CASE WHEN r.fullname IS NULL THEN r.name ELSE r.fullname END) title_name, 
-//     LOWER(CASE WHEN r.fullname IS NULL THEN r.name ELSE r.fullname END) order_repository,
-//     r.description, r.private, r.anonymous, r.logo,    
-//     ua.username admin, r.updated_at
-//   FROM repository r
-//   LEFT JOIN user u ON u.user_id = r.user_id
-//   LEFT JOIN repository_project p ON r.project_id = p.project_id
-//   LEFT JOIN repository_collection co ON co.collection_id = r.collection_id
-//   LEFT JOIN repository_contributor ad 
-//     ON ad.repository_id = r.repository_id AND ad.permission in ('Administrators')
-//   LEFT JOIN user ua ON ua.user_id = ad.user_id
-//   ${ !pgmView?``:`
-//   LEFT JOIN repository_contributor c 
-//     ON c.repository_id = r.repository_id AND c.permission in ('Contributors','Administrators')
-//   `}
-//   WHERE content_id IS NULL AND fork_id IS NULL
-//     ${otherPrivate?``:`
-//     AND (r.private = 'NO' OR (r.private = 'YES' AND r.user_id = ${getProfile.user_id}))
-//     `}
-//     ${ !pgmView?`
-//     `:`
-//     AND (c.user_id IS NULL OR (c.user_id IS NOT NULL AND c.user_id = ${getProfile.user_id}))
-//     AND (c.user_id = ${getProfile.user_id} OR r.anonymous = 'YES')
-//     `}
-//   AND (co.name = '${collection_name}' OR u.username = '${collection_name}')
-//   `;
+  let pgmView = getProfile.level > 1 && getProfile.level < 5;
+  let otherPrivate = getProfile.level < 1;
+  let forProject = getProfile.level >= 5;
 
-//   db.query(query, function(err, data){
-//   	if(err) self.error(err);
+  let query = `
+  SELECT 
+    r.repository_id, r.collection_id, r.user_id, r.project_id, p.name project_name, LOWER(p.name) order_project,
+    (CASE WHEN r.collection_id IS NOT NULL THEN co.name ELSE u.username END) collection_name, 
+    u.username, r.name repository_name,
+    (CASE WHEN r.fullname IS NULL THEN r.name ELSE r.fullname END) title_name, 
+    LOWER(CASE WHEN r.fullname IS NULL THEN r.name ELSE r.fullname END) order_repository,
+    r.description, r.private, r.anonymous, r.logo,    
+    ua.username admin, r.updated_at
+  FROM repository r
+  LEFT JOIN user u ON u.user_id = r.user_id
+  LEFT JOIN repository_project p ON r.project_id = p.project_id
+  LEFT JOIN repository_collection co ON co.collection_id = r.collection_id
+  LEFT JOIN repository_contributor ad 
+    ON ad.repository_id = r.repository_id AND ad.permission in ('Administrators')
+  LEFT JOIN user ua ON ua.user_id = ad.user_id
+  ${ !pgmView?``:`
+  LEFT JOIN repository_contributor c 
+    ON c.repository_id = r.repository_id AND c.permission in ('Contributors','Administrators')
+  `}
+  WHERE content_id IS NULL AND fork_id IS NULL
+    ${otherPrivate?``:`
+    AND (r.private = 'NO' OR (r.private = 'YES' AND r.user_id = ${getProfile.user_id}))
+    `}
+    ${ !pgmView?`
+    `:`
+    AND (c.user_id IS NULL OR (c.user_id IS NOT NULL AND c.user_id = ${getProfile.user_id}))
+    AND (c.user_id = ${getProfile.user_id} OR r.anonymous = 'YES')
+    `}
+  AND (co.name = '${collection_name}' OR u.username = '${collection_name}')
+  `;
 
-//     (data || []).forEach(function(item){
-//       var findCommits = mongo.Commit.findOne({ repository_id: item.repository_id }).sort({since : -1});
-//       findCommits.exec(function(err, result){
-//         if(err) console.log(err);
-//         item.updated_at = (result || {}).since || item.updated_at;        
-//         self.added('list.repository', item.repository_id, item);
-//       });
-//     });
-// 		self.ready();
-//   });
-// });
+  db.query(query).forEach(function(item){
 
-// // const liveDbs 	s	= new LiveMysql(config.mysql);
-// Meteor.publish('repository-loaded', function(param){
-//   let summary = {
-//     collection: param.collection,
-//     repository: param.repository
-//   };
-//   let thread = [];
-//   let self = this;
-//   // db.collection_name, db.repository_name
-//   // console.log(param.collection, param.repository.replace(/\.git$/g,''));
+    var findCommits = (Meteor.wrapAsync(function(callback) {
+    	let obj = mongo.Commit.findOne({ repository_id: item.repository_id }).sort({since : -1});
+	    obj.exec(function(err, result){ callback(err, result); });
+    }))();
 
-//   if(!self.userId) return [];
+    item.updated_at = (findCommits || {}).since || item.updated_at;        
+    self.added('list.repository', item.repository_id, item);
+  });
+	self.ready();
+});
 
-//   let UserProfile = Meteor.users.findOne({ _id: self.userId }).profile;
-//   // let api = `http://${config.socket}:${config.api}/api/repository/files/${summary.collection}/${summary.repository}/master`;
+Meteor.publish('repository-loaded', function(param){
+  let summary = {
+    collection: param.collection,
+    repository: param.repository
+  };
+  let thread = [];
+  let self = this;
+  if(!self.userId) return [];
 
-//   // var response = HTTP.get(api);
-//   // try { response = JSON.parse(response.content); } catch (e) { response = {} }
+  let UserProfile = Meteor.users.findOne({ _id: self.userId }).profile;
+  // let api = `http://${config.socket}:${config.api}/api/repository/files/${summary.collection}/${summary.repository}/master`;
 
-//   // console.log(response);
-  
-//   let getRepository = function(){
-//     let def = Q.defer();
-//     let sql = `SELECT repository_id FROM repositories WHERE dir_name = '${param.collection}/${param.repository}'`;
-//     db.query(sql, function(err, data){
-//       if(err || data.length == 0) {
-//         def.reject(err);
-//       } else {
-//         let commits = mongo.Commit.find({ repository_id: data[0].repository_id, logs: true }).count();
-//         commits.exec(function(err, logs){
-//           if(err) { def.reject(err); } else { summary.commits = logs; def.resolve(data[0]); }
-//         });
-//       }
-//     });
-//     return def.promise;
-//   }
+  // var response = HTTP.get(api);
+  // try { response = JSON.parse(response.content); } catch (e) { response = {} }
 
-//   getRepository().then(function(data){
-//     let all = []
-//     all.push((function(){
-//       let def = Q.defer();
-//       let query_loaded = `
-//         SELECT COUNT(*) person 
-//         FROM repository_contributor 
-//         WHERE repository_id = ${data.repository_id}
-//       `;
+  // console.log(response);
 
-//       db.query(query_loaded, function(err, person){
-//         if(err || person.length == 0) {
-//           def.reject(err);
-//         } else {
-//           summary.contributor = person[0].person;
-//           def.resolve();
-//         }
-//       });
-//       return def.promise;      
-//     })());
+  let repositories = db.one(`SELECT repository_id FROM repositories WHERE dir_name = '${param.collection}/${param.repository}'`);
 
-//     all.push((function(){
-//       let def = Q.defer();
-//       let commits = mongo.Repository.findOne(data, function(err, repo){
-//         if(err) {
-//           def.reject(err);
-//         } else if(!repo) {
-//           def.resolve();
-//         } else {
-//           summary.title = repo.title;
-//           summary.description = repo.description;
-//           summary.master = repo.master;
-//           summary.branch = repo.branch;
-//           summary.readme = (repo.readme || '').toString();
-//           self.added('summary.repository', data.repository_id, summary);
-
-//           repo.files.forEach(function(file){
-//             self.added('file.repository', file.filename, {
-//               collection: param.collection,
-//               repository: param.repository,
-//               filename: file.filename,
-//               ext: file.ext,
-//               size: file.size,
-//               since: file.since,
-//               comment: file.comment
-//             });
-//           });
-//           def.resolve();
-//         }
-//       });
-//       return def.promise; 
-//     })());
-    
-//     all.push((function(){
-//       let def = Q.defer();
-//       let commits = mongo.Commit.find(data).sort({since : -1}).limit(13);
-//       commits.exec(function(err, logs){
-//         if(err) def.reject(err);
-
-//         logs.forEach(function(log){
-//           self.added('logs.repository', `${log.repository_id}_${log.commit_id}`, {
-//             logs: log.logs,
-//             collection: param.collection,
-//             repository: param.repository,
-//             author: log.author,
-//             email: log.email,
-//             since: log.since,
-//             subject: log.subject,
-//             comment: log.comment,
-//           });
-//         });
-//         def.resolve();
-//       });
-//       return def.promise;      
-//     })());
-
-//     return Q.all(all);
-//   }).then(function(){
-//     self.ready();
-//   }).catch(function(err){
-//     console.log('err', err);
-//     self.stop();
-//   });
+  summary.commits = (Meteor.wrapAsync(function(callback) {
+  	let obj = mongo.Commit.find({ repository_id: repositories.repository_id, logs: true }).count();
+    obj.exec(function(err, result){ callback(err, result); });
+  }))();
 
 
-// });
+	let query_loaded = `
+	  SELECT COUNT(*) person 
+	  FROM repository_contributor 
+	  WHERE repository_id = ${repositories.repository_id}
+	`;
+	let person = db.query(query_loaded);
+	if(person.length == 0) {
+    summary.contributor = 0;
+  } else {
+    summary.contributor = person[0].person;
+  }
+
+	let repo = (Meteor.wrapAsync(function(callback) {
+		mongo.Repository.findOne(repositories, function(err, result){ callback(err, result); });
+  }))() || {};
+  summary.title = repo.title;
+  summary.description = repo.description;
+  summary.master = repo.master;
+  summary.branch = repo.branch;
+  summary.readme = (repo.readme || '').toString();
+  self.added('summary.repository', repositories.repository_id, summary);
+
+  (repo.files || []).forEach(function(file){
+    self.added('file.repository', file.filename, {
+      collection: param.collection,
+      repository: param.repository,
+      filename: file.filename,
+      ext: file.ext,
+      size: file.size,
+      since: file.since,
+      comment: file.comment
+    });
+  });
+	let logs = (Meteor.wrapAsync(function(callback) {
+    let commits = mongo.Commit.find(repositories).sort({since : -1}).limit(13);
+    commits.exec(function(err, result){ callback(err, result); });
+  }))();
+	(logs || []).forEach(function(log){
+	  self.added('logs.repository', `${log.repository_id}_${log.commit_id}`, {
+	    logs: log.logs,
+	    collection: param.collection,
+	    repository: param.repository,
+	    author: log.author,
+	    email: log.email,
+	    since: log.since,
+	    subject: log.subject,
+	    comment: log.comment,
+	  });
+	});
+	self.ready();
+});
 
 
 
