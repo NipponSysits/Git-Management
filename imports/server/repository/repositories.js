@@ -16,7 +16,7 @@ const db        = require("/imports/api/mysql");
 
 
 Meteor.publish('collection-list', function() {
-//   // Meteor._sleepForMs(2000);
+  console.time('collection-list');
   let self = this;
   if(!self.userId) return [];
   let getUser = Meteor.users.findOne({ _id: self.userId });
@@ -91,9 +91,12 @@ Meteor.publish('collection-list', function() {
     });
   }
 	self.ready();
+  console.timeEnd('collection-list');
+  console.log();
 });
 
 Meteor.publish('repository-list', function(collection) {
+  console.time('repository-list');
   let self = this;
   if(!self.userId) return [];
 
@@ -148,9 +151,12 @@ Meteor.publish('repository-list', function(collection) {
     self.added('list.repository', item.repository_id, item);
   });
 	self.ready();
+  console.timeEnd('repository-list');
+  console.log();
 });
 
 Meteor.publish('repository-loaded', function(param){
+  console.time('repository-loaded');
   let summary = {
     collection: param.collection,
     repository: param.repository
@@ -225,6 +231,8 @@ Meteor.publish('repository-loaded', function(param){
 	  });
 	});
 	self.ready();
+  console.timeEnd('repository-loaded');
+  console.log();
 });
 
 

@@ -23,10 +23,12 @@ FlowRouter.route('/Repositories', {
   name: 'repository',
   triggersEnter: [SignAccess],
   subscriptions: function(param){
-    this.register('rcollection-list', Meteor.subscribe('collection-list', { username: 'dvgamer' } ));
     // this.register('repository-list', Meteor.subscribe('repository-list'));
   },
   action:function() {
+    Meteor.subscribe('collection-list', {}, function(){
+      Session.set('prepare', true);
+    });
     BlazeLayout.render('app', { 
       navigator: 'Navigator',
       component: 'RepositoryCollection',
@@ -40,7 +42,10 @@ FlowRouter.route('/Repositories/:collection', {
   name: 'repository.list',
   triggersEnter: [SignAccess],
   subscriptions: function(param){
-    this.register('rcollection-list', Meteor.subscribe('collection-list', param));
+    Meteor.subscribe('collection-list', param, function(){
+      Session.set('prepare', true);
+    });
+
     // this.register('repository-list', Meteor.subscribe('repository-list', param));
   },
   action:function() {
@@ -84,7 +89,10 @@ FlowRouter.route('/:collection/:repository', {
   name: 'repository.detail',
   triggersEnter: [SignAccess],
   subscriptions: function(param){
-    this.register('repository-loaded', Meteor.subscribe('repository-loaded', param));
+    Meteor.subscribe('collection-loaded', param, function(){
+      Session.set('prepare', true);
+    });
+    
   },
   action:function() {
     BlazeLayout.render('app', { 
