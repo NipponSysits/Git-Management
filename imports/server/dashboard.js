@@ -71,7 +71,7 @@ Meteor.publish('dashboard-exp', function(username) {
 
   self.added('exp.dashboard', dashboard.userId, dashboard);
   self.ready();
-  console.timeEnd('exp.dashboard');
+  console.timeEnd('dashboard-exp');
 });
 
 

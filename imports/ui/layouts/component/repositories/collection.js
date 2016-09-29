@@ -47,13 +47,13 @@ Template.RepositoryCollection.events({
 });
 
 
-Tracker.autorun(function() {
-  let collection_name = FlowRouter.getParam('collection') || (Meteor.user() || {}).username;
-  Meteor.subscribe('collection-list', function(e) {
-    $('.collection > .ui.menu a.item').removeClass('selected');
-    $(`.collection > .ui.menu a.item[data-item="${collection_name}"]`).addClass('selected');
-  });
-});
+// Tracker.autorun(function() {
+//   let collection_name = FlowRouter.getParam('collection') || (Meteor.user() || {}).username;
+//   Meteor.subscribe('collection-list', function(e) {
+//     $('.collection > .ui.menu a.item').removeClass('selected');
+//     $(`.collection > .ui.menu a.item[data-item="${collection_name}"]`).addClass('selected');
+//   });
+// });
 
 Template.RepositoryCollection.onCreated(() => {
   

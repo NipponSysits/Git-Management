@@ -25,15 +25,15 @@ FlowRouter.route('/Repositories', {
     $('.main>.ui.content').fadeOut(200);
   }],
   subscriptions: function(param){
-    this.register('collection-list', Meteor.subscribe('collection-list', {}, function(){
-      $('.main>.ui.content').fadeIn(200);
-      Session.set('prepare', true);
-      BlazeLayout.render('app', { 
-        navigator: 'Navigator',
-        component: 'RepositoryCollection',
-        main: 'Repositories', 
-      }); 
-    }));
+    // this.register('collection-list', Meteor.subscribe('collection-list', {}, function(){
+    //   $('.main>.ui.content').fadeIn(200);
+    //   Session.set('prepare', true);
+    //   BlazeLayout.render('app', { 
+    //     navigator: 'Navigator',
+    //     component: 'RepositoryCollection',
+    //     main: 'Repositories', 
+    //   }); 
+    // }));
   },
   action:function() {
     
@@ -46,9 +46,9 @@ FlowRouter.route('/Repositories/:collection', {
   name: 'repository.list',
   triggersEnter: [SignAccess],
   subscriptions: function(param){
-    Meteor.subscribe('collection-list', param, function(){
-      Session.set('prepare', true);
-    });
+    // Meteor.subscribe('collection-list', param, function(){
+    //   Session.set('prepare', true);
+    // });
 
     // this.register('repository-list', Meteor.subscribe('repository-list', param));
   },

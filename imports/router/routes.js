@@ -28,9 +28,7 @@ FlowRouter.route('/', {
   triggersExit: [function() {
   }],
   subscriptions: function(params) {
-    this.register('dashboard-exp', Meteor.subscribe('dashboard-exp', null, function(){
-      // $('.main>.ui.content').fadeIn(100);
-    }));
+    this.register('dashboard-exp', Meteor.subscribe('dashboard-exp', null));
   },
   action: function(){
     BlazeLayout.render('app', { 
