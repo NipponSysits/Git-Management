@@ -12,15 +12,15 @@ require('/imports/language')('Dashboard');
 
 
 
-Tracker.autorun(function(c) {
-  console.log(Session.get('sign-in'), Session.get('prepare'));
-  if(Session.get('sign-in') && Session.get('prepare')) {
-    $('.ui.dimmer.prepare').fadeOut(300);
-  }
-  // if(!Session.get('prepare')) {
-  //   $('.ui.dimmer.prepare').fadeIn(300);
-  // }
-});
+// Tracker.autorun(function(c) {
+//   console.log(Session.get('sign-in'), Session.get('prepare'));
+//   if(Session.get('sign-in') && Session.get('prepare')) {
+//     $('.ui.dimmer.prepare').fadeOut(300);
+//   }
+//   // if(!Sessio n.get('prepare')) {
+//   //   $('.ui.dimmer.prepare').fadeIn(300);
+//   // }
+// });
 
 
 Template.Dashboard.onCreated(function(){

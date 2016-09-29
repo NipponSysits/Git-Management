@@ -21,13 +21,10 @@ Meteor.publish('dashboard-exp', function(username) {
 
   let user_id = getUser.profile.user_id;
 
-  console.time('calc--email');
   let getEmail = db.query(`SELECT email FROM user_email WHERE user_id = ${user_id}`).map(function(item){
     return item.email;
   });
-  console.timeEnd('calc--email');
 
-  console.time('calc--logs');
   calc.logs = (Meteor.wrapAsync(function(callback) {
     let commits = mongo.Commit.aggregate( [
       { $match : { email : { '$in': getEmail }, logs: true } },
@@ -40,9 +37,7 @@ Meteor.publish('dashboard-exp', function(username) {
 
     commits.exec(function(err, logs){ callback(err, logs.length); });
   }))();
-  console.timeEnd('calc--logs');
 
-  console.time('calc--stats');
   let query = ` 
     SELECT SUM(fork) fork, SUM(created) created, SUM(assist) assist, SUM(own) own  
     FROM ( 
@@ -65,7 +60,6 @@ Meteor.publish('dashboard-exp', function(username) {
   calc.created = getCount.created;
   calc.assist = getCount.assist;
   calc.own = getCount.own;
-  console.timeEnd('calc--stats');
 
   let dashboard = exp(calc.logs + (calc.fork * 2) + (calc.assist * 3) + (calc.own * 4) + (calc.created * 5));
   dashboard.userId = getUser._id;
@@ -77,8 +71,7 @@ Meteor.publish('dashboard-exp', function(username) {
 
   self.added('exp.dashboard', dashboard.userId, dashboard);
   self.ready();
-  console.timeEnd('dashboard-exp');
-  console.log();
+  console.timeEnd('exp.dashboard');
 });
 
 

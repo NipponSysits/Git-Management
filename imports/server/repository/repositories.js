@@ -92,7 +92,6 @@ Meteor.publish('collection-list', function() {
   }
 	self.ready();
   console.timeEnd('collection-list');
-  console.log();
 });
 
 Meteor.publish('repository-list', function(collection) {
@@ -152,7 +151,6 @@ Meteor.publish('repository-list', function(collection) {
   });
 	self.ready();
   console.timeEnd('repository-list');
-  console.log();
 });
 
 Meteor.publish('repository-loaded', function(param){
@@ -232,7 +230,6 @@ Meteor.publish('repository-loaded', function(param){
 	});
 	self.ready();
   console.timeEnd('repository-loaded');
-  console.log();
 });
 
 

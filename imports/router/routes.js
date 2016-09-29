@@ -13,41 +13,31 @@ import './routes-sign.js';
 import './routes-nippon.js';
 import './routes-source.js';
 
-// HomeController = RouteController.extend({
-//   onBeforeAction: function () {
-//     Meteor.subscribe('latestActivity', function () {
-//       dataReadyHold.release();
-//     });
-//   }
-// });
-
-BlazeLayout.setRoot('body');
 
 const SignAccess = function(context, redirect) {
   if(!Meteor.userId()) {
     redirect('home');
   }
 }
-
 FlowRouter.route('/', {
   name: 'home',
-  action:function() {
-    if(Meteor.userId()) {
-      // Session.set("TITLE_PAGE", );
-      // let dashboard = LaunchScreen.hold();
-      Meteor.subscribe('dashboard-exp', function(){
-        // dashboard.release();
-        Session.set('prepare', true);
-      });
-
-      BlazeLayout.render('app', { 
-        main: 'Dashboard', 
-        board: 'UserStatus',
-        navigator: 'Navigator'
-      });
-    } else {
-      BlazeLayout.render('app', { sign: 'SignIn' });
-    }
+  triggersEnter: [function() {
+    // BlazeLayout.render('app', { navigator: 'Navigator' });
+    // $('.main>.ui.content').fadeOut(100);
+  }],
+  triggersExit: [function() {
+  }],
+  subscriptions: function(params) {
+    this.register('dashboard-exp', Meteor.subscribe('dashboard-exp', null, function(){
+      // $('.main>.ui.content').fadeIn(100);
+    }));
+  },
+  action: function(){
+    BlazeLayout.render('app', { 
+      main: 'Dashboard', 
+      board: 'UserStatus',
+      navigator: 'Navigator'
+    });
   }
 });
 

@@ -21,19 +21,23 @@ FlowRouter.route('/Repository.New', {
 
 FlowRouter.route('/Repositories', {
   name: 'repository',
-  triggersEnter: [SignAccess],
+  triggersEnter: [SignAccess, function() {
+    $('.main>.ui.content').fadeOut(200);
+  }],
   subscriptions: function(param){
-    // this.register('repository-list', Meteor.subscribe('repository-list'));
+    this.register('collection-list', Meteor.subscribe('collection-list', {}, function(){
+      $('.main>.ui.content').fadeIn(200);
+      Session.set('prepare', true);
+      BlazeLayout.render('app', { 
+        navigator: 'Navigator',
+        component: 'RepositoryCollection',
+        main: 'Repositories', 
+      }); 
+    }));
   },
   action:function() {
-    Meteor.subscribe('collection-list', {}, function(){
-      Session.set('prepare', true);
-    });
-    BlazeLayout.render('app', { 
-      navigator: 'Navigator',
-      component: 'RepositoryCollection',
-      main: 'Repositories', 
-    }); 
+    
+
      
   },
 });
@@ -89,10 +93,9 @@ FlowRouter.route('/:collection/:repository', {
   name: 'repository.detail',
   triggersEnter: [SignAccess],
   subscriptions: function(param){
-    Meteor.subscribe('collection-loaded', param, function(){
+    Meteor.subscribe('repository-loaded', param, function(){
       Session.set('prepare', true);
     });
-    
   },
   action:function() {
     BlazeLayout.render('app', { 

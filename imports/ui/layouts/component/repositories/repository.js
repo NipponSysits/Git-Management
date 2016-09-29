@@ -16,15 +16,6 @@ const marked        = require("marked");
 require('/imports/language')('Repository');
 
 
-Tracker.autorun(function(c) {
-  if(FlowRouter.subsReady()) {
-    $('.ui.panel.main').fadeIn(0);
-    // Session.set('prepare', true);s
-  } else {
-    // Session.set('prepare', false);
-  }
-});
-
 
 Template.Repository.helpers({
   isReady: function(){
@@ -128,18 +119,18 @@ Template.Repository.events({
 
 
 Template.Repository.onCreated(() => {
-  // let param = {
-  //   collection: FlowRouter.getParam('collection'),
-  //   repository: FlowRouter.getParam('repository')
-  // }
-  // Meteor.subscribe('repository-loaded', param, function(){
+  let param = {
+    collection: FlowRouter.getParam('collection'),
+    repository: FlowRouter.getParam('repository')
+  }
+  Meteor.subscribe('repository-loaded', param, function(){
     
-  // });
+  });
 });
 
 
 Template.Repository.onRendered(() => {
-  //$('.ui.panel.main').fadeIn(300);
+  $('.ui.panel.main').fadeIn(300);
   $('.ui.dimmer.prepare').fadeOut(0);
 
   $('.ui.branch.dropdown').dropdown();

@@ -46,7 +46,7 @@ Template.Navigator.events({
     if(Meteor.userId()) {
 		  FlowRouter.go('dashboard');
     } else {
-      FlowRouter.go('sign');
+      FlowRouter.go('home');
     }
   	// });
   },
