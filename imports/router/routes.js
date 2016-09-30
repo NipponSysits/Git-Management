@@ -22,20 +22,19 @@ const SignAccess = function(context, redirect) {
 FlowRouter.route('/', {
   name: 'home',
   triggersEnter: [function(){
-    console.log('home -- triggersEnter');
-    BlazeLayout.render('app', { navigator: 'Navigator' });
+    if(!FlowRouter.current().oldRoute) BlazeLayout.render('app', { navigator: 'Navigator' });
   }],
   action: function(){
-    console.log('home -- action');
     if(!Meteor.userId()) {
       BlazeLayout.render('app', { sign: 'SignIn' });
     } else {
       if(!dbExp.find({ userId: Meteor.userId() }).count()) {
         $('.user-menu>.loading').transition('show');
-        BlazeLayout.render('app', { navigator: 'Navigator' });
         Meteor.subscribe('dashboard-exp', function(){
           $('.user-menu>.loading').transition('hide');
-          BlazeLayout.render('app', { main: 'Dashboard', board: 'UserStatus',navigator: 'Navigator' });
+          if(FlowRouter.current().route.name == 'home') {
+            BlazeLayout.render('app', { main: 'Dashboard', board: 'UserStatus',navigator: 'Navigator' });
+          }
         });
       } else {
         BlazeLayout.render('app', { main: 'Dashboard', board: 'UserStatus',navigator: 'Navigator' });
