@@ -5,6 +5,7 @@ import { Template } from 'meteor/templating';
 import { Tracker } from 'meteor/tracker';
 import { Session } from 'meteor/session';
 import { FlowRouter } from 'meteor/kadira:flow-router';
+import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 
 require('/imports/language')('Navigator');
 
@@ -75,34 +76,7 @@ Template.Navigator.events({
 		FlowRouter.go('profile');
   	// });">
   },
-  'click .ui.access.grid .dropdown.profile .item.signout': function(event){
-    $('.signout.modal').modal({
-      closable  : false,
-      onDeny : function() {
-        if(!onButton.SignOut) {
-          onButton.SignOut = true;
-          $('.signout.modal .actions .ok.button').addClass('disabled');
-          $('.signout.modal .actions .negative.button').addClass('loading');
-          Meteor.logout(function(err){
-            $('.signout.modal .actions .ok.button').removeClass('disabled');
-            $('.signout.modal .actions .negative.button').removeClass('loading');
-            if(!err) {
-              $('.signout.modal').modal('hide');
-              $('.ui.panel.main, .ui.panel.board').fadeOut(0);
-              $('.ui.panel.sign-in').fadeIn(300, function(){
-                onButton.SignOut = false;
-                FlowRouter.go('sign');
-              }); 
 
-            } else {
-              onButton.SignOut = false;
-            }
-          });
-        }
-        return false;
-      }
-    }).modal('show');
-  },
 });
 
 let onButton = { SignOut: false };
@@ -123,6 +97,39 @@ Template.Navigator.onRendered(function() {
 	var self = this;
    // $('.user-menu > .item.profile').avatar(null, 64);
   $('.user-menu > .item.profile').dropdown();
+  $('.signout.modal').modal({
+    closable  : false,
+    onDeny : function() {
+      if(!onButton.SignOut) {
+        onButton.SignOut = true;
+        $('.signout.modal .actions .ok.button').addClass('disabled');
+        $('.signout.modal .actions .negative.button').addClass('loading');
+        Meteor.logout(function(err){
+          $('.signout.modal .actions .ok.button').removeClass('disabled');
+          $('.signout.modal .actions .negative.button').removeClass('loading');
+          if(!err) {
+            $('.signout.modal').modal('hide');
+            $('.ui.panel.main, .ui.panel.board').fadeOut(0);
+            $('.ui.panel.sign-in').fadeIn(300, function(){
+              onButton.SignOut = false;
+              BlazeLayout.render('app', { sign: 'SignIn' });
+            }); 
+
+          } else {
+            onButton.SignOut = false;
+          }
+        });
+      }
+      return false;
+    }
+  })
+
+  $('.ui.access.grid .dropdown.profile .item.signout').click(function(event){
+    $('.signout.modal').modal('show');
+  });
+
+
+
 
   // $('.header.avatar .stats.avatar').avatar(null, 96);
 });

@@ -22,9 +22,11 @@ const SignAccess = function(context, redirect) {
 FlowRouter.route('/', {
   name: 'home',
   triggersEnter: [function(){
+    console.log('home -- triggersEnter');
     BlazeLayout.render('app', { navigator: 'Navigator' });
   }],
   action: function(){
+    console.log('home -- action');
     if(!Meteor.userId()) {
       BlazeLayout.render('app', { sign: 'SignIn' });
     } else {

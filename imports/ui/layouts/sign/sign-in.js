@@ -89,12 +89,16 @@ Template.SignIn.helpers({
 });
 
 Template.SignIn.onRendered(function() {
-  $('.ui.dimmer.prepare').fadeOut(300);
+  $('.ui.prepare.dimmer').transition({
+    animation  : 'fade',
+    duration   : '300ms',
+    onComplete : function() { $('.ui.prepare.dimmer').remove(); }
+  });
+  
   $('.ui.panel.sign-in').fadeIn(300);
   $('.ui.panel.main').hide();
   $('.ui.remember-id').checkbox(T.Storage('signin-remember-id') || 'uncheck');  // 
 
-  Session.set('prepare', false);
   if(T.Storage('signin-remember-id') == 'check' && T.Storage('signin-username')) {
     let user = T.Storage('signin-username');
     toPanelSignImage(user.fullname, user.email, user.status);
