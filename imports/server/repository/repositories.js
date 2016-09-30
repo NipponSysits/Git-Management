@@ -5,7 +5,6 @@ const config 		= require('$custom/config');
 const mongo     = require('$custom/schema');
 const Q         = require('q');
 
-const db        = require("/imports/api/mysql");
 
 // Meteor.publish('collection-add', function(data) {
 //   let self = this;
@@ -16,6 +15,7 @@ const db        = require("/imports/api/mysql");
 
 
 Meteor.publish('collection-list', function() {
+  const db  = require("/imports/api/mysql");
   console.time('collection-list');
   let self = this;
   if(!self.userId) return [];
@@ -95,6 +95,7 @@ Meteor.publish('collection-list', function() {
 });
 
 Meteor.publish('repository-list', function(collection) {
+  const db  = require("/imports/api/mysql");
   console.time('repository-list');
   let self = this;
   if(!self.userId) return [];
@@ -154,6 +155,7 @@ Meteor.publish('repository-list', function(collection) {
 });
 
 Meteor.publish('repository-loaded', function(param){
+  const db  = require("/imports/api/mysql");
   console.time('repository-loaded');
   let summary = {
     collection: param.collection,

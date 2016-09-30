@@ -37,7 +37,7 @@ Template.Navigator.helpers({
 
 Template.Navigator.events({
 	'click .user-menu .item.signin': function (event) {
-		FlowRouter.go('sign');
+		FlowRouter.go('home');
 	},
   'click .user-menu .item.home': function(event){
   	$('.user-menu > .item').removeClass('selected');
@@ -75,25 +75,7 @@ Template.Navigator.events({
 		FlowRouter.go('profile');
   	// });">
   },
-});
-
-let onButton = { SignOut: false };
-
-Tracker.autorun(function() {
-  if(Meteor.user()) {
-    Session.set('sign-in', true);
-  }
-});
-
-Template.Navigator.onCreated(() => {
-  Session.setDefault('sign-in', false);
-});
-Template.Navigator.onRendered(function() {
-	var self = this;
-   // $('.user-menu > .item.profile').avatar(null, 64);
-  $('.user-menu > .item.profile').dropdown();
-
-  $('.ui.access.grid .dropdown.profile .item.signout').click(function(){
+  'click .ui.access.grid .dropdown.profile .item.signout': function(event){
     $('.signout.modal').modal({
       closable  : false,
       onDeny : function() {
@@ -120,8 +102,27 @@ Template.Navigator.onRendered(function() {
         return false;
       }
     }).modal('show');
-  });
+  },
+});
 
+let onButton = { SignOut: false };
+
+Tracker.autorun(function() {
+  if(Meteor.user()) {
+    Session.set('sign-in', true);
+  }
+});
+
+Template.Navigator.onCreated(() => {
+  $('.user-menu>.loading').transition('hide');
+  Session.setDefault('sign-in', false);
+});
+Template.Navigator.onRendered(function() {
+  $('.user-menu>.loading').transition('hide');
+
+	var self = this;
+   // $('.user-menu > .item.profile').avatar(null, 64);
+  $('.user-menu > .item.profile').dropdown();
 
   // $('.header.avatar .stats.avatar').avatar(null, 96);
 });

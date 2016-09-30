@@ -21,72 +21,53 @@ FlowRouter.route('/Repository.New', {
 
 FlowRouter.route('/Repositories', {
   name: 'repository',
-  triggersEnter: [SignAccess, function() {
-    $('.main>.ui.content').fadeOut(200);
-  }],
-  subscriptions: function(param){
-    // this.register('collection-list', Meteor.subscribe('collection-list', {}, function(){
-    //   $('.main>.ui.content').fadeIn(200);
-    //   Session.set('prepare', true);
-    //   BlazeLayout.render('app', { 
-    //     navigator: 'Navigator',
-    //     component: 'RepositoryCollection',
-    //     main: 'Repositories', 
-    //   }); 
-    // }));
-  },
-  action:function() {
-    
-
-     
-  },
-});
-
-FlowRouter.route('/Repositories/:collection', {
-  name: 'repository.list',
   triggersEnter: [SignAccess],
-  subscriptions: function(param){
-    // Meteor.subscribe('collection-list', param, function(){
-    //   Session.set('prepare', true);
-    // });
-
-    // this.register('repository-list', Meteor.subscribe('repository-list', param));
-  },
   action:function() {
     BlazeLayout.render('app', { 
       navigator: 'Navigator',
       component: 'RepositoryCollection',
       main: 'Repositories', 
     }); 
-     
   },
 });
 
-FlowRouter.route('/Contents/:name?', {
-  name: 'content',
+FlowRouter.route('/Repositories/:collection', {
+  name: 'repository.list',
   triggersEnter: [SignAccess],
   action:function() {
     BlazeLayout.render('app', { 
       navigator: 'Navigator',
-      component: 'Content',
+      component: 'RepositoryCollection',
       main: 'Repositories', 
     }); 
-     
   },
 });
 
-FlowRouter.route('/Fork', {
-  name: 'fork',
-  triggersEnter: [SignAccess],
-  action:function() {
-    BlazeLayout.render('app', { 
-      navigator: 'Navigator',
-      component: 'Fork',
-      main: 'Repositories', 
-    }); 
+// FlowRouter.route('/Contents/:name?', {
+//   name: 'content',
+//   triggersEnter: [SignAccess],
+//   action:function() {
+//     BlazeLayout.render('app', { 
+//       navigator: 'Navigator',
+//       component: 'Content',
+//       main: 'Repositories', 
+//     }); 
      
-  },
-});
+//   },
+// });
+
+// FlowRouter.route('/Fork', {
+//   name: 'fork',
+//   triggersEnter: [SignAccess],
+//   action:function() {
+//     BlazeLayout.render('app', { 
+//       navigator: 'Navigator',
+//       component: 'Fork',
+//       main: 'Repositories', 
+//     }); 
+     
+//   },
+// });
 
 
 FlowRouter.route('/:collection/:repository', {

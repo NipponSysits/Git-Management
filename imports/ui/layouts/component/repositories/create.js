@@ -20,11 +20,15 @@ Template.RepositoryCreate.helpers({
 Template.RepositoryCreate.events({
   'click .collection > .ui.menu a.item': function(e) {
 
+  },
+  'click .ui.button.cancel': function() {
+  	FlowRouter.go('repository');
+  	return false;
+  },
+  'click .ui.button.save': function() {
+		FlowRouter.go('repository');
+  	return false;
   }
-});
-
-Tracker.autorun(function() {
-
 });
 
 Template.RepositoryCreate.onCreated(() => {

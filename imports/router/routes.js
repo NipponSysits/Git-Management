@@ -21,37 +21,37 @@ const SignAccess = function(context, redirect) {
 }
 FlowRouter.route('/', {
   name: 'home',
-  triggersEnter: [function() {
-    // BlazeLayout.render('app', { navigator: 'Navigator' });
-    // $('.main>.ui.content').fadeOut(100);
+  triggersEnter: [function(){
+    BlazeLayout.render('app', { navigator: 'Navigator' });
   }],
-  triggersExit: [function() {
-  }],
-  subscriptions: function(params) {
-    this.register('dashboard-exp', Meteor.subscribe('dashboard-exp', null));
-  },
   action: function(){
-    BlazeLayout.render('app', { 
-      main: 'Dashboard', 
-      board: 'UserStatus',
-      navigator: 'Navigator'
-    });
+    if(!Meteor.userId()) {
+      BlazeLayout.render('app', { sign: 'SignIn' });
+    } else {
+      if(!dbExp.find({ userId: Meteor.userId() }).count()) {
+        $('.user-menu>.loading').transition('show');
+        BlazeLayout.render('app', { navigator: 'Navigator' });
+        Meteor.subscribe('dashboard-exp', function(){
+          $('.user-menu>.loading').transition('hide');
+          BlazeLayout.render('app', { main: 'Dashboard', board: 'UserStatus',navigator: 'Navigator' });
+        });
+      } else {
+        BlazeLayout.render('app', { main: 'Dashboard', board: 'UserStatus',navigator: 'Navigator' });
+      }
+    }
+
   }
 });
 
 FlowRouter.route('/:username', {
   name: 'dashboard',
   triggersEnter: [SignAccess],
-  subscriptions: function(param){
-    //this.register('dashboard', Meteor.subscribe('dashboard-exp'));
-  },
   action:function() {
     BlazeLayout.render('app', { 
       main: 'Dashboard', 
       board: 'UserStatus',
       navigator: 'Navigator'
     });
-
   },
 });
 

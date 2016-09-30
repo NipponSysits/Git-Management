@@ -20,6 +20,7 @@
     "mongoose": "^4.5.8",
     "mysql-live": "^0.4.4",
     "mysql-wrap": "^0.5.3",
+    "progressbar.js": "^1.0.1",
     "push.js": "0.0.10",
     "q": "^1.4.1",
     "request": "^2.74.0",

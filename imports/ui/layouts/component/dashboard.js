@@ -35,6 +35,12 @@ Template.Dashboard.onCreated(function(){
 
 
 Template.Dashboard.onRendered(() => {
+
+	$('.ui.prepare.dimmer').transition({
+    animation  : 'fade',
+    duration   : '300ms',
+    onComplete : function() { $('.ui.prepare.dimmer').remove(); }
+  });
   $('.ui.panel.main, .ui.panel.board').show();
   $('.ui.panel.sign-in').hide();
 

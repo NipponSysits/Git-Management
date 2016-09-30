@@ -6,7 +6,8 @@ import { Tracker } from 'meteor/tracker';
 import { Session } from 'meteor/session';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-const $ = require('jquery');
+const $ 					= require('jquery');
+const ProgressBar = require('progressbar.js');
 
 require('malihu-custom-scrollbar-plugin')($);
 require('/imports/language')('app');
@@ -15,8 +16,6 @@ require('/imports/language')('app');
 Meteor.startup(() => {
 
 });
-
-
 
 Template.app.onCreated(function() {
   Session.setDefault('sign-in', false);

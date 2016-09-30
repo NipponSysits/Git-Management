@@ -1,16 +1,17 @@
 <template name="Navigator">
   <div class="computer tablet only row user-menu">
     {{#if isLogin}}
-      <a class="ui item home">
-        <i class="home icon big"></i>
+      <a class="ui button loading big">
+        <i class="icon"></i>
       </a>
-
-      <a class="ui item repository">
-        <i class="repository icon big"></i>
-      </a>
-      <a class="ui item nippon" style="display:none">
-        <i class="nippon icon big"></i>
-      </a>
+      {{#if isWait}}
+        <a class="ui item home">
+          <i class="home icon big"></i>
+        </a>
+        <a class="ui item repository">
+          <i class="repository icon big"></i>
+        </a>
+      {{/if}}
       <div class="ui item content">
         <div class="content">
           <div class="ui fullname sub header">{{getFullname}}</div>
@@ -46,7 +47,7 @@
   </div>
   <div class="ui small signout modal">
     <div class="header">
-      deBUGerr
+      deBUGerr.com
     </div>
     <div class="content">
       <p>Are you sure you want to sign-out your account</p>

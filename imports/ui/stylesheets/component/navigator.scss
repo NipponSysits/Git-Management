@@ -1,4 +1,16 @@
+.user-menu {
+    > .button.loading {
+        padding: 0px 20px; 
+        margin: 6px 20px 6px 0px;
+        border-right:#373a42 solid 1px;
+        background-color: transparent; 
+        top: auto !important;
+        left: auto !important;
+    }
+}
+
 .ui.menu {
+
     .item {
         &.notify {
             > .menu {

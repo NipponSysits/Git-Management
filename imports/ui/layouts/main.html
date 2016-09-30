@@ -1,4 +1,5 @@
 <template name="app">
+  <div id="bar"></div>
   <div class="main">
     <div class="header">
       <div class="ui attached menu top">
@@ -13,8 +14,8 @@
       </div>
     </div>
     <div class="ui content">
-      <div class="ui prepare inverted dimmer" style="top: 55px !important; height: calc(100% - 55px) !important;">
-        <div class="ui text loader">Loading...</div>
+      <div class="ui prepare dimmer active" style="top: 55px !important; height: calc(100% - 55px) !important;">
+        <div class="ui text large loader">deBUGerr.com</div>
       </div>
       <div class="ui panel board" style="display:none;">
         {{> Template.dynamic template=board }}
