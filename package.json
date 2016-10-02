@@ -23,6 +23,7 @@
     "progressbar.js": "^1.0.1",
     "push.js": "0.0.10",
     "q": "^1.4.1",
+    "query": "^0.2.0",
     "request": "^2.74.0",
     "utf-8-validate": "^1.2.1"
   }

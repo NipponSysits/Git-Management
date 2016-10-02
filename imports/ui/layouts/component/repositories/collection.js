@@ -10,8 +10,6 @@ require('/imports/language')('RepositoryCollection');
 
 const moment = require('moment');
 
-
-
 Template.RepositoryCollection.helpers({
   // // the collection cursor
   isReady: function() {
@@ -36,15 +34,33 @@ Template.RepositoryCollection.helpers({
 
 Template.RepositoryCollection.events({
   'click .collection > .ui.menu a.item': function(e) {
+    let self = this;
     Session.set('filter-name', null);
     $('.filter.input input').val('');
     $('.repository>.list.filter').hide();
     $('.repository>.list.view').show();
 
-    Meteor.subscribe('repository-list', this.collection_name);
-    FlowRouter.go('repository.list', { collection: this.collection_name });
+
+    
+    if(!dbReposList.find({ collection_name: self.collection_name }).count()) {
+      $(e.target.firstElementChild).addClass('hidden');
+      $(e.target.lastElementChild).addClass('loading');
+      $(`.collection > .ui.menu a.item`).removeClass('selected');
+      $(`.collection > .ui.menu a.item[data-item="${self.collection_name}"]`).addClass('selected');
+      Meteor.subscribe('repository-list', self.collection_name, function(){
+        $(e.target.firstElementChild).removeClass('hidden');
+        $(e.target.lastElementChild).removeClass('loading');
+        let selected = $(`.collection > .ui.menu a.item.selected`).attr('data-item');
+        if(selected == self.collection_name) FlowRouter.go('repository.list', { collection: self.collection_name });
+      });
+    } else {
+      FlowRouter.go('repository.list', { collection: self.collection_name });
+    }
+    
   }
 });
+
+
 
 
 // Tracker.autorun(function() {
