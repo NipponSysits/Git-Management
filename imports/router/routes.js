@@ -40,7 +40,6 @@ FlowRouter.route('/', {
         BlazeLayout.render('app', { main: 'Dashboard', board: 'UserStatus',navigator: 'Navigator' });
       }
     }
-
   }
 });
 

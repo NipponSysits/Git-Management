@@ -40,6 +40,13 @@
           border-radius: 0px;
           color: #FFF;
           font-weight: bold;
+          > .button {
+            float: right;
+            background-color: transparent;
+            width: 0px;
+            height: 0px;
+            margin: -5px -8px 0 0;
+          }
           &.selected {
             background-color: #27608d;
             > .label {

@@ -3,7 +3,7 @@ import '../ui/layouts/component';
 import '../ui/layouts/menu/navigator.js';
 
 const SignAccess = function(context, redirect) {
-  if(!Meteor.userId()) redirect('sign');
+  
 }
 
 FlowRouter.route('/Repository.New', {
@@ -21,54 +21,73 @@ FlowRouter.route('/Repository.New', {
 
 FlowRouter.route('/Repositories', {
   name: 'repository',
-  triggersEnter: [SignAccess],
-  action:function() {
-    BlazeLayout.render('app', { 
-      navigator: 'Navigator',
-      component: 'RepositoryCollection',
-      main: 'Repositories', 
-    }); 
-  },
+  triggersEnter: [function(){
+    if(!Meteor.userId()) {
+      redirect('home');
+    } else if(!FlowRouter.current().oldRoute) {
+      BlazeLayout.render('app', { navigator: 'Navigator' });
+    }
+  }],
+  action: function(){
+    if(!Meteor.userId()) {
+      BlazeLayout.render('app', { sign: 'SignIn' });
+    } else {
+      let dbCollection = dbListCollectionName.find({ }).count() + dbListCollectionUser.find({ }).count(); 
+      if(!dbCollection) {
+        $('.user-menu>.loading').transition('show');
+
+        if(!FlowRouter.current().oldRoute) {
+          Meteor.subscribe('repository-list', null, function(){
+
+          });
+        }
+        Meteor.subscribe('collection-list', function(){
+          $('.user-menu>.loading').transition('hide');
+          if(FlowRouter.current().route.name == 'repository') {
+            BlazeLayout.render('app', { main: 'Repositories', component: 'RepositoryCollection',navigator: 'Navigator' });
+          }
+        });
+      } else {
+        BlazeLayout.render('app', { main: 'Repositories', component: 'RepositoryCollection',navigator: 'Navigator' });
+      }
+    }
+  }
 });
 
 FlowRouter.route('/Repositories/:collection', {
   name: 'repository.list',
-  triggersEnter: [SignAccess],
-  action:function() {
-    BlazeLayout.render('app', { 
-      navigator: 'Navigator',
-      component: 'RepositoryCollection',
-      main: 'Repositories', 
-    }); 
-  },
+  triggersEnter: [function(){
+    if(!Meteor.userId()) {
+      redirect('home');
+    } else if(!FlowRouter.current().oldRoute) {
+      BlazeLayout.render('app', { navigator: 'Navigator' });
+    }
+  }],
+  action: function(){
+    if(!Meteor.userId()) {
+      BlazeLayout.render('app', { sign: 'SignIn' });
+    } else {
+      let dbCollection = dbListCollectionName.find({ }).count() + dbListCollectionUser.find({ }).count(); 
+      if(!dbCollection) {
+        $('.user-menu>.loading').transition('show');
+
+        if(!FlowRouter.current().oldRoute) {
+          Meteor.subscribe('repository-list', FlowRouter.getParam('collection'), function(){
+            
+          });
+        }
+        Meteor.subscribe('collection-list', function(){
+          $('.user-menu>.loading').transition('hide');
+          if(FlowRouter.current().route.name == 'repository.list') {
+            BlazeLayout.render('app', { main: 'Repositories', component: 'RepositoryCollection',navigator: 'Navigator' });
+          }
+        });
+      } else {
+        BlazeLayout.render('app', { main: 'Repositories', component: 'RepositoryCollection',navigator: 'Navigator' });
+      }
+    }
+  }
 });
-
-// FlowRouter.route('/Contents/:name?', {
-//   name: 'content',
-//   triggersEnter: [SignAccess],
-//   action:function() {
-//     BlazeLayout.render('app', { 
-//       navigator: 'Navigator',
-//       component: 'Content',
-//       main: 'Repositories', 
-//     }); 
-     
-//   },
-// });
-
-// FlowRouter.route('/Fork', {
-//   name: 'fork',
-//   triggersEnter: [SignAccess],
-//   action:function() {
-//     BlazeLayout.render('app', { 
-//       navigator: 'Navigator',
-//       component: 'Fork',
-//       main: 'Repositories', 
-//     }); 
-     
-//   },
-// });
-
 
 FlowRouter.route('/:collection/:repository', {
   name: 'repository.detail',

@@ -10,14 +10,6 @@ require('/imports/language')('RepositoryList');
 
 const moment = require('moment');
 
-Tracker.autorun(function(c) {
-  if(FlowRouter.subsReady()) {
-    Session.set('repository', true);
-    // Session.set('prepare', true);
-  }
-});
-
-
 // Tracker.autorun(function() {
 //   let collection_name = FlowRouter.getParam('collection') || (Meteor.user() || {}).username;
 //   Meteor.subscribe('collection-list', function(e) {
@@ -115,10 +107,10 @@ Template.RepositoryList.onCreated(() => {
 });
 
 Template.RepositoryList.onRendered(() => {
-  if(FlowRouter.subsReady()) {
-    Session.set('repository', true);
-    // Session.set('prepare', true);
+  if(FlowRouter.current().oldRoute) {
+    
+    Meteor.subscribe('repository-list', FlowRouter.getParam('collection'), function(){
+      
+    });
   }
-  console.log('collection', FlowRouter.getParam('collection'));
-  Meteor.subscribe('repository-list', FlowRouter.getParam('collection'));
 });

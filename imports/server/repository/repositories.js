@@ -137,10 +137,12 @@ Meteor.publish('repository-list', function(collection) {
     AND (c.user_id IS NULL OR (c.user_id IS NOT NULL AND c.user_id = ${getProfile.user_id}))
     AND (c.user_id = ${getProfile.user_id} OR r.anonymous = 'YES')
     `}
-  AND (co.name = '${collection_name}' OR u.username = '${collection_name}')
+  AND (co.name = '${collection_name}' OR (u.username = '${collection_name}' AND r.collection_id IS NULL))
   `;
 
-  db.query(query).forEach(function(item){
+  let dbRepository = db.query(query);
+  console.log(collection_name, '--', dbRepository.length);
+  dbRepository.forEach(function(item){
 
     var findCommits = (Meteor.wrapAsync(function(callback) {
     	let obj = mongo.Commit.findOne({ repository_id: item.repository_id }).sort({since : -1});
