@@ -52,15 +52,3 @@ Meteor.startup(function () {
 
 
 });
-
-process.on("SIGTERM", function() {
-  console.log("SIGTERM END");
-  db.end();
-	db.destroy();
-});
-
-process.on("SIGINT", function() {
-  console.log("SIGINT END");
-  db.end();
-	db.destroy();
-});

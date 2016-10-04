@@ -1,7 +1,7 @@
 const Q         = require('q');
 const md5      	= require('md5');
 const Push      = require('push.js');
-const config		= location.hostname == 'dev.ns.co.th' ? 'http://dev.ns.co.th:811' : 'http://localhost:8200';
+const config		= location.hostname == 'git.ns.co.th' ? 'http://db.touno-k.com:8211' : 'http://localhost:8200';
 const socket  	= require('socket.io-client')(config);
 
 // Fixed bug repository for other socket.
