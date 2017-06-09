@@ -2,6 +2,9 @@ debugger
 =================
 Project Management Software and Source Control
 
+### 0.7 (beta)
+- Rebuild project to bootstrap
+
 ### 0.4 (beta)
 - Detail add commit logs.
 

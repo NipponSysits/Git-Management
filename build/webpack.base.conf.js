@@ -42,10 +42,15 @@ module.exports = {
         options: vueLoaderConfig
       },
       {
+        test: /\.s[a|c]ss$/,
+        loader: 'style!css!sass',
+        include: [resolve('src')]
+      },
+      {
         test: /\.js$/,
         loader: 'babel-loader',
         include: [resolve('src'), resolve('test')]
-      },
+      }, 
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',
@@ -61,7 +66,8 @@ module.exports = {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
-      }
+      },
+      { test: /bootstrap\/dist\/js\/umd\//, loader: 'imports?jQuery=jquery' },
     ]
   }
 }
