@@ -1,6 +1,8 @@
-# debuger-app
+# debugger.io
+==================================
 
-> A Vue.js project
+> Project Management Software and Source Control
+
 
 ## Build Setup
 
@@ -24,4 +26,5 @@ npm run unit
 npm test
 ```
 
+# - Documentation -
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
