@@ -1,5 +1,5 @@
 {
-  "name": "debuger-app",
+  "name": "debugerr-app",
   "version": "1.0.0",
   "description": "A Vue.js project",
   "author": "Kananek Thongkam <info.dvgamer@gmail.com>",
@@ -13,7 +13,10 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs"
   },
   "dependencies": {
+    "counterpart": "^0.18.0",
+    "moment": "^2.18.1",
     "vue": "^2.3.3",
+    "vue-head": "^2.0.11",
     "vue-router": "^2.3.1"
   },
   "devDependencies": {
